@@ -10,9 +10,9 @@ export const COLORS = {
 };
 
 export const FONTSIZE = {
-  small: 12,
+  small: 13,
   medium: 15,
-  large: 18,
+  large: 37,
 };
 
 export const EZStatusBar = ({backgroundStyle}) => {

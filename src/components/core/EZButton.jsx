@@ -1,7 +1,8 @@
-import { View, Text } from 'react-native'
+import { View, Text, TouchableOpacity } from 'react-native'
 import React from 'react'
+import Icon from 'react-native-vector-icons/Feather'
 
-const Button = () => {
+const EZButton = () => {
   return (
     <View>
       <Text>Button</Text>
@@ -9,4 +10,15 @@ const Button = () => {
   )
 }
 
-export default Button
+const EZButtonBack = ({navigation}) => {
+  return (
+    <TouchableOpacity
+      onPress={() => navigation.goBack()}
+      style={styles.backBtn}>
+      <Icon name="arrow-left" size={30} color={COLORS.whiteText} />
+      <Text style={styles.backBtnText}>Back</Text>
+    </TouchableOpacity>
+  );
+}
+
+export {EZButton, EZButtonBack}
