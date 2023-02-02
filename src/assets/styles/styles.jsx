@@ -3,7 +3,7 @@ import {StatusBar, useColorScheme} from 'react-native';
 export const COLORS = {
   primary: '#0071AE',
   secondary: '#FF5286',
-  tertiary: '#FF5286',
+  tertiary: '#2085D3',
   white: '#FFFFFF',
   black: '#000000',
   disable: '#C5C4D2',
