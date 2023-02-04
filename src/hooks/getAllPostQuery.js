@@ -1,10 +1,11 @@
 import {useQuery} from '@tanstack/react-query';
 import axios from 'axios';
+import {API_URL} from '@env';
+import * as httpRequest from '../utils/httpRequest';
 
-const postApiUrl = 'https://jsonplaceholder.typicode.com/posts';
 const getAllPost = async () => {
-  const response = await axios.get(postApiUrl);
-  return response.data;
+  const response = await httpRequest.getHttpRequest(`${API_URL}posts`);
+  return response;
 };
 
 export const UseGetAllPost = () => {

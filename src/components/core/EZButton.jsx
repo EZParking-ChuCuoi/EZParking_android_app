@@ -9,6 +9,7 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import {COLORS, FONTSIZE} from '../../assets/styles/styles';
 import EZText from './EZText';
+import { useNavigation } from '@react-navigation/native';
 
 const EZButton = props => {
   const isDarkMode = useColorScheme() === 'dark';
@@ -50,7 +51,8 @@ const EZButton = props => {
   );
 };
 
-const EZButtonBack = ({navigation}) => {
+const EZButtonBack = () => {
+  const navigation = useNavigation();
   return (
     <TouchableOpacity
       onPress={() => navigation.goBack()}

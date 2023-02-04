@@ -4,6 +4,7 @@ import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AuthStackNavigators from './AuthStackNavigators';
 import SplashScreen from 'react-native-splash-screen';
 import {COLORS} from '../assets/styles/styles';
+import BottomTab from './BottomTabs';
 
 const RootRoute = () => {
   useEffect(() => {
@@ -17,6 +18,7 @@ const RootRoute = () => {
           headerShown: false,
         }}>
         <Stack.Screen name="auth" component={AuthStackNavigators} />
+        <Stack.Screen name="bottomTab" component={BottomTab}/>
       </Stack.Group>
     </Stack.Navigator>
   );
