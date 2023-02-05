@@ -14,9 +14,8 @@ import EZText from './EZText';
 const EZInput = props => {
   const isDarkMode = useColorScheme() === 'dark';
   const [styleTextFocused, setStyleTextFocused] = useState({});
-  console.log('styleFocus', styleTextFocused);
   return (
-    <View style={styles.groupInput}>
+    <View style={[styles.groupInput, {...props.styleEZInput}]}>
       {props.label && (
         <EZText styleEZText={{marginBottom: 5, fontWeight: '500'}}>
           {props.label}
@@ -39,11 +38,12 @@ const EZInput = props => {
           placeholder={props.placeholder}
           placeholderTextColor={COLORS.disable}
           onFocus={() => {
-            setStyleTextFocused(props.styleFocus);
+            setStyleTextFocused(props.styleFocus || {borderColor: COLORS.primary});
           }}
           onBlur={() => {
             setStyleTextFocused({});
           }}
+          editable={props.editable}
         />
         {props.iconName && (
           <TouchableOpacity onPress={props.handlePressIcon} style={styles.icon}>
@@ -64,6 +64,7 @@ export default EZInput;
 const styles = StyleSheet.create({
   groupInput: {
     width: '100%',
+    position: 'relative',
   },
   inputIcon: {
     flexDirection: 'row',
@@ -73,15 +74,17 @@ const styles = StyleSheet.create({
     borderColor: COLORS.borderInput,
     width: '100%',
     borderRadius: 10,
-    marginBottom: 15,
+    position: 'relative',
   },
   input: {
     fontSize: FONTSIZE.medium,
-    width: '90%',
-    paddingLeft: 10,
+    width: '100%',
+    paddingHorizontal: 10,
   },
   icon: {
-    paddingRight: 15,
+    position: 'absolute',
+    right: 8,
+    padding: 5,
   },
   // Error text
   textErr: {

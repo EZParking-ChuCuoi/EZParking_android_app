@@ -9,13 +9,13 @@ import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
 import {COLORS, FONTSIZE} from '../../assets/styles/styles';
 import EZText from './EZText';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
 
 const EZButton = props => {
   const isDarkMode = useColorScheme() === 'dark';
-  const {type = 'primary'} = props;
+  const {type = 'primary', color} = props;
   let bg = COLORS.primary;
-  let colorText = COLORS.white;
+  let colorText = color || COLORS.white;
   let bw = 0;
   if (type === 'none') {
     bg = 'transparent';
@@ -27,6 +27,9 @@ const EZButton = props => {
   } else if (type === 'disabled') {
     bg = COLORS.disable;
     colorText = COLORS.white;
+  } else if (type === 'noneWithColor') {
+    bg = 'transparent';
+    colorText = color;
   }
   return (
     <TouchableOpacity
@@ -41,24 +44,41 @@ const EZButton = props => {
           backgroundColor: bg,
           borderColor: COLORS.primary,
           borderWidth: bw,
+          ...props.styleEZButton,
         },
       ]}>
-      {props.icon && <Icon name={props.icon} color={colorText} size={FONTSIZE.iconMedium} />}
+      {props.icon && (
+        <Icon name={props.icon} color={colorText} size={FONTSIZE.iconMedium} />
+      )}
       {props.title && (
-        <Text style={[styles.btnText, {color: colorText}]}>{props.title}</Text>
+        <EZText
+          color={colorText}
+          bold
+          styleEZText={{
+            textTransform: 'capitalize',
+            paddingHorizontal: 10,
+          }}
+          size={props.sizeText || "medium"}>
+          {props.title}
+        </EZText>
       )}
     </TouchableOpacity>
   );
 };
 
 const EZButtonBack = () => {
+  const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       onPress={() => navigation.goBack()}
       style={styles.backBtn}>
-      <Icon name="arrow-left" size={28} color={COLORS.white} />
-      <EZText style={styles.btnText}> Back</EZText>
+      <Icon
+        name="chevron-left"
+        color={isDarkMode ? COLORS.white : COLORS.black}
+        size={FONTSIZE.iconSmall}
+      />
+      <EZText styleEZText={styles.backBtnText}>Back</EZText>
     </TouchableOpacity>
   );
 };
@@ -69,22 +89,14 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'flex-end',
   },
-  btnText: {
-    fontWeight: 'bold',
-    textTransform: 'capitalize',
-    paddingHorizontal: 10,
-  },
   backBtn: {
-    position: 'absolute',
-    top: 20,
-    left: 15,
     flexDirection: 'row',
     alignItems: 'center',
   },
   backBtnText: {
-    marginLeft: 6,
+    paddingLeft: 3,
     fontWeight: '600',
-    fontSize: FONTSIZE.medium,
+    fontSize: FONTSIZE.small,
   },
 });
 export {EZButton, EZButtonBack};

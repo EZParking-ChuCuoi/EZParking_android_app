@@ -1,11 +1,13 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import EZContainer from '../../components/core/EZContainer'
+import EZText from '../../components/core/EZText'
 
 const Register = () => {
   return (
-    <View>
-      <Text>Register</Text>
-    </View>
+    <EZContainer>
+      <EZText>Register</EZText>
+    </EZContainer>
   )
 }
 

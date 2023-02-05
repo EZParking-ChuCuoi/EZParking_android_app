@@ -3,14 +3,14 @@ import React from 'react'
 import EZContainer from '../components/core/EZContainer'
 import EZText from '../components/core/EZText'
 
-const Setting = () => {
+const Account = () => {
   return (
     <EZContainer>
-      <EZText>Setting</EZText>
+      <EZText>Account</EZText>
     </EZContainer>
   )
 }
 
-export default Setting
+export default Account
 
 const styles = StyleSheet.create({})

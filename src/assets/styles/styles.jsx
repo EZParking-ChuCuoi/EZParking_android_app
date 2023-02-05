@@ -24,13 +24,15 @@ export const FONTSIZE = {
 
 export const SPACING = {
   pxComponent: 15,
+  mbInputItem: 10,
 };
-export const EZStatusBar = () => {
+
+export const EZStatusBar = props => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <StatusBar
       barStyle={isDarkMode ? 'light-content' : 'dark-content'}
-      backgroundColor={isDarkMode ? COLORS.bgDark : COLORS.bgLight}
+      backgroundColor={props.bg ? props.bg : isDarkMode ? COLORS.bgDark : COLORS.bgLight}
     />
   );
 };

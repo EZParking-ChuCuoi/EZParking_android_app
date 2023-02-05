@@ -5,13 +5,14 @@ import {StyleSheet, Text, useColorScheme} from 'react-native';
 import {COLORS, FONTSIZE} from '../assets/styles/styles';
 import Home from '../views/Home';
 import Chat from '../views/Chat';
-import Setting from '../views/Setting';
+import Setting from '../views/Account';
 import ScanQRCode from '../views/ScanQRCode';
 import Notification from '../views/Notification';
 import EZText from '../components/core/EZText';
+import Account from '../views/Account';
 
 const BottomTab = () => {
-  const isSpaceOwner = true;
+  const isSpaceOwner = false;
   const isDarkMode = useColorScheme() === 'dark';
   const defaultIconColor = isDarkMode ? COLORS.white : COLORS.black;
   const focusIcon = isFocused => {
@@ -142,17 +143,17 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name="setting"
-        component={Setting}
+        name="Account"
+        component={Account}
         options={() => {
           return {
             tabBarLabel: ({focused}) => {
-              return <EZText styleEZText={focusText(focused)}>Setting</EZText>;
+              return <EZText styleEZText={focusText(focused)}>Account</EZText>;
             },
             tabBarIcon: ({focused}) => {
               return (
                 <Icon
-                  name="settings"
+                  name="user"
                   style={[
                     focusIcon(focused),
                     {color: focused ? defaultIconColor : COLORS.disable},
@@ -164,7 +165,7 @@ const BottomTab = () => {
               paddingBottom: 5,
               backgroundColor: isDarkMode ? COLORS.bgDark : COLORS.bgLight,
             },
-            title: 'Setting',
+            title: 'Account',
           };
         }}
       />
