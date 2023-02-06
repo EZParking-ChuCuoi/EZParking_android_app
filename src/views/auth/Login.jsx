@@ -1,11 +1,20 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React, {useState} from 'react';
+import {
+  Dimensions,
+  Image,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import React, {useRef, useState} from 'react';
 import {EZButton} from '../../components/core/EZButton';
 import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
 import {navigateAuthorized} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
-import {COLORS, SPACING} from '../../assets/styles/styles';
+import {BGDEFAULT, COLORS, SPACING} from '../../assets/styles/styles';
+import EZRBSheet from '../../components/core/EZRBSheet';
+import ListCountryCode from '../../components/auth/ListCountryCode';
 
 const Login = ({navigation}) => {
   const [params, setParams] = useState({
@@ -15,12 +24,17 @@ const Login = ({navigation}) => {
   });
   console.log('params=>>', params);
   const [secure, setSecure] = useState(true);
-
+  const refRBSheet = useRef();
+  const bg = BGDEFAULT();
   const handleLogin = () => {
     navigateAuthorized(navigation);
   };
+  
   return (
     <EZContainer styleEZContainer={styles.container}>
+      <EZRBSheet refRBSheet={refRBSheet}>
+        <ListCountryCode/>
+      </EZRBSheet>
       <EZText size="large" bold styleEZText={{marginTop: 30}}>
         Login
       </EZText>
@@ -28,6 +42,9 @@ const Login = ({navigation}) => {
         <View style={styles.inputGroup}>
           <EZInput
             iconName="chevron-down"
+            handlePressIcon={() => {
+              refRBSheet.current.open();
+            }}
             placeholder="country-code"
             styleEZInput={{width: '30%', marginRight: 10}}
             editable={false}

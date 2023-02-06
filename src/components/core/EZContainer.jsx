@@ -11,6 +11,7 @@ const EZContainer = props => {
         backgroundColor: isDarkMode ? COLORS.bgDark : COLORS.bgLight,
         position: 'relative',
         flex: 1,
+        width: '100%',
         ...props.styleEZContainer,
       }}>
       {props.children}

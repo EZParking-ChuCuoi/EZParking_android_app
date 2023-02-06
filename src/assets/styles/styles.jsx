@@ -27,6 +27,10 @@ export const SPACING = {
   mbInputItem: 10,
 };
 
+export const BGDEFAULT = () => {
+  const isDarkMode = useColorScheme();
+  return isDarkMode ? COLORS.bgDark : COLORS.bgLight;
+}
 export const EZStatusBar = props => {
   const isDarkMode = useColorScheme() === 'dark';
   return (
