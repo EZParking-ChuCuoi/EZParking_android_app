@@ -4,6 +4,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React from 'react';
@@ -11,14 +12,14 @@ import EZContainer from '../core/EZContainer';
 import EZText from '../core/EZText';
 import {UseGetCountriesCode} from '../../hooks/getCountriesCode';
 import {COLORS} from '../../assets/styles/styles';
-const ListCountryCode = () => {
+const ListCountryCode = (props) => {
   const {data, isLoading} = UseGetCountriesCode();
   const renderItem = ({item}) => {
     return (
-      <View style={styles.item}>
+      <TouchableOpacity style={styles.item} onPress={()=>props.handlePressItem(item.countryCode)}>
         <EZText>{item.countryName}</EZText>
         <EZText>{item.countryCode}</EZText>
-      </View>
+      </TouchableOpacity>
     );
   };
   if (isLoading) {

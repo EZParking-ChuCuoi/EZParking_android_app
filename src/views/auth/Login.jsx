@@ -29,11 +29,13 @@ const Login = ({navigation}) => {
   const handleLogin = () => {
     navigateAuthorized(navigation);
   };
-  
+
   return (
     <EZContainer styleEZContainer={styles.container}>
       <EZRBSheet refRBSheet={refRBSheet}>
-        <ListCountryCode/>
+        <ListCountryCode
+          handlePressItem={countryCode => setParams({...params, ['prefix']: countryCode})}
+        />
       </EZRBSheet>
       <EZText size="large" bold styleEZText={{marginTop: 30}}>
         Login
