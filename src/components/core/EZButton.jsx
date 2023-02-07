@@ -24,6 +24,10 @@ const EZButton = props => {
     bg = 'transparent';
     colorText = COLORS.primary;
     bw = 2;
+  }else if (type === 'secondaryWithColor') {
+    bg = 'transparent';
+    colorText = color;
+    bw = 2;
   } else if (type === 'disabled') {
     bg = COLORS.disable;
     colorText = COLORS.white;
@@ -92,6 +96,10 @@ const styles = StyleSheet.create({
   backBtn: {
     flexDirection: 'row',
     alignItems: 'center',
+    position: 'absolute',
+    top: 15,
+    left: 10,
+    zIndex: 1000,
   },
   backBtnText: {
     paddingLeft: 3,

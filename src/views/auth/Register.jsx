@@ -1,16 +1,17 @@
 import {
   Dimensions,
   Image,
+  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useRef, useState} from 'react';
-import {EZButton} from '../../components/core/EZButton';
+import {EZButton, EZButtonBack} from '../../components/core/EZButton';
 import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
-import {navigateAuthorized} from '../../shared/auth';
+import {navigateAuthorized, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
 import {BGDEFAULT, COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
@@ -18,18 +19,64 @@ import ListCountryCode from '../../components/auth/ListCountryCode';
 
 const Register = ({navigation}) => {
   const [params, setParams] = useState({
-    prefix: '84',
-    phone: '',
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
   });
-  const [secure, setSecure] = useState(true);
+  const [errMessage, setErrMessage] = useState({
+    email: '',
+    username: '',
+    password: '',
+    confirmPassword: '',
+  });
+  const [secure, setSecure] = useState({
+    pwd: true,
+    confirmPwd: true,
+  });
   const refRBSheet = useRef();
-  const bg = BGDEFAULT();
   const handleRegister = () => {
-    console.log('handleRegister', params);
+    console.log('params=>>', params);
+    validate();
+    navigation.navigate('login');
+  };
+
+  const validate = () => {
+    let check = true;
+    let errMess = {
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+    };
+    if (!validateEmail(params.email)) {
+      check = false;
+      errMess.email = 'Invalid email format!';
+    }
+    if (params.email === '') {
+      check = false;
+      errMess.email = 'Required input!';
+    }
+    if (params.password === '') {
+      check = false;
+      errMess.password = 'Required input!';
+    }
+    setErrMessage(errMess);
+    return check;
+  };
+
+  const handleBlur = () => {
+    setErrMessage({
+      email: '',
+      username: '',
+      password: '',
+      confirmPassword: '',
+    });
   };
 
   return (
     <EZContainer styleEZContainer={styles.container}>
+      <EZButtonBack />
       <EZRBSheet refRBSheet={refRBSheet}>
         <ListCountryCode
           handlePressItem={countryCode =>
@@ -37,50 +84,73 @@ const Register = ({navigation}) => {
           }
         />
       </EZRBSheet>
-      <EZText size="large" bold styleEZText={{marginTop: 30}}>
-        Register
-      </EZText>
+      <ImageBackground
+        source={require('../../assets/images/loginImage.png')}
+        resizeMode="cover"
+        style={styles.imageRegister}>
+        <EZText
+          size="large"
+          bold
+          styleEZText={{marginTop: 30}}
+          color={COLORS.primary}>
+          Register
+        </EZText>
+      </ImageBackground>
       <View>
-        <EZText styleEZText={{marginBottom: 20}}>
-          Enter you phone number to signup
-        </EZText>
-        <View style={styles.inputGroup}>
-          <EZInput
-            iconName="chevron-down"
-            handlePressIcon={() => {
-              refRBSheet.current.open();
-            }}
-            placeholder="country-code"
-            styleEZInput={{width: '30%', marginRight: 10}}
-            editable={false}
-            defaultValue={'+' + params.prefix}
-            onChangeText={newText =>
-              setParams({...params, ['prefix']: newText})
-            }
-          />
-          <EZInput
-            placeholder="Phone number"
-            styleEZInput={{width: '65%'}}
-            onChangeText={newText => setParams({...params, ['phone']: newText})}
-            keyboardType="phone-pad"
-          />
-        </View>
-      </View>
-      <View style={styles.registerAndServices}>
-        <EZButton
-          title="Register"
-          w="85%"
-          py={20}
-          br={30}
-          handlePress={handleRegister}
+        <EZInput
+          iconName="mail"
+          placeholder="Email"
+          onChangeText={newText => setParams({...params, ['email']: newText})}
+          keyboardType="email-address"
+          styleEZInput={{marginBottom: SPACING.mbInputItem}}
+          errMess={errMessage.email}
+          handleBlur={handleBlur}
         />
-        <EZText color={COLORS.disable} styleEZText={{marginTop: 20}}>
-          By proceeding you agree with our
-        </EZText>
-        <EZText color={COLORS.primary}>
-          Terms of Services & Privacy Policy
-        </EZText>
+        <EZInput
+          iconName="user"
+          placeholder="Username"
+          onChangeText={newText =>
+            setParams({...params, ['username']: newText})
+          }
+          styleEZInput={{marginBottom: SPACING.mbInputItem}}
+          errMess={errMessage.username}
+          handleBlur={handleBlur}
+        />
+        <EZInput
+          iconName={secure.pwd ? 'eye' : 'eye-off'}
+          placeholder="Password"
+          secure={secure.pwd}
+          onChangeText={newText =>
+            setParams({...params, ['password']: newText})
+          }
+          handlePressIcon={() => setSecure({...secure, ['pwd']: !secure.pwd})}
+          styleEZInput={{marginBottom: SPACING.mbInputItem}}
+          errMess={errMessage.password}
+          handleBlur={handleBlur}
+        />
+        <EZInput
+          iconName={secure.confirmPwd ? 'eye' : 'eye-off'}
+          placeholder="Confirm password"
+          secure={secure.confirmPwd}
+          onChangeText={newText =>
+            setParams({...params, ['confirmPassword']: newText})
+          }
+          handlePressIcon={() =>
+            setSecure({...secure, ['confirmPwd']: !secure.confirmPwd})
+          }
+          styleEZInput={{marginBottom: SPACING.mbInputItem}}
+          errMess={errMessage.confirmPassword}
+          handleBlur={handleBlur}
+        />
       </View>
+      <EZButton
+        title="Register"
+        w="85%"
+        py={20}
+        br={30}
+        handlePress={handleRegister}
+        styleEZButton={{marginBottom: 30}}
+      />
     </EZContainer>
   );
 };
@@ -92,29 +162,17 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     paddingHorizontal: 10,
-    paddingVertical: 50,
   },
-  inputGroup: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: SPACING.mbInputItem,
-  },
-  registerAndServices: {
+  RegisterAndServices: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
   },
-  btnServices: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+  imageRegister: {
+    height: 200,
+    minWidth: '100%',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-  },
-  btnService: {
-    maxWidth: 60,
-    maxHeight: 60,
-    marginHorizontal: 10,
   },
   createNew: {
     width: '100%',

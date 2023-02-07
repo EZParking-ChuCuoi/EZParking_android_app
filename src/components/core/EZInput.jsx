@@ -38,10 +38,11 @@ const EZInput = props => {
           placeholder={props.placeholder}
           placeholderTextColor={COLORS.disable}
           onFocus={() => {
-            setStyleTextFocused(props.styleFocus || {borderColor: COLORS.primary});
+            setStyleTextFocused(props.styleFocus || {borderColor: COLORS.primary, borderWidth: 2,});
           }}
           onBlur={() => {
             setStyleTextFocused({});
+            props.handleBlur();
           }}
           editable={props.editable}
         />

@@ -17,6 +17,7 @@ export const FONTSIZE = {
   small: 13,
   medium: 15,
   large: 37,
+  huge: 50,
   iconSmall: 17,
   iconMedium: 20,
   iconLarge: 25,

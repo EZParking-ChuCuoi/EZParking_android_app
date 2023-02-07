@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  ImageBackground,
   StyleSheet,
   Text,
   TouchableOpacity,
@@ -10,7 +11,7 @@ import React, {useRef, useState} from 'react';
 import {EZButton} from '../../components/core/EZButton';
 import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
-import {navigateAuthorized} from '../../shared/auth';
+import {navigateAuthorized, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
 import {BGDEFAULT, COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
@@ -18,50 +19,77 @@ import ListCountryCode from '../../components/auth/ListCountryCode';
 
 const Login = ({navigation}) => {
   const [params, setParams] = useState({
-    prefix: '84',
-    phone: '',
+    email: '',
     password: '',
   });
-  console.log('params=>>', params);
+  const [errMessage, setErrMessage] = useState({
+    email: '',
+    password: '',
+  });
   const [secure, setSecure] = useState(true);
   const refRBSheet = useRef();
-  const bg = BGDEFAULT();
   const handleLogin = () => {
-    navigateAuthorized(navigation);
+    console.log('params=>>', params);
+    validate();
+    // navigateAuthorized(navigation);
+  };
+
+  const validate = () => {
+    let check = true;
+    let errMess = {
+      email: '',
+      password: '',
+    };
+    if (!validateEmail(params.email)) {
+      check = false;
+      errMess.email = 'Invalid email format!';
+    }
+    if (params.email === '') {
+      check = false;
+      errMess.email = 'Required input!';
+    }
+    if (params.password === '') {
+      check = false;
+      errMess.password = 'Required input!';
+    }
+    setErrMessage(errMess);
+    return check;
+  };
+
+  const handleBlur = () => {
+    setErrMessage({
+      email: '',
+      password: '',
+    });
   };
 
   return (
     <EZContainer styleEZContainer={styles.container}>
       <EZRBSheet refRBSheet={refRBSheet}>
         <ListCountryCode
-          handlePressItem={countryCode => setParams({...params, ['prefix']: countryCode})}
+          handlePressItem={countryCode =>
+            setParams({...params, ['prefix']: countryCode})
+          }
         />
       </EZRBSheet>
-      <EZText size="large" bold styleEZText={{marginTop: 30}}>
-        Login
-      </EZText>
+      <ImageBackground
+        source={require('../../assets/images/loginImage.png')}
+        resizeMode="cover"
+        style={styles.imageLogin}>
+        <EZText size="large" bold styleEZText={{marginTop: 30}} color={COLORS.primary}>
+          Login
+        </EZText>
+      </ImageBackground>
       <View>
-        <View style={styles.inputGroup}>
-          <EZInput
-            iconName="chevron-down"
-            handlePressIcon={() => {
-              refRBSheet.current.open();
-            }}
-            placeholder="country-code"
-            styleEZInput={{width: '30%', marginRight: 10}}
-            editable={false}
-            defaultValue={'+' + params.prefix}
-            onChangeText={newText =>
-              setParams({...params, ['prefix']: newText})
-            }
-          />
-          <EZInput
-            placeholder="Phone number"
-            styleEZInput={{width: '65%'}}
-            onChangeText={newText => setParams({...params, ['phone']: newText})}
-            keyboardType="phone-pad"
-          />
-        </View>
+        <EZInput
+          iconName="mail"
+          placeholder="Email"
+          onChangeText={newText => setParams({...params, ['email']: newText})}
+          keyboardType="email-address"
+          styleEZInput={{marginBottom: SPACING.mbInputItem}}
+          errMess={errMessage.email}
+          handleBlur={handleBlur}
+        />
         <EZInput
           iconName={secure ? 'eye' : 'eye-off'}
           placeholder="Password"
@@ -71,6 +99,8 @@ const Login = ({navigation}) => {
           }
           handlePressIcon={() => setSecure(!secure)}
           styleEZInput={{marginBottom: SPACING.mbInputItem}}
+          errMess={errMessage.password}
+          handleBlur={handleBlur}
         />
 
         <TouchableOpacity onPress={() => navigation.navigate('forgot')}>
@@ -87,29 +117,6 @@ const Login = ({navigation}) => {
           br={30}
           handlePress={handleLogin}
         />
-        <EZText color={COLORS.disable} styleEZText={{marginVertical: 15}}>
-          Or Continue with
-        </EZText>
-        <View style={styles.btnServices}>
-          <TouchableOpacity
-            onPress={() => {
-              console.log('login with google');
-            }}>
-            <Image
-              source={require('../../assets/images/googleLogo.png')}
-              style={styles.btnService}
-            />
-          </TouchableOpacity>
-          <TouchableOpacity
-            onPress={() => {
-              console.log('login with facebook');
-            }}>
-            <Image
-              source={require('../../assets/images/facebookLogo.png')}
-              style={styles.btnService}
-            />
-          </TouchableOpacity>
-        </View>
       </View>
       <View style={styles.createNew}>
         <EZText
@@ -137,28 +144,18 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     padding: 10,
-  },
-  inputGroup: {
-    width: '100%',
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    marginBottom: SPACING.mbInputItem,
+    paddingTop: 0,
   },
   loginAndServices: {
     justifyContent: 'center',
     alignItems: 'center',
     width: '100%',
   },
-  btnServices: {
-    flexDirection: 'row',
-    justifyContent: 'center',
+  imageLogin: {
+    height: 200,
+    minWidth: '100%',
+    justifyContent: 'flex-end',
     alignItems: 'center',
-  },
-  btnService: {
-    maxWidth: 60,
-    maxHeight: 60,
-    marginHorizontal: 10,
   },
   createNew: {
     width: '100%',
