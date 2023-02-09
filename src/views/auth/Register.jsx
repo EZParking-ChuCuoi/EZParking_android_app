@@ -4,10 +4,11 @@ import {
   ImageBackground,
   StyleSheet,
   Text,
+  TextInput,
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {EZButton, EZButtonBack} from '../../components/core/EZButton';
 import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
@@ -16,6 +17,10 @@ import EZInput from '../../components/core/EZInput';
 import {BGDEFAULT, COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import ListCountryCode from '../../components/auth/ListCountryCode';
+import {useRegister} from '../../hooks/auth';
+import {androidNotification} from '../../shared/androidNotification';
+import OTPScreen from '../../components/auth/OTPScreen';
+import EZLoading from '../../components/core/EZLoading';
 
 const Register = ({navigation}) => {
   const [params, setParams] = useState({
@@ -34,11 +39,29 @@ const Register = ({navigation}) => {
     pwd: true,
     confirmPwd: true,
   });
+  
+  const mutation = useRegister();
   const refRBSheet = useRef();
+
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      refRBSheet.current.open();
+    }
+    if (mutation.isError) {
+      throw mutation.error;
+    }
+  }, [mutation]);
+  
   const handleRegister = () => {
-    console.log('params=>>', params);
-    validate();
-    navigation.navigate('login');
+    if (!validate()) {
+      return;
+    }
+    mutation.mutate({
+      fullName: params.username,
+      email: params.email,
+      password: params.password,
+      password_confirmation: params.confirmPassword,
+    });
   };
 
   const validate = () => {
@@ -57,9 +80,21 @@ const Register = ({navigation}) => {
       check = false;
       errMess.email = 'Required input!';
     }
+    if (params.username === '') {
+      check = false;
+      errMess.username = 'Required input!';
+    }
     if (params.password === '') {
       check = false;
       errMess.password = 'Required input!';
+    }
+    if (params.confirmPassword === '') {
+      check = false;
+      errMess.confirmPassword = 'Required input!';
+    }
+    if (params.confirmPassword !== params.password) {
+      check = false;
+      errMess.confirmPassword = 'Confirm password not match!';
     }
     setErrMessage(errMess);
     return check;
@@ -77,11 +112,18 @@ const Register = ({navigation}) => {
   return (
     <EZContainer styleEZContainer={styles.container}>
       <EZButtonBack />
-      <EZRBSheet refRBSheet={refRBSheet}>
-        <ListCountryCode
-          handlePressItem={countryCode =>
-            setParams({...params, ['prefix']: countryCode})
-          }
+      {mutation.isLoading && <EZLoading />}
+      <EZRBSheet
+        refRBSheet={refRBSheet}
+        closeBtn={false}
+        height={Dimensions.get('window').height}
+        styleEZRBSheet={{
+          borderTopLeftRadius: 0,
+          borderTopRightRadius: 0,
+        }}>
+        <OTPScreen
+          params={params}
+          closeRBSheet={() => refRBSheet.current.close()}
         />
       </EZRBSheet>
       <ImageBackground
@@ -95,6 +137,7 @@ const Register = ({navigation}) => {
           color={COLORS.primary}>
           Register
         </EZText>
+        <EZText>{mutation.isError && mutation.error.message}</EZText>
       </ImageBackground>
       <View>
         <EZInput

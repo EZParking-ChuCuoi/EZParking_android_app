@@ -5,7 +5,7 @@ import {COLORS, FONTSIZE} from '../../assets/styles/styles';
 import Icon from 'react-native-vector-icons/Feather';
 
 const EZRBSheet = props => {
-  const {refRBSheet, height = 500} = props;
+  const {refRBSheet, height = 500, closeBtn=true} = props;
   return (
     <RBSheet
       ref={refRBSheet}
@@ -20,15 +20,21 @@ const EZRBSheet = props => {
           borderTopLeftRadius: 23,
           borderTopRightRadius: 23,
           backgroundColor: COLORS.primary,
-        
+          ...props.styleEZRBSheet,
         },
         draggableIcon: {
           backgroundColor: COLORS.secondary,
         },
       }}>
-      <TouchableOpacity onPress={()=>refRBSheet.current.close()}>
-        <Icon name="chevron-down" size={FONTSIZE.iconLarge} color={COLORS.secondary} />
-      </TouchableOpacity>
+      {closeBtn && (
+        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
+          <Icon
+            name="chevron-down"
+            size={FONTSIZE.iconLarge}
+            color={COLORS.secondary}
+          />
+        </TouchableOpacity>
+      )}
       {props.children}
     </RBSheet>
   );

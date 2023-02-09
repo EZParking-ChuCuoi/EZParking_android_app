@@ -1,8 +1,13 @@
 import axios from 'axios';
-import {API_URL} from '@env';
+import {BASE_API_URL} from '@env';
 
 const httpRequest = axios.create({
-  baseURL: API_URL,
+  baseURL: BASE_API_URL,
+  headers: {
+    'X-Custom-Header': 'foobar',
+    'Content-Type': 'application/json',
+    Accept: 'application/json',
+  },
 });
 
 export const getHttpRequest = async (path, options = {}) => {
@@ -11,8 +16,12 @@ export const getHttpRequest = async (path, options = {}) => {
 };
 
 export const postHttpRequest = async (path, options = {}) => {
-  const response = await httpRequest.post(path, options);
-  return response.data;
+  try {
+    const response = await httpRequest.post(path, options);
+    return response.data;
+  } catch (error) {
+    console.log(error);
+  }
 };
 
 export const deleteHttpRequest = async path => {

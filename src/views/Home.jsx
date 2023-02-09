@@ -1,13 +1,22 @@
 import {ActivityIndicator, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import EZContainer from '../components/core/EZContainer';
 import EZText from '../components/core/EZText';
 import {UseGetAllPost} from '../hooks/getAllPostQuery';
 import {EZButton} from '../components/core/EZButton';
 import {COLORS} from '../assets/styles/styles';
+import {UseGetCountriesCode} from '../hooks/getCountriesCode';
+import {getData} from '../shared/auth';
 
 const Home = () => {
-  const {data, isLoading} = UseGetAllPost();
+  const {data, isLoading} = UseGetCountriesCode();
+  useEffect(() => {
+    const getToken = async() => {
+      const token = await getData('EZToken');
+      console.log(token);
+    };
+    getToken();
+  }, []);
   if (isLoading) {
     return (
       <EZContainer>
@@ -15,13 +24,14 @@ const Home = () => {
       </EZContainer>
     );
   }
+
   return (
     <EZContainer>
       <EZText>Home</EZText>
       {data &&
         data.map((post, key) => (
           <View key={key}>
-            <EZText>{post.title}</EZText>
+            <EZText>{post.countryName}</EZText>
           </View>
         ))}
     </EZContainer>

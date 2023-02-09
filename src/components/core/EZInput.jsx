@@ -21,11 +21,6 @@ const EZInput = props => {
           {props.label}
         </EZText>
       )}
-      {props.errMess && (
-        <EZText size="small" color={COLORS.redLight} styleEZText={{marginBottom: 5, fontWeight: '500'}}>
-          {props.errMess}
-        </EZText>
-      )}
       <View style={[styles.inputIcon, styleTextFocused]}>
         <TextInput
           style={[styles.input, {color: isDarkMode ? COLORS.white : COLORS.black}]}
@@ -42,9 +37,10 @@ const EZInput = props => {
           }}
           onBlur={() => {
             setStyleTextFocused({});
-            props.handleBlur();
+            props.handleBlur;
           }}
           editable={props.editable}
+          ref={props.refEZInput}
         />
         {props.iconName && (
           <TouchableOpacity onPress={props.handlePressIcon} style={styles.icon}>
@@ -56,6 +52,11 @@ const EZInput = props => {
           </TouchableOpacity>
         )}
       </View>
+      {props.errMess && (
+        <EZText size="small" color={COLORS.redLight} styleEZText={{marginTop: 5, fontWeight: '500'}}>
+          {props.errMess}
+        </EZText>
+      )}
     </View>
   );
 };

@@ -7,17 +7,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {EZButton} from '../../components/core/EZButton';
 import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
-import {navigateAuthorized, validateEmail} from '../../shared/auth';
+import {navigateAuthorized, storeData, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
 import {BGDEFAULT, COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import ListCountryCode from '../../components/auth/ListCountryCode';
-
-const Login = ({navigation}) => {
+import {UseLogin} from '../../hooks/auth';
+import {androidNotification} from '../../shared/androidNotification';
+import EZLoading from '../../components/core/EZLoading';
+import {useNavigation} from '@react-navigation/native';
+const Login = () => {
+  const navigation = useNavigation();
   const [params, setParams] = useState({
     email: '',
     password: '',
@@ -26,12 +30,28 @@ const Login = ({navigation}) => {
     email: '',
     password: '',
   });
+
+  const mutation = UseLogin();
   const [secure, setSecure] = useState(true);
   const refRBSheet = useRef();
-  const handleLogin = () => {
-    console.log('params=>>', params);
-    validate();
-    // navigateAuthorized(navigation);
+
+  useEffect(() => {
+    if (mutation.isSuccess) {
+      // storeData('EZToken', mutation.data.data.accessToken);
+      // androidNotification('login');
+      // navigateAuthorized(navigation);
+      console.log(mutation);
+    }
+    if (mutation.isError && mutation.error.response.status === 401) {
+      console.log(mutation.data);
+    }
+  }, [mutation]);
+
+  const handleLogin = async () => {
+    if (!validate()) {
+      return;
+    }
+    mutation.mutate(params);
   };
 
   const validate = () => {
@@ -65,6 +85,7 @@ const Login = ({navigation}) => {
 
   return (
     <EZContainer styleEZContainer={styles.container}>
+      {mutation.isLoading && <EZLoading />}
       <EZRBSheet refRBSheet={refRBSheet}>
         <ListCountryCode
           handlePressItem={countryCode =>
@@ -76,7 +97,11 @@ const Login = ({navigation}) => {
         source={require('../../assets/images/loginImage.png')}
         resizeMode="cover"
         style={styles.imageLogin}>
-        <EZText size="large" bold styleEZText={{marginTop: 30}} color={COLORS.primary}>
+        <EZText
+          size="large"
+          bold
+          styleEZText={{marginTop: 30}}
+          color={COLORS.primary}>
           Login
         </EZText>
       </ImageBackground>

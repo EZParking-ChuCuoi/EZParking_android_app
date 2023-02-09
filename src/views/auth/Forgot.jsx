@@ -14,11 +14,10 @@ import EZContainer from '../../components/core/EZContainer';
 import {navigateAuthorized, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
 import {BGDEFAULT, COLORS, SPACING} from '../../assets/styles/styles';
-import EZRBSheet from '../../components/core/EZRBSheet';
-import ListCountryCode from '../../components/auth/ListCountryCode';
 
 const Forgot = ({navigation}) => {
   const [isStep1, setIsStep1] = useState(true);
+  const [editable, setEditable] = useState(true);
   const [params, setParams] = useState({
     email: '',
     password: '',
@@ -33,15 +32,14 @@ const Forgot = ({navigation}) => {
     pwd: true,
     confirmPwd: true,
   });
-  const refRBSheet = useRef();
   const handleForgot = () => {
     console.log('params=>>', params);
     validate();
     // navigateAuthorized(navigation);
   };
-  const handleStep1 = ()=> {
-    setIsStep1(false)
-  }
+  const handleStep1 = () => {
+    setIsStep1(false);
+  };
 
   const validate = () => {
     let check = true;
@@ -102,12 +100,13 @@ const Forgot = ({navigation}) => {
           styleEZInput={{marginBottom: SPACING.mbInputItem}}
           errMess={errMessage.email}
           handleBlur={handleBlur}
+          editable={editable}
         />
         {!isStep1 ? (
           <>
             <EZInput
               iconName={secure.pwd ? 'eye' : 'eye-off'}
-              placeholder="Password"
+              placeholder="New password"
               secure={secure.pwd}
               onChangeText={newText =>
                 setParams({...params, ['password']: newText})
@@ -143,7 +142,10 @@ const Forgot = ({navigation}) => {
             w="40%"
             py={15}
             br={30}
-            handlePress={handleStep1}
+            handlePress={() => {
+              setIsStep1(false);
+              setEditable(false);
+            }}
             styleEZButton={{marginBottom: 30}}
           />
           <EZButton
@@ -151,7 +153,7 @@ const Forgot = ({navigation}) => {
             w="40%"
             py={15}
             br={30}
-            handlePress={handleForgot}
+            handlePress={() => navigation.navigate('login')}
             styleEZButton={{marginBottom: 30}}
             type="secondary"
           />
