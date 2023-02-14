@@ -18,15 +18,16 @@ const OTPScreen = props => {
   const navigation = useNavigation();
 
   useEffect(() => {
-    if(mutation.error){
-      console.log(mutation.error.message)
-    }
     if (mutation.isSuccess) {
-      console.log('CLMMMMMMMMMM', mutation.data);
       props.closeRBSheet();
       navigateAuthorized(navigation);
     }
   }, [mutation]);
+  useEffect(() => {
+    if (mutation.isError && mutation.error.response.status === 400) {
+      setErrMessage('Invalid OTP!');
+    }
+  }, [mutation.isError]);
 
   const handleConfirm = () => {
     if (otp === '' || otp.length != 6) {
@@ -46,6 +47,7 @@ const OTPScreen = props => {
         paddingHorizontal: 10,
         justifyContent: 'center',
       }}>
+      {mutation.isLoading && <EZLoading />}
       <EZText size="large" bold>
         OTP verification
       </EZText>

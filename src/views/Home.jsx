@@ -6,14 +6,14 @@ import {UseGetAllPost} from '../hooks/getAllPostQuery';
 import {EZButton} from '../components/core/EZButton';
 import {COLORS} from '../assets/styles/styles';
 import {UseGetCountriesCode} from '../hooks/getCountriesCode';
-import {getData} from '../shared/auth';
+import { getData } from '../shared/asyncStorages';
 
 const Home = () => {
   const {data, isLoading} = UseGetCountriesCode();
   useEffect(() => {
     const getToken = async() => {
       const token = await getData('EZToken');
-      console.log(token);
+      console.log('token', token);
     };
     getToken();
   }, []);
@@ -27,7 +27,7 @@ const Home = () => {
 
   return (
     <EZContainer>
-      <EZText>Home</EZText>
+      <EZText bold>Home</EZText>
       {data &&
         data.map((post, key) => (
           <View key={key}>

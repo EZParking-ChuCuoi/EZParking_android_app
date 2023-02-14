@@ -14,7 +14,7 @@ import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
 import {navigateAuthorized, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
-import {BGDEFAULT, COLORS, SPACING} from '../../assets/styles/styles';
+import { COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import ListCountryCode from '../../components/auth/ListCountryCode';
 import {useRegister} from '../../hooks/auth';
@@ -39,7 +39,7 @@ const Register = ({navigation}) => {
     pwd: true,
     confirmPwd: true,
   });
-  
+
   const mutation = useRegister();
   const refRBSheet = useRef();
 
@@ -47,11 +47,13 @@ const Register = ({navigation}) => {
     if (mutation.isSuccess) {
       refRBSheet.current.open();
     }
-    if (mutation.isError) {
-      throw mutation.error;
-    }
   }, [mutation]);
-  
+  useEffect(() => {
+    if (mutation.isError && mutation.error.response.status === 422) {
+      setErrMessage({...errMessage, ['email']: 'Email is duplicated'});
+    }
+  }, [mutation.isError]);
+
   const handleRegister = () => {
     if (!validate()) {
       return;
@@ -83,10 +85,16 @@ const Register = ({navigation}) => {
     if (params.username === '') {
       check = false;
       errMess.username = 'Required input!';
+    } else if (params.username.length < 3) {
+      check = false;
+      errMess.username = 'Username must be more than 3 characters!';
     }
     if (params.password === '') {
       check = false;
       errMess.password = 'Required input!';
+    } else if (params.password.length < 8) {
+      check = false;
+      errMess.password = 'Password must be more than 8 characters!';
     }
     if (params.confirmPassword === '') {
       check = false;
@@ -137,7 +145,6 @@ const Register = ({navigation}) => {
           color={COLORS.primary}>
           Register
         </EZText>
-        <EZText>{mutation.isError && mutation.error.message}</EZText>
       </ImageBackground>
       <View>
         <EZInput

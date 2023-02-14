@@ -8,9 +8,7 @@ import { EZStatusBar } from '../assets/styles/styles'
 const Chat = () => {
   return (
     <EZContainer >
-      <EZButtonBack/>
       <EZText size="large" bold>Chat</EZText>
-      <EZStatusBar/>
     </EZContainer>
   )
 }

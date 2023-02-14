@@ -10,9 +10,10 @@ import ScanQRCode from '../views/ScanQRCode';
 import Notification from '../views/Notification';
 import EZText from '../components/core/EZText';
 import Account from '../views/Account';
+import { isSpaceOwner } from '../shared/auth';
 
 const BottomTab = () => {
-  const isSpaceOwner = false;
+  const isSpaceOwnerAccount = isSpaceOwner();
   const isDarkMode = useColorScheme() === 'dark';
   const defaultIconColor = isDarkMode ? COLORS.white : COLORS.black;
   const focusIcon = isFocused => {
@@ -61,7 +62,7 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name="Chat"
+        name="chat"
         component={Chat}
         options={() => {
           return {
@@ -87,9 +88,9 @@ const BottomTab = () => {
           };
         }}
       />
-      {isSpaceOwner && (
+      {isSpaceOwnerAccount && (
         <Tab.Screen
-          name="ScanQRCode"
+          name="scanQRCode"
           component={ScanQRCode}
           options={() => {
             return {
@@ -114,7 +115,7 @@ const BottomTab = () => {
         />
       )}
       <Tab.Screen
-        name="Notification"
+        name="notification"
         component={Notification}
         options={() => {
           return {
@@ -143,7 +144,7 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name="Account"
+        name="account"
         component={Account}
         options={() => {
           return {

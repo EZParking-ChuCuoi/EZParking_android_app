@@ -82,6 +82,7 @@ const styles = StyleSheet.create({
     fontSize: FONTSIZE.medium,
     width: '100%',
     paddingHorizontal: 10,
+    fontFamily: 'Poppins-Regular',
   },
   icon: {
     position: 'absolute',

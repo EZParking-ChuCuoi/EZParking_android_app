@@ -7,6 +7,11 @@ export const navigateAuthorized = navigation => {
   });
 };
 
+export const logOut = navigation => {
+  AsyncStorage.removeItem('EZToken');
+  navigation.navigate('auth', {screen: 'login'});
+};
+
 export const validateEmail = email => {
   if (
     email
@@ -21,23 +26,6 @@ export const validateEmail = email => {
   }
 };
 
-export const storeData = async (key, val) => {
-  try {
-    await AsyncStorage.setItem(key, val);
-  } catch (e) {
-    console.log('errStore', e);
-  }
-};
-
-export const getData = async key => {
-  try {
-    const value = await AsyncStorage.getItem(key);
-    if (value !== null) {
-      return value;
-    } else {
-      return '';
-    }
-  } catch (e) {
-    console.log('error: ' + e);
-  }
+export const isSpaceOwner = () => {
+  return false;
 };

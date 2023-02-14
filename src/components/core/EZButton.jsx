@@ -82,7 +82,7 @@ const EZButtonBack = () => {
         color={isDarkMode ? COLORS.white : COLORS.black}
         size={FONTSIZE.iconSmall}
       />
-      <EZText styleEZText={styles.backBtnText}>Back</EZText>
+      <EZText styleEZText={styles.backBtnText} bold>Back</EZText>
     </TouchableOpacity>
   );
 };

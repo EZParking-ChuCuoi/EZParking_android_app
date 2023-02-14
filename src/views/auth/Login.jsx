@@ -9,17 +9,18 @@ import {
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {EZButton} from '../../components/core/EZButton';
-import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
-import {navigateAuthorized, storeData, validateEmail} from '../../shared/auth';
+import {navigateAuthorized, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
-import {BGDEFAULT, COLORS, SPACING} from '../../assets/styles/styles';
+import { COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import ListCountryCode from '../../components/auth/ListCountryCode';
 import {UseLogin} from '../../hooks/auth';
 import {androidNotification} from '../../shared/androidNotification';
 import EZLoading from '../../components/core/EZLoading';
 import {useNavigation} from '@react-navigation/native';
+import { storeData } from '../../shared/asyncStorages';
+import EZText from '../../components/core/EZText';
 const Login = () => {
   const navigation = useNavigation();
   const [params, setParams] = useState({
@@ -37,15 +38,21 @@ const Login = () => {
 
   useEffect(() => {
     if (mutation.isSuccess) {
-      // storeData('EZToken', mutation.data.data.accessToken);
-      // androidNotification('login');
-      // navigateAuthorized(navigation);
+      storeData('EZToken', mutation.data.data.accessToken);
+      androidNotification('login');
+      navigateAuthorized(navigation);
       console.log(mutation);
     }
+  }, [mutation, secure]);
+
+  useEffect(() => {
     if (mutation.isError && mutation.error.response.status === 401) {
-      console.log(mutation.data);
+      setErrMessage({
+        email: 'Email or password wrong!',
+        password: 'Email or password wrong!',
+      });
     }
-  }, [mutation]);
+  }, [mutation.isError]);
 
   const handleLogin = async () => {
     if (!validate()) {

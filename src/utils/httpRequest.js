@@ -16,12 +16,8 @@ export const getHttpRequest = async (path, options = {}) => {
 };
 
 export const postHttpRequest = async (path, options = {}) => {
-  try {
-    const response = await httpRequest.post(path, options);
-    return response.data;
-  } catch (error) {
-    console.log(error);
-  }
+  const response = await httpRequest.post(path, options);
+  return response.data;
 };
 
 export const deleteHttpRequest = async path => {

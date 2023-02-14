@@ -13,7 +13,7 @@ import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
 import {navigateAuthorized, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
-import {BGDEFAULT, COLORS, SPACING} from '../../assets/styles/styles';
+import { COLORS, SPACING} from '../../assets/styles/styles';
 
 const Forgot = ({navigation}) => {
   const [isStep1, setIsStep1] = useState(true);

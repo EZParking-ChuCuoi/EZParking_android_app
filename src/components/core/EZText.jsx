@@ -3,15 +3,11 @@ import React from 'react';
 import {COLORS, FONTSIZE} from '../../assets/styles/styles';
 
 const EZText = props => {
-  let {
-    size = 'medium',
-    color = 'default',
-    bold = false,
-  } = props;
+  let {size = 'medium', color = 'default', bold = false} = props;
   const isDarkMode = useColorScheme() === 'dark';
   let colorText = color;
   let sizeText = size;
-  const fwText = bold ? 'bold' : 'normal';
+  const ff = bold ? 'Poppins-Bold' : 'Poppins-Regular';
   if (color === 'primary') {
     colorText = COLORS.primary;
   } else if (color === 'secondary') {
@@ -38,7 +34,7 @@ const EZText = props => {
       style={{
         color: colorText,
         fontSize: sizeText,
-        fontWeight: fwText,
+        fontFamily: ff,
         ...props.styleEZText,
       }}>
       {props.children}
