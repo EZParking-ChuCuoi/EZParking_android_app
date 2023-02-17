@@ -1,14 +1,17 @@
 import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
-import EZContainer from '../components/core/EZContainer';
-import {EZButton} from '../components/core/EZButton';
-import EZText from '../components/core/EZText';
-import {colorDefault, COLORS, FONTSIZE, SPACING} from '../assets/styles/styles';
-import {NAVIGATED_PROFILE, NAVIGATED_PROFILE_SPACEOWNER} from '../components/account/constants';
-import NavigatedOption from '../components/account/NavigatedOptions';
+import React, {useEffect} from 'react';
+import EZContainer from '../../components/core/EZContainer';
+import {EZButton} from '../../components/core/EZButton';
+import EZText from '../../components/core/EZText';
+import {colorDefault, COLORS, FONTSIZE, SPACING} from '../../assets/styles/styles';
+import {
+  NAVIGATED_PROFILE,
+  NAVIGATED_PROFILE_SPACEOWNER,
+} from '../../components/account/constants';
+import NavigatedOption from '../../components/account/NavigatedOptions';
 import Icon from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
-import {isSpaceOwner, logOut} from '../shared/auth';
+import {isSpaceOwner, logOut} from '../../shared/auth';
 
 const Account = () => {
   const navigation = useNavigation();

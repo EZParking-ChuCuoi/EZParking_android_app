@@ -9,7 +9,9 @@ export const COLORS = {
   disable: '#7D7C80',
   redLight: '#FD3232',
   bgDark: '#1B1616',
-  bgLight: '#F9FAFB',
+  bgDarkSecondary: '#2E2B2B',
+  bgLightSecondary: '#F9FAFB',
+  bgLight: '#E6F0FA',
   borderInput: '#7D7C80',
   borderBrighter: '#091C3F14',
 };
@@ -17,6 +19,7 @@ export const COLORS = {
 export const FONTSIZE = {
   small: 13,
   medium: 15,
+  quiteLarge: 25,
   large: 37,
   huge: 50,
   iconSmall: 17,
@@ -34,6 +37,11 @@ export const bgDefault = () => {
   const BG = isDarkMode ? COLORS.bgDark : COLORS.bgLight;
   return {BG};
 };
+export const bgSecondaryDefault = () => {
+  const isDarkMode = useColorScheme() === 'dark';
+  const BG2ND = isDarkMode ? COLORS.bgDarkSecondary : COLORS.bgLightSecondary;
+  return {BG2ND};
+};
 export const colorDefault = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const COLOR = isDarkMode ? COLORS.white : COLORS.black;
@@ -44,6 +52,7 @@ export const EZStatusBar = props => {
   return (
     <StatusBar
       barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+      translucent={props.translucent ? true : false}
       backgroundColor={
         props.bg ? props.bg : isDarkMode ? COLORS.bgDark : COLORS.bgLight
       }

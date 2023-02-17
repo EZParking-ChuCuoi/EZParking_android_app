@@ -70,13 +70,13 @@ const EZButton = props => {
   );
 };
 
-const EZButtonBack = () => {
+const EZButtonBack = props => {
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
   return (
     <TouchableOpacity
       onPress={() => navigation.goBack()}
-      style={styles.backBtn}>
+      style={[styles.backBtn, {...props.styleEZButtonBack}]}>
       <Icon
         name="chevron-left"
         color={isDarkMode ? COLORS.white : COLORS.black}

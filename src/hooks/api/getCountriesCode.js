@@ -1,6 +1,6 @@
 import {useQuery} from '@tanstack/react-query';
 import {API_COUNTRY_CODE} from '@env';
-import * as httpRequest from '../utils/httpRequest';
+import * as httpRequest from '../../utils/httpRequest';
 import axios from 'axios';
 
 const getCountriesCode = async () => {

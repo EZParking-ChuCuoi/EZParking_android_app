@@ -17,7 +17,7 @@ import EZInput from '../../components/core/EZInput';
 import { COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import ListCountryCode from '../../components/auth/ListCountryCode';
-import {useRegister} from '../../hooks/auth';
+import {useRegister} from '../../hooks/api/auth';
 import {androidNotification} from '../../shared/androidNotification';
 import OTPScreen from '../../components/auth/OTPScreen';
 import EZLoading from '../../components/core/EZLoading';

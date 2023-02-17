@@ -10,7 +10,7 @@ import {
 import React from 'react';
 import EZContainer from '../core/EZContainer';
 import EZText from '../core/EZText';
-import {UseGetCountriesCode} from '../../hooks/getCountriesCode';
+import {UseGetCountriesCode} from '../../hooks/api/getCountriesCode';
 import {COLORS} from '../../assets/styles/styles';
 const ListCountryCode = (props) => {
   const {data, isLoading} = UseGetCountriesCode();

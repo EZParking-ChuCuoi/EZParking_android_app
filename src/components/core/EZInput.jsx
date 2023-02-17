@@ -14,6 +14,7 @@ import EZText from './EZText';
 const EZInput = props => {
   const isDarkMode = useColorScheme() === 'dark';
   const [styleTextFocused, setStyleTextFocused] = useState({});
+  const [styleIconFocused, setStyleIconFocused] = useState({color: COLORS.borderInput});
   return (
     <View style={[styles.groupInput, {...props.styleEZInput}]}>
       {props.label && (
@@ -23,20 +24,31 @@ const EZInput = props => {
       )}
       <View style={[styles.inputIcon, styleTextFocused]}>
         <TextInput
-          style={[styles.input, {color: isDarkMode ? COLORS.white : COLORS.black}]}
+          style={[
+            styles.input,
+            {color: isDarkMode ? COLORS.white : COLORS.black},
+            {...props.styleEZInputField},
+          ]}
           onChangeText={newText => props.onChangeText(newText)}
           defaultValue={props.defaultValue || ''}
           keyboardType={props.keyboardType || 'default'}
+          autoFocus={props.autoFocus || false}
           returnKeyType="next"
           secureTextEntry={props.secure || false}
           selectTextOnFocus={true}
           placeholder={props.placeholder}
           placeholderTextColor={COLORS.disable}
           onFocus={() => {
-            setStyleTextFocused(props.styleFocus || {borderColor: COLORS.primary, borderWidth: 2,});
+            setStyleTextFocused(
+              props.styleFocus || {borderColor: COLORS.primary, borderWidth: 2},
+            );
+            setStyleIconFocused(
+              props.styleFocus || {color: COLORS.primary},
+            );
           }}
           onBlur={() => {
             setStyleTextFocused({});
+            setStyleIconFocused({color: COLORS.borderInput});
             props.handleBlur;
           }}
           editable={props.editable}
@@ -47,13 +59,16 @@ const EZInput = props => {
             <Icon
               name={props.iconName}
               size={FONTSIZE.iconMedium}
-              color={COLORS.borderInput}
+              style={styleIconFocused}
             />
           </TouchableOpacity>
         )}
       </View>
       {props.errMess && (
-        <EZText size="small" color={COLORS.redLight} styleEZText={{marginTop: 5, fontWeight: '500'}}>
+        <EZText
+          size="small"
+          color={COLORS.redLight}
+          styleEZText={{marginTop: 5, fontWeight: '500'}}>
           {props.errMess}
         </EZText>
       )}
@@ -77,6 +92,7 @@ const styles = StyleSheet.create({
     width: '100%',
     borderRadius: 10,
     position: 'relative',
+    overflow: 'hidden',
   },
   input: {
     fontSize: FONTSIZE.medium,

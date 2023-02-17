@@ -15,7 +15,7 @@ import EZInput from '../../components/core/EZInput';
 import { COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import ListCountryCode from '../../components/auth/ListCountryCode';
-import {UseLogin} from '../../hooks/auth';
+import {useLogin} from '../../hooks/api/auth';
 import {androidNotification} from '../../shared/androidNotification';
 import EZLoading from '../../components/core/EZLoading';
 import {useNavigation} from '@react-navigation/native';
@@ -32,16 +32,14 @@ const Login = () => {
     password: '',
   });
 
-  const mutation = UseLogin();
+  const mutation = useLogin();
   const [secure, setSecure] = useState(true);
   const refRBSheet = useRef();
 
   useEffect(() => {
     if (mutation.isSuccess) {
       storeData('EZToken', mutation.data.data.accessToken);
-      androidNotification('login');
       navigateAuthorized(navigation);
-      console.log(mutation);
     }
   }, [mutation, secure]);
 

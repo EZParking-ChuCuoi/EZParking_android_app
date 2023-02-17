@@ -5,7 +5,7 @@ import EZText from '../core/EZText';
 import {COLORS} from '../../assets/styles/styles';
 import {EZButton} from '../core/EZButton';
 import EZLoading from '../core/EZLoading';
-import {useSendOTP} from '../../hooks/auth';
+import {useSendOTP} from '../../hooks/api/auth';
 import {useNavigation} from '@react-navigation/native';
 import {navigateAuthorized} from '../../shared/auth';
 
@@ -26,6 +26,7 @@ const OTPScreen = props => {
   useEffect(() => {
     if (mutation.isError && mutation.error.response.status === 400) {
       setErrMessage('Invalid OTP!');
+      console.log(mutation.variables);
     }
   }, [mutation.isError]);
 
@@ -95,7 +96,7 @@ const OTPScreen = props => {
           type="none"
           title="Resend OTP"
           handlePress={handleResend}
-          w="25%"
+          w="30%"
           styleEZButton={{paddingHorizontal: 0, paddingVertical: 0}}
         />
       </View>

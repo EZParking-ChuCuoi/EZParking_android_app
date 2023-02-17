@@ -1,5 +1,6 @@
 import axios from 'axios';
 import {BASE_API_URL} from '@env';
+import {getData} from '../shared/asyncStorages';
 
 const httpRequest = axios.create({
   baseURL: BASE_API_URL,
@@ -9,6 +10,19 @@ const httpRequest = axios.create({
     Accept: 'application/json',
   },
 });
+
+httpRequest.interceptors.request.use(
+  async config => {
+    const accessToken = await getData('EZToken');
+    if (accessToken) {
+      config.headers.Authorization = `bearer ${accessToken}`;
+    }
+    return config;
+  },
+  error => {
+    return Promise.reject(error);
+  },
+);
 
 export const getHttpRequest = async (path, options = {}) => {
   const response = await httpRequest.get(path, options);

@@ -1,4 +1,4 @@
-import {ScrollView, StyleSheet, Text, useColorScheme, View} from 'react-native';
+import {ScrollView, StatusBar, StyleSheet, Text, useColorScheme, View} from 'react-native';
 import React from 'react';
 import {COLORS, EZStatusBar} from '../../assets/styles/styles';
 
@@ -15,7 +15,7 @@ const EZContainer = props => {
         ...props.styleEZContainer,
       }}>
       {props.children}
-      <EZStatusBar bg={props.bgEZStatusBar}/>
+      <EZStatusBar bg={props.bgEZStatusBar} translucent={props.translucent ? true : false}/>
     </View>
   );
 };

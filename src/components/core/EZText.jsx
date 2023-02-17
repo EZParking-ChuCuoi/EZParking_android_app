@@ -28,6 +28,10 @@ const EZText = props => {
     sizeText = FONTSIZE.medium;
   } else if (size === 'large') {
     sizeText = FONTSIZE.large;
+  }else if (size === 'huge') {
+    sizeText = FONTSIZE.huge;
+  }else if (size === 'quiteLarge') {
+    sizeText = FONTSIZE.quiteLarge;
   }
   return (
     <Text
@@ -35,6 +39,7 @@ const EZText = props => {
         color: colorText,
         fontSize: sizeText,
         fontFamily: ff,
+        textAlignVertical: 'center',
         ...props.styleEZText,
       }}>
       {props.children}

@@ -3,14 +3,15 @@ import Icon from 'react-native-vector-icons/Feather';
 import Ionicon from 'react-native-vector-icons/Ionicons';
 import {StyleSheet, Text, useColorScheme} from 'react-native';
 import {COLORS, FONTSIZE} from '../assets/styles/styles';
-import Home from '../views/Home';
-import Chat from '../views/Chat';
-import Setting from '../views/Account';
-import ScanQRCode from '../views/ScanQRCode';
-import Notification from '../views/Notification';
+import Home from '../views/home/Home';
+import Chat from '../views/chat/Chat';
+import Setting from '../views/account/Account';
+import ScanQRCode from '../views/scanQRcode/ScanQRCode';
+import Notification from '../views/notification/Notification';
 import EZText from '../components/core/EZText';
-import Account from '../views/Account';
+import Account from '../views/account/Account';
 import { isSpaceOwner } from '../shared/auth';
+import HomeStackNavigators from './HomeStackNavigator';
 
 const BottomTab = () => {
   const isSpaceOwnerAccount = isSpaceOwner();
@@ -32,12 +33,11 @@ const BottomTab = () => {
           backgroundColor: 'transparent',
           height: 50,
           borderTopWidth: 0,
-          position: 'absolute',
         },
       }}>
       <Tab.Screen
-        name="home"
-        component={Home}
+        name="homeStack"
+        component={HomeStackNavigators}
         options={() => {
           return {
             tabBarLabel: ({focused}) => {
@@ -140,6 +140,7 @@ const BottomTab = () => {
               backgroundColor: isDarkMode ? COLORS.bgDark : COLORS.bgLight,
             },
             title: 'Notification',
+            headerShown: true,
           };
         }}
       />
