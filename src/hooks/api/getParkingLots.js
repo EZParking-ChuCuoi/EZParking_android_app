@@ -10,3 +10,28 @@ export const useGetNearlyParkingLot = () => {
     },
   });
 };
+
+export const useGetParkingLotInfo = () => {
+  return useMutation({
+    mutationFn: id => {
+      return httpRequest.getHttpRequest(`parking-lot/${id}/info`);
+    },
+  });
+};
+
+export const useGetParkingLotComment = () => {
+  return useMutation({
+    mutationFn: id => {
+      return httpRequest.getHttpRequest(`parking-lot/${id}/info/comment`);
+    },
+  });
+};
+
+const getAllParkingLot = async () => {
+  const response = await httpRequest.getHttpRequest('parking-lot');
+  return response;
+};
+export const UseGetAllParkingLot = () => {
+  const {isLoading, data, isSuccess} = useQuery(['getAll'], getAllParkingLot);
+  return {data, isLoading, isSuccess};
+};

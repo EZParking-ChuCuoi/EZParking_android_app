@@ -1,5 +1,6 @@
 import {useMutation, useQuery} from '@tanstack/react-query';
 import axios from 'axios';
+import {getData} from '../../shared/asyncStorages';
 import * as httpRequest from '../../utils/httpRequest';
 
 export const useLogin = () => {
@@ -27,6 +28,24 @@ export const useSendOTP = () => {
       );
     },
   });
+};
+
+export const useGetUserInfo = () => {
+  return useMutation({
+    mutationFn: uid => {
+      return httpRequest.getHttpRequest(`user/${uid}/info`);
+    },
+  });
+};
+
+export const isSpaceOwner = async () => {
+  const uid = await getData('EZUid');
+  const res = await httpRequest.getHttpRequest(`user/${uid}/role`);
+  if (res.role === 'user') {
+    return false;
+  } else {
+    return true;
+  }
 };
 
 //Search query example

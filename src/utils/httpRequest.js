@@ -23,7 +23,6 @@ httpRequest.interceptors.request.use(
     return Promise.reject(error);
   },
 );
-
 export const getHttpRequest = async (path, options = {}) => {
   const response = await httpRequest.get(path, options);
   return response.data;

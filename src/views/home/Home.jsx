@@ -28,8 +28,11 @@ import ParkingLotItem from '../../components/home/ParkingLotItem';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import {requestLocationPermission} from '../../shared/androidPermission';
 import Geolocation from '@react-native-community/geolocation';
-import {askLocationDevice} from '../../shared/askToTurnOnLocationDevice';
 import {useGetNearlyParkingLot} from '../../hooks/api/getParkingLots';
+import {getData, storeDataObj} from '../../shared/asyncStorages';
+import {useGetUserInfo} from '../../hooks/api/auth';
+import {AVATAR} from '../../utils/defaultImage';
+import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 
 const Home = () => {
   const {COLOR} = colorDefault();
@@ -37,23 +40,37 @@ const Home = () => {
   const refRBSheet = useRef();
   const navigation = useNavigation();
   const mutationNearlyPark = useGetNearlyParkingLot();
-  const [currentRegion, setCurrentRegion] = useState();
+  const mutationUserInfo = useGetUserInfo();
+  const [currentRegion, setCurrentRegion] = useState(undefined);
 
   useEffect(() => {
     const askPermissionLocation = async () => {
       const permission = await requestLocationPermission(null);
+      const EZUid = await getData('EZUid');
+      mutationUserInfo.mutate(EZUid);
       if (permission) {
         getCurrentLocation();
       }
     };
     askPermissionLocation();
   }, []);
+  // todo: get this shit of line away
+  console.log(mutationUserInfo.data?.data[0]?.avatar);
   useEffect(() => {
-    if (currentRegion !== undefined) {
-      mutationNearlyPark.mutate(currentRegion);
-    }
+    const storeCurrent = () => {
+      if (currentRegion !== undefined) {
+        storeDataObj('EZCurrentRegion', currentRegion);
+      }
+      if (currentRegion !== undefined) {
+        mutationNearlyPark.mutate(currentRegion);
+      }
+    };
+    return storeCurrent();
   }, [currentRegion]);
 
+  if (mutationNearlyPark.isSuccess) {
+    console.log('mutationNearlyPark.data', mutationNearlyPark.data);
+  }
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
@@ -63,7 +80,18 @@ const Home = () => {
       },
       error => {
         if (error.PERMISSION_DENIED === 1) {
-          askLocationDevice();
+          RNAndroidLocationEnabler.promptForEnableLocationIfNeeded({
+            interval: 10000,
+            fastInterval: 5000,
+          })
+            .then(data => {
+              if (data === 'enabled') {
+                getCurrentLocation();
+              }
+            })
+            .catch(err => {
+              throw err;
+            });
         }
       },
     );
@@ -79,11 +107,15 @@ const Home = () => {
       <EZBgTopRounded styleEZBgTopRounded={{marginBottom: 30}}>
         <View style={styles.userInfo}>
           <EZText color={COLORS.white} bold size="large">
-            Hi CLMM
+            Hi{' '}
+            {mutationUserInfo.isSuccess &&
+              mutationUserInfo.data.data[0].fullName}
           </EZText>
           <Image
             source={{
-              uri: 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxzZWFyY2h8Mnx8cGVyc29ufGVufDB8fDB8fA%3D%3D&w=1000&q=80',
+              uri: mutationUserInfo.isSuccess
+                ? mutationUserInfo.data.data[0].avatar
+                : AVATAR,
             }}
             style={styles.image}
           />
@@ -112,7 +144,7 @@ const Home = () => {
         keyExtractor={item => item.id}
         ListEmptyComponent={
           <>
-            {mutationNearlyPark.isError && <EZText>Turn on location to see your nearly parking spaces</EZText>}
+            {<EZText>Turn on location to see your nearly parking lots</EZText>}
             {mutationNearlyPark.isLoading && <EZLoading />}
           </>
         }

@@ -7,7 +7,6 @@ import {colorDefault, COLORS, FONTSIZE} from '../../assets/styles/styles';
 import EZText from '../core/EZText';
 const NavigatedOptions = ({data}) => {
   const {COLOR} = colorDefault();
-  console.log(COLOR);
   const navigation = useNavigation();
   return (
     <TouchableOpacity
@@ -38,7 +37,6 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     flexDirection: 'row',
-    marginBottom: 16,
   },
   content: {
     display: 'flex',

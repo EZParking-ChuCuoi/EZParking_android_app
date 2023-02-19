@@ -20,7 +20,8 @@ const OTPScreen = props => {
   useEffect(() => {
     if (mutation.isSuccess) {
       props.closeRBSheet();
-      navigateAuthorized(navigation);
+      navigation.navigate('login');
+      // navigateAuthorized(navigation);
     }
   }, [mutation]);
   useEffect(() => {

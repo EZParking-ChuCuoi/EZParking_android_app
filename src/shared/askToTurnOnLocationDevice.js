@@ -7,6 +7,7 @@ export const askLocationDevice = () => {
   })
     .then(data => {
       console.log(data);
+      return data;
       // The user has accepted to enable the location services
       // data can be :
       //  - "already-enabled" if the location services has been already enabled

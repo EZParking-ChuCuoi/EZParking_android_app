@@ -1,8 +1,13 @@
 import {createBottomTabNavigator} from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/Feather';
 import Ionicon from 'react-native-vector-icons/Ionicons';
-import {StyleSheet, Text, useColorScheme} from 'react-native';
-import {COLORS, FONTSIZE} from '../assets/styles/styles';
+import {StyleSheet, Text, TouchableOpacity, useColorScheme} from 'react-native';
+import {
+  bgDefault,
+  colorDefault,
+  COLORS,
+  FONTSIZE,
+} from '../assets/styles/styles';
 import Home from '../views/home/Home';
 import Chat from '../views/chat/Chat';
 import Setting from '../views/account/Account';
@@ -10,13 +15,27 @@ import ScanQRCode from '../views/scanQRcode/ScanQRCode';
 import Notification from '../views/notification/Notification';
 import EZText from '../components/core/EZText';
 import Account from '../views/account/Account';
-import { isSpaceOwner } from '../shared/auth';
 import HomeStackNavigators from './HomeStackNavigator';
+import {EZButtonBack} from '../components/core/EZButton';
+import {useNavigation} from '@react-navigation/native';
+import {isSpaceOwner} from '../hooks/api/auth';
+import {useEffect, useState} from 'react';
 
 const BottomTab = () => {
-  const isSpaceOwnerAccount = isSpaceOwner();
-  const isDarkMode = useColorScheme() === 'dark';
-  const defaultIconColor = isDarkMode ? COLORS.white : COLORS.black;
+  const navigation = useNavigation();
+  const {BG} = bgDefault();
+  const {COLOR} = colorDefault();
+  const [isSpaceOwnerAccount, setIsSpaceOwnerAccount] = useState(false);
+
+  useEffect(() => {
+    const isSpaceOwnerAccount = async () => {
+      const result = await isSpaceOwner();
+      if (!result) {
+        setIsSpaceOwnerAccount(false);
+      }
+    };
+    isSpaceOwnerAccount();
+  }, []);
   const focusIcon = isFocused => {
     return isFocused ? styles.isFocused : styles.isUnfocused;
   };
@@ -49,14 +68,14 @@ const BottomTab = () => {
                   name="home"
                   style={[
                     focusIcon(focused),
-                    {color: focused ? defaultIconColor : COLORS.disable},
+                    {color: focused ? COLOR : COLORS.disable},
                   ]}
                 />
               );
             },
             tabBarItemStyle: {
               paddingBottom: 5,
-              backgroundColor: isDarkMode ? COLORS.bgDark : COLORS.bgLight,
+              backgroundColor: BG,
             },
           };
         }}
@@ -75,14 +94,14 @@ const BottomTab = () => {
                   name="message-circle"
                   style={[
                     focusIcon(focused),
-                    {color: focused ? defaultIconColor : COLORS.disable},
+                    {color: focused ? COLOR : COLORS.disable},
                   ]}
                 />
               );
             },
             tabBarItemStyle: {
               paddingBottom: 5,
-              backgroundColor: isDarkMode ? COLORS.bgDark : COLORS.bgLight,
+              backgroundColor: BG,
             },
             title: 'Chat',
           };
@@ -106,7 +125,7 @@ const BottomTab = () => {
               },
               tabBarItemStyle: {
                 paddingBottom: 5,
-                backgroundColor: isDarkMode ? COLORS.bgDark : COLORS.bgLight,
+                backgroundColor: BG,
                 position: 'relative',
               },
               title: 'Scan QR Code',
@@ -124,23 +143,36 @@ const BottomTab = () => {
                 <EZText styleEZText={focusText(focused)}>Notification</EZText>
               );
             },
+            headerLeft: () => {
+              return (
+                <TouchableOpacity onPress={() => navigation.goBack()}>
+                  <Icon
+                    name="chevron-left"
+                    color={COLOR}
+                    size={FONTSIZE.iconLarge}
+                  />
+                </TouchableOpacity>
+              );
+            },
             tabBarIcon: ({focused}) => {
               return (
                 <Icon
                   name="bell"
                   style={[
                     focusIcon(focused),
-                    {color: focused ? defaultIconColor : COLORS.disable},
+                    {color: focused ? COLOR : COLORS.disable},
                   ]}
                 />
               );
             },
             tabBarItemStyle: {
               paddingBottom: 5,
-              backgroundColor: isDarkMode ? COLORS.bgDark : COLORS.bgLight,
+              backgroundColor: BG,
             },
             title: 'Notification',
             headerShown: true,
+            headerTintColor: COLOR,
+            headerStyle: {backgroundColor: BG},
           };
         }}
       />
@@ -158,14 +190,14 @@ const BottomTab = () => {
                   name="user"
                   style={[
                     focusIcon(focused),
-                    {color: focused ? defaultIconColor : COLORS.disable},
+                    {color: focused ? COLOR : COLORS.disable},
                   ]}
                 />
               );
             },
             tabBarItemStyle: {
               paddingBottom: 5,
-              backgroundColor: isDarkMode ? COLORS.bgDark : COLORS.bgLight,
+              backgroundColor: BG,
             },
             title: 'Account',
           };

@@ -19,7 +19,9 @@ const ParkingLotItem = props => {
   const {data} = props;
   return (
     <TouchableOpacity
-      onPress={()=>navigation.navigate('spaceDetail')}
+      onPress={()=>navigation.navigate('spaceDetail', {
+        parkingId: data.id,
+      })}
       style={[styles.container, {backgroundColor: BG2ND, shadowColor: COLOR}]}>
       <Icon
         name="map-pin"

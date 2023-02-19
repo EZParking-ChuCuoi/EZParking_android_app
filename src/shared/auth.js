@@ -25,7 +25,3 @@ export const validateEmail = email => {
     return false;
   }
 };
-
-export const isSpaceOwner = () => {
-  return false;
-};

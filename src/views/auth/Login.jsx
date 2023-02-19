@@ -12,14 +12,14 @@ import {EZButton} from '../../components/core/EZButton';
 import EZContainer from '../../components/core/EZContainer';
 import {navigateAuthorized, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
-import { COLORS, SPACING} from '../../assets/styles/styles';
+import {COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import ListCountryCode from '../../components/auth/ListCountryCode';
 import {useLogin} from '../../hooks/api/auth';
 import {androidNotification} from '../../shared/androidNotification';
 import EZLoading from '../../components/core/EZLoading';
 import {useNavigation} from '@react-navigation/native';
-import { storeData } from '../../shared/asyncStorages';
+import {storeData} from '../../shared/asyncStorages';
 import EZText from '../../components/core/EZText';
 const Login = () => {
   const navigation = useNavigation();
@@ -39,6 +39,7 @@ const Login = () => {
   useEffect(() => {
     if (mutation.isSuccess) {
       storeData('EZToken', mutation.data.data.accessToken);
+      storeData('EZUid', mutation.data.data.uid + '');
       navigateAuthorized(navigation);
     }
   }, [mutation, secure]);
