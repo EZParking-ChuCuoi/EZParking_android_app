@@ -97,7 +97,7 @@ const Home = () => {
     <EZContainer bgEZStatusBar={COLORS.tertiary}>
       <EZRBSheet refRBSheet={refRBSheet}>
         <EZContainer>
-          <EZText>CLMM</EZText>
+          <EZText>Hi man</EZText>
         </EZContainer>
       </EZRBSheet>
       <EZBgTopRounded styleEZBgTopRounded={{marginBottom: 30}}>

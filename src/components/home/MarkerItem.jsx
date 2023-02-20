@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import {EZButton} from '../core/EZButton';
 import {useNavigation} from '@react-navigation/native';
+import {handleDate} from '../../shared/handleDate';
 
 const MarkerItem = ({item}) => {
   const navigation = useNavigation();
@@ -27,7 +28,11 @@ const MarkerItem = ({item}) => {
   return (
     <Marker
       title={item.nameParkingLot}
-      description={item.desc}
+      description={
+        item.openTime.toString().slice(0, 5) +
+        ' - ' +
+        item.endTime.toString().slice(0, 5)
+      }
       coordinate={coordinate}
       onPress={() => {
         refRBSheet.current.open();
@@ -79,14 +84,11 @@ const MarkerItem = ({item}) => {
           </EZContainer>
         </EZRBSheet>
 
-        <EZText
-          color={COLORS.secondary}
-          bold
-          size="quiteLarge"
-          styleEZText={styles.markerP}>
-          P
-        </EZText>
-        <EZText styleEZText={styles.label} bold color={COLORS.primary}>
+        <Image
+          source={require('../../assets/images/markerIcon.png')}
+          style={styles.markerP}
+        />
+        <EZText styleEZText={styles.label}  size="small" color={COLORS.primary}>
           {item.nameParkingLot}
         </EZText>
       </View>
@@ -113,10 +115,9 @@ const styles = StyleSheet.create({
     elevation: 5,
   },
   markerP: {
-    paddingHorizontal: 6,
-    borderRadius: 3,
-    backgroundColor: COLORS.primary,
-    marginBottom: 10,
+    width: 30,
+    height: 41,
+    resizeMode: 'cover',
   },
   image: {
     width: '100%',

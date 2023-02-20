@@ -34,7 +34,7 @@ const ParkingLotComment = props => {
     <FlatList
       data={mutationParkingLotComment.data}
       renderItem={({item}) => (
-        <ParkingLotCommentItem item={item} />
+        <ParkingLotCommentItem key={item.id} item={item} />
       )}
       keyExtractor={item => item.id}
       showsVerticalScrollIndicator={false}

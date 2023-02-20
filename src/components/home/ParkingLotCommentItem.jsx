@@ -13,11 +13,11 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import {handleDate} from '../../shared/handleDate';
 
 const ParkingLotCommentItem = ({item}) => {
-  const COLOR = colorDefault();
+  const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const LIMITSTAR = 5;
   // todo: get this shit of line away
-  // console.log(item);
+  console.log(item.avatar);
 
   return (
     <View style={[styles.container, {backgroundColor: BG2ND}]}>
@@ -27,18 +27,20 @@ const ParkingLotCommentItem = ({item}) => {
         <View style={styles.contentRight}>
           <View style={styles.flexRow}>
             <View style={styles.rating}>
-              {[...Array(item.ranting)].map(index => (
+              {[...Array(item.ranting)].map((val, index) => (
                 <Icon
                   name="star"
                   size={FONTSIZE.iconMedium}
                   color={COLORS.yellow}
+                  key={index}
                 />
               ))}
-              {[...Array(LIMITSTAR - item.ranting)].map(index => (
+              {[...Array(LIMITSTAR - item.ranting)].map((val, index) => (
                 <Icon
                   name="star-o"
                   size={FONTSIZE.iconMedium}
                   color={COLOR}
+                  key={index}
                 />
               ))}
             </View>
