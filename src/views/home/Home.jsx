@@ -67,10 +67,6 @@ const Home = () => {
     };
     return storeCurrent();
   }, [currentRegion]);
-
-  if (mutationNearlyPark.isSuccess) {
-    console.log('mutationNearlyPark.data', mutationNearlyPark.data);
-  }
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       position => {

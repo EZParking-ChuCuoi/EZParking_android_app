@@ -78,7 +78,9 @@ const Account = () => {
             </TouchableOpacity>
             <EZButton
               title="Create a car park"
-              handlePress={() => console.log('create car park')}
+              handlePress={() =>
+                navigation.navigate('auth', {screen: 'registerSpaceOwner'})
+              }
             />
           </View>
         }

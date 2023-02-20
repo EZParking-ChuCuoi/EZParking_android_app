@@ -4,6 +4,7 @@ import Login from '../views/auth/Login';
 import {COLORS} from '../assets/styles/styles';
 import Register from '../views/auth/Register';
 import Forgot from '../views/auth/Forgot';
+import RegisterSpaceOwner from '../views/auth/RegisterSpaceOwner';
 
 const AuthStackNavigators = () => {
   const AuthStack = createNativeStackNavigator();
@@ -17,6 +18,7 @@ const AuthStackNavigators = () => {
         <AuthStack.Screen name="login" component={Login} />
         <AuthStack.Screen name="register" component={Register} />
         <AuthStack.Screen name="forgot" component={Forgot} />
+        <AuthStack.Screen name="registerSpaceOwner" component={RegisterSpaceOwner} />
       </AuthStack.Group>
     </AuthStack.Navigator>
   );
