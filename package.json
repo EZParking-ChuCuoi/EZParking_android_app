@@ -7,7 +7,8 @@
     "ios": "react-native run-ios",
     "lint": "eslint .",
     "start": "react-native start",
-    "test": "jest"
+    "test": "jest",
+    "postinstall": "patch-package"
   },
   "dependencies": {
     "@react-native-async-storage/async-storage": "^1.17.11",
@@ -24,7 +25,6 @@
     "react-native-android-location-enabler": "^1.2.2",
     "react-native-dotenv": "^3.4.7",
     "react-native-dropdown-picker": "^5.4.4",
-    "react-native-gesture-handler": "^2.9.0",
     "react-native-google-places-autocomplete": "^2.5.1",
     "react-native-image-crop-picker": "^0.39.0",
     "react-native-maps": "^1.4.0",
@@ -34,7 +34,8 @@
     "react-native-screens": "^3.19.0",
     "react-native-splash-screen": "^3.3.0",
     "react-native-vector-icons": "^9.2.0",
-    "react-native-vision-camera": "^2.15.4"
+    "react-native-vision-camera": "^2.15.4",
+    "vision-camera-code-scanner": "^0.2.0"
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",
