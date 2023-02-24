@@ -31,7 +31,21 @@ const getAllParkingLot = async () => {
   const response = await httpRequest.getHttpRequest('parking-lot');
   return response;
 };
+
 export const UseGetAllParkingLot = () => {
   const {isLoading, data, isSuccess} = useQuery(['getAll'], getAllParkingLot);
   return {data, isLoading, isSuccess};
+};
+
+export const useGetSlots = () => {
+  return useMutation({
+    mutationFn: params => {
+      return httpRequest.getHttpRequest(`parking-lot/${params.id}/slots`, {
+        params: {
+          start_datetime: params.start_datetime,
+          end_datetime: params.end_datetime,
+        },
+      });
+    },
+  });
 };

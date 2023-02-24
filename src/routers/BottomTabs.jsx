@@ -30,8 +30,8 @@ const BottomTab = () => {
   useEffect(() => {
     const isSpaceOwnerAccount = async () => {
       const result = await isSpaceOwner();
-      if (!result) {
-        setIsSpaceOwnerAccount(false);
+      if (result) {
+        setIsSpaceOwnerAccount(true);
       }
     };
     isSpaceOwnerAccount();

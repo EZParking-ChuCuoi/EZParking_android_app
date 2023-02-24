@@ -139,15 +139,15 @@ const Home = () => {
         renderItem={({item}) => <ParkingLotItem data={item} />}
         keyExtractor={item => item.id}
         ListEmptyComponent={
-          <>
+          <View style={{justifyContent: 'center'}}>
             {<EZText>Turn on location to see your nearly parking lots</EZText>}
             {mutationNearlyPark.isLoading && <EZLoading />}
-          </>
+          </View>
         }
         contentContainerStyle={{
           flexGrow: 1,
           alignItems: 'center',
-          justifyContent: 'center',
+          justifyContent: 'flex-start',
           paddingHorizontal: SPACING.pxComponent,
           paddingVertical: 10,
         }}

@@ -6,7 +6,12 @@ import {useHideTabBar} from '../../hooks/useHideTabBar';
 import {useRoute} from '@react-navigation/native';
 import {useGetParkingLotInfo} from '../../hooks/api/getParkingLots';
 import Icon from 'react-native-vector-icons/Feather';
-import {colorDefault, COLORS, FONTSIZE, SPACING} from '../../assets/styles/styles';
+import {
+  colorDefault,
+  COLORS,
+  FONTSIZE,
+  SPACING,
+} from '../../assets/styles/styles';
 import {EZButton} from '../../components/core/EZButton';
 import ParkingLotComment from '../../components/home/ParkingLotComment';
 
@@ -56,10 +61,24 @@ const SpaceDetail = ({navigation, route}) => {
             </EZText>
             <EZText>{parkingLotInfo.desc}</EZText>
             <View style={styles.btns}>
-              <EZButton title="Booking" type="primary" w="40%" handlePress={() => {}} />
-              <EZButton title="Chat" type="secondary" w="40%" handlePress={() => {}} />
+              <EZButton
+                title="Booking"
+                type="primary"
+                w="40%"
+                handlePress={() =>
+                  navigation.navigate('booking', {
+                    info: mutationParkingLotInfo.data[0],
+                  })
+                }
+              />
+              <EZButton
+                title="Chat"
+                type="secondary"
+                w="40%"
+                handlePress={() => {}}
+              />
             </View>
-            <ParkingLotComment idParkingLot={parkingId}/>
+            <ParkingLotComment idParkingLot={parkingId} />
           </View>
         </>
       )}
@@ -73,7 +92,7 @@ const styles = StyleSheet.create({
   image: {
     width: '100%',
     height: 200,
-    borderRadius: 20,
+    borderRadius: 10,
   },
   lotContent: {
     // paddingHorizontal: SPACING.pxComponent,
@@ -91,7 +110,7 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     borderBottomColor: COLORS.borderInput,
-    borderBottomWidth:1,
+    borderBottomWidth: 1,
     marginBottom: 10,
-  }
+  },
 });

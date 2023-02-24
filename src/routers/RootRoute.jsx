@@ -32,8 +32,8 @@ const RootRoute = () => {
         screenOptions={{
           headerShown: false,
         }}>
-        <Stack.Screen name="bottomTab" component={BottomTab} />
         <Stack.Screen name="auth" component={AuthStackNavigators} />
+        <Stack.Screen name="bottomTab" component={BottomTab} />
       </Stack.Group>
     </Stack.Navigator>
   );

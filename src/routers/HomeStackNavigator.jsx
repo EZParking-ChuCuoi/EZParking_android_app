@@ -10,6 +10,7 @@ import Home from '../views/home/Home';
 import SearchSpace from '../views/home/SearchSpace';
 import SpaceDetail from '../views/home/SpaceDetail';
 import Reviews from '../views/home/Reviews';
+import BookingParkingLot from '../views/home/BookingParkingLot';
 
 const HomeStack = createNativeStackNavigator();
 const HomeStackNavigators = () => {
@@ -33,6 +34,7 @@ const HomeStackNavigators = () => {
         }}>
         <HomeStack.Screen name="spaceDetail" component={SpaceDetail} />
         <HomeStack.Screen name="reviews" component={Reviews} options={{title: 'Reviews'}} />
+        <HomeStack.Screen name="booking" component={BookingParkingLot} options={{title: 'Booking'}} />
       </HomeStack.Group>
     </HomeStack.Navigator>
   );

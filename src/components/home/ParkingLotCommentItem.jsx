@@ -17,7 +17,7 @@ const ParkingLotCommentItem = ({item}) => {
   const {BG2ND} = bgSecondaryDefault();
   const LIMITSTAR = 5;
   // todo: get this shit of line away
-  console.log(item.avatar);
+  // console.log(item.avatar);
 
   return (
     <View style={[styles.container, {backgroundColor: BG2ND}]}>
@@ -39,7 +39,7 @@ const ParkingLotCommentItem = ({item}) => {
                 <Icon
                   name="star-o"
                   size={FONTSIZE.iconMedium}
-                  color={COLOR}
+                  color={COLORS.borderInput}
                   key={index}
                 />
               ))}
