@@ -25,11 +25,11 @@ const ParkingLotBlock = ({item, idSlotArr, setIdSlotArr}) => {
   };
   const SlotItem = ({slot}) => {
     const [isSelected, setIsSelected] = useState(false);
-    const BG = slot?.status === 'available' ? COLORS.tertiary : COLORS.disable;
+    const BG = slot?.status === 1 ? COLORS.tertiary : COLORS.disable;
     return (
       <TouchableOpacity
         onPress={() => {
-          if (slot?.status === 'available') {
+          if (slot?.status === 1) {
             handlePressSlot(slot.idSlot);
             setIsSelected(!isSelected);
           }

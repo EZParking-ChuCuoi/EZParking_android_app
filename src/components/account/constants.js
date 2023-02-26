@@ -2,17 +2,17 @@ export const NAVIGATED_PROFILE = [
   {
     text: 'Edit profile',
     nameIcon: 'edit-3',
-    screenName: 'editProfile',
+    screenName: 'editAccount',
   },
   {
     text: 'Chat',
     nameIcon: 'message-circle',
-    screenName: 'chat',
+    screenName: 'chatSetting',
   },
   {
     text: 'Payment details',
     nameIcon: 'credit-card',
-    screenName: 'payment',
+    screenName: 'paymentSetting',
   },
   {
     text: 'Subcriptions',
@@ -60,7 +60,7 @@ export const NAVIGATED_PROFILE_SPACEOWNER = [
   {
     text: 'QR code',
     nameIcon: 'qr-code-outline',
-    screenName: 'qrcode',
+    screenName: 'qrcodeSetting',
     iconLibrary: 'Ionicon',
   },
 ];

@@ -3,35 +3,35 @@ import React from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
 import {AVATAR} from '../../utils/defaultImage';
-import {COLORS} from '../../assets/styles/styles';
+import {COLORS, SPACING} from '../../assets/styles/styles';
 
 const Notification = () => {
   return (
-    <EZContainer>
+    <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}} >
       <View style={styles.noticeItem}>
         <View style={styles.new} />
         <Image source={{uri: AVATAR}} style={styles.avatar} />
         <View style={styles.noticRight}>
-          <View style={styles.noticRightTop}>
+          <EZText lines={3} styleEZText={styles.noticRightTop}>
             <EZText bold color={COLORS.primary}>
               Hoang Tuan Minh
             </EZText>
-            <EZText>Has booked your parking lot</EZText>
-          </View>
-          <EZText>2 minutes ago</EZText>
+            <EZText>Has booked your parking Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, aliquid? lot</EZText>
+          </EZText>
+          <EZText size="small">2 minutes ago</EZText>
         </View>
       </View>
       <View style={styles.noticeItem}>
         <View style={styles.new} />
         <Image source={{uri: AVATAR}} style={styles.avatar} />
         <View style={styles.noticRight}>
-          <View style={styles.noticRightTop}>
+          <EZText lines={3} styleEZText={styles.noticRightTop}>
             <EZText bold color={COLORS.primary}>
               Hoang Tuan Minh
             </EZText>
             <EZText>Has booked your parking lot</EZText>
-          </View>
-          <EZText>2 minutes ago</EZText>
+          </EZText>
+          <EZText size="small">2 minutes ago</EZText>
         </View>
       </View>
     </EZContainer>
@@ -51,6 +51,7 @@ const styles = StyleSheet.create({
     paddingBottom: 15,
     borderBottomColor: COLORS.borderBrighter,
     borderBottomWidth: 1,
+    overflow: 'hidden',
   },
   avatar: {
     width: 50,

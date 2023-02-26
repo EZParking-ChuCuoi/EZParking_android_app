@@ -38,7 +38,6 @@ import moment, {duration} from 'moment';
 const BookingParkingLot = ({navigation, route}) => {
   const {info} = route.params;
   const [idSlotArr, setIdSlotArr] = useState([]);
-  console.log('CCCCCCCCCCCCC', idSlotArr);
   const mutationGetSlots = useGetSlots();
   const [params, setParams] = useState({
     duration: '',

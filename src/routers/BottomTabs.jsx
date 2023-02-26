@@ -20,6 +20,7 @@ import {EZButtonBack} from '../components/core/EZButton';
 import {useNavigation} from '@react-navigation/native';
 import {isSpaceOwner} from '../hooks/api/auth';
 import {useEffect, useState} from 'react';
+import AccountStackNavigators from './AccountStackNavigator';
 
 const BottomTab = () => {
   const navigation = useNavigation();
@@ -170,7 +171,7 @@ const BottomTab = () => {
               backgroundColor: BG,
             },
             title: 'Notification',
-            headerShown: true,
+            headerShown: false,
             headerTintColor: COLOR,
             headerStyle: {backgroundColor: BG},
           };
@@ -178,7 +179,7 @@ const BottomTab = () => {
       />
       <Tab.Screen
         name="account"
-        component={Account}
+        component={AccountStackNavigators}
         options={() => {
           return {
             tabBarLabel: ({focused}) => {
