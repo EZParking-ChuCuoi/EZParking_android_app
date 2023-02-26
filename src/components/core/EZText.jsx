@@ -41,7 +41,9 @@ const EZText = props => {
         fontFamily: ff,
         textAlignVertical: 'center',
         ...props.styleEZText,
-      }}>
+      }}
+      numberOfLines={props.lines}
+      ellipsizeMode='tail'>
       {props.children}
     </Text>
   );

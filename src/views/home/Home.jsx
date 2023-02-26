@@ -55,7 +55,7 @@ const Home = () => {
     askPermissionLocation();
   }, []);
   // todo: get this shit of line away
-  console.log(mutationUserInfo.data?.data[0]?.avatar);
+  // console.log(mutationUserInfo.data?.data[0]?.avatar);
   useEffect(() => {
     const storeCurrent = () => {
       if (currentRegion !== undefined) {
@@ -150,6 +150,7 @@ const Home = () => {
           justifyContent: 'flex-start',
           paddingHorizontal: SPACING.pxComponent,
           paddingVertical: 10,
+          paddingBottom: 50,
         }}
         refreshControl={
           <RefreshControl

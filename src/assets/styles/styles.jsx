@@ -55,6 +55,7 @@ export const EZStatusBar = props => {
   return (
     <StatusBar
       barStyle={isDarkMode ? 'light-content' : 'dark-content'}
+      hidden={props.hidden || false}
       translucent={props.translucent ? true : false}
       backgroundColor={
         props.bg ? props.bg : isDarkMode ? COLORS.bgDark : COLORS.bgLight

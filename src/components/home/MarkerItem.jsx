@@ -24,7 +24,6 @@ const MarkerItem = ({item}) => {
     latitude: item.address_latitude,
     longitude: item.address_longitude,
   };
-  console.log(item);
   return (
     <Marker
       title={item.nameParkingLot}

@@ -19,6 +19,14 @@ export const useGetParkingLotInfo = () => {
   });
 };
 
+export const useGetParkingPrice = () => {
+  return useMutation({
+    mutationFn: id => {
+      return httpRequest.getHttpRequest(`parking-lot/${id}/info/price`);
+    },
+  });
+};
+
 export const useGetParkingLotComment = () => {
   return useMutation({
     mutationFn: id => {

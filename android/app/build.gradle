@@ -163,6 +163,8 @@ dependencies {
     
     implementation project(':react-native-splash-screen')
 
+    implementation project(':lottie-react-native')
+
     implementation project(':react-native-android-location-enabler')
     debugImplementation("com.facebook.flipper:flipper:${FLIPPER_VERSION}")
     debugImplementation("com.facebook.flipper:flipper-network-plugin:${FLIPPER_VERSION}") {

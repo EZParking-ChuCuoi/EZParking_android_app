@@ -33,30 +33,9 @@ const SearchSpace = () => {
   const navigation = useNavigation();
   const [search, setSearch] = useState('');
   const mutationNearlyPark = useGetNearlyParkingLot();
-  const {data, isLoading, isSuccess} = UseGetAllParkingLot();
+  // const {data, isLoading, isSuccess} = UseGetAllParkingLot();
   const refRBSheet = useRef();
   const [currenRegion, setCurrenRegion] = useState(undefined);
-  console.log('LOADINGGGGGGGGGGGGGGGGGGGGGGGGG');
-  const MARKER_DATA = [
-    {
-      nameParkingLot: 'Store 1',
-      desc: 'PNJ store',
-      address_latitude: 16.067757,
-      address_longitude: 108.230098,
-      image:
-        'https://img.freepik.com/free-photo/wide-angle-shot-single-tree-growing-clouded-sky-during-sunset-surrounded-by-grass_181624-22807.jpg',
-      id: 1,
-    },
-    {
-      nameParkingLot: 'Store 2',
-      desc: 'FPT store',
-      address_latitude: 16.074139,
-      address_longitude: 108.231343,
-      image:
-        'https://thumbs.dreamstime.com/b/tree-field-orange-sky-14335903.jpg',
-      id: 2,
-    },
-  ];
 
   useEffect(() => {
     const initRegion = async () => {

@@ -45,7 +45,7 @@ const Login = () => {
   }, [mutation, secure]);
 
   useEffect(() => {
-    if (mutation.isError && mutation.error.response.status === 401) {
+    if (mutation.isError && mutation.error?.response?.status === 401) {
       setErrMessage({
         email: 'Email or password wrong!',
         password: 'Email or password wrong!',
@@ -106,7 +106,7 @@ const Login = () => {
         <EZText
           size="large"
           bold
-          styleEZText={{marginTop: 30}}
+          styleEZText={{marginTop: 60}}
           color={COLORS.primary}>
           Login
         </EZText>

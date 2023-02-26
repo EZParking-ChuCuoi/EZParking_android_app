@@ -1,5 +1,5 @@
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import EZContainer from '../core/EZContainer';
 import EZText from '../core/EZText';
 import {
@@ -10,18 +10,25 @@ import {
   SPACING,
 } from '../../assets/styles/styles';
 import Icon from 'react-native-vector-icons/Feather';
-import { useNavigation } from '@react-navigation/native';
+import {useNavigation} from '@react-navigation/native';
+import {useGetParkingPrice} from '../../hooks/api/getParkingLots';
 
 const ParkingLotItem = props => {
   const navigation = useNavigation();
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const {data} = props;
+  // const mutationPrice = useGetParkingPrice();
+  // useEffect(() => {
+  //   mutationPrice.mutate(data.id);
+  // }, []);
   return (
     <TouchableOpacity
-      onPress={()=>navigation.navigate('spaceDetail', {
-        parkingId: data.id,
-      })}
+      onPress={() =>
+        navigation.navigate('spaceDetail', {
+          parkingId: data.id,
+        })
+      }
       style={[styles.container, {backgroundColor: BG2ND, shadowColor: COLOR}]}>
       <Icon
         name="map-pin"
@@ -37,7 +44,7 @@ const ParkingLotItem = props => {
             {data.openTime} - {data.endTime}
           </EZText>
           <EZText bold color={COLORS.secondary}>
-            15 000vnd
+            {Math.round(data.distance * 100) / 100} Km
           </EZText>
         </View>
       </View>

@@ -5,6 +5,7 @@ import {
   ScrollView,
   StyleSheet,
   Text,
+  TouchableOpacity,
   View,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
@@ -31,13 +32,15 @@ import BookingInfoTop from '../../components/home/BookingInfoTop';
 import DatePicker from 'react-native-date-picker';
 import {useGetSlots} from '../../hooks/api/getParkingLots';
 import EZLoading from '../../components/core/EZLoading';
+import {EZButton} from '../../components/core/EZButton';
+import moment, {duration} from 'moment';
 
 const BookingParkingLot = ({navigation, route}) => {
   const {info} = route.params;
+  const [idSlotArr, setIdSlotArr] = useState([]);
+  console.log('CCCCCCCCCCCCC', idSlotArr);
   const mutationGetSlots = useGetSlots();
   const [params, setParams] = useState({
-    licensePlate: '',
-    vehicleType: '',
     duration: '',
     dateStart: '',
     dateReturn: '',
@@ -48,6 +51,24 @@ const BookingParkingLot = ({navigation, route}) => {
     start: false,
     end: false,
   });
+  const handleNextBtn = () => {
+    if (
+      params.duration !== '' &&
+      params.dateStart !== '' &&
+      params.dateReturn !== '' &&
+      idSlotArr.length > 0
+    ) {
+      navigation.navigate('preview', {
+        dateStart: moment(new Date(params.dateStart)).format(
+          'YYYY-MM-DD hh:mm:ss',
+        ),
+        dateReturn: moment(new Date(params.dateReturn)).format(
+          'YYYY-MM-DD hh:mm:ss',
+        ),
+        idSlotArr,
+      });
+    }
+  };
   useEffect(() => {
     navigation.setOptions({
       title: info.nameParkingLot,
@@ -66,28 +87,16 @@ const BookingParkingLot = ({navigation, route}) => {
       });
     }
   }, [params.dateStart, params.dateReturn]);
-
   return (
     <EZContainer>
       <ScrollView style={styles.wrapper} showsVerticalScrollIndicator={false}>
         <BookingInfoTop info={info} />
-        {mutationGetSlots.isLoading && <EZLoading/>}
+        {mutationGetSlots.isLoading && <EZLoading />}
         <View style={styles.form}>
           <View style={styles.formLeft}>
-            <EZInput
-              styleEZInput={{marginBottom: SPACING.mbInputItem}}
-              onChangeText={licensePlate =>
-                setParams({...params, ['license']: licensePlate})
-              }
-              defaultValue={params.licensePlate}
-              placeholder="License plate"
-            />
             <View style={styles.dropDown}>
               <EZInput
                 styleEZInput={{marginBottom: SPACING.mbInputItem}}
-                onChangeText={licensePlate =>
-                  setParams({...params, ['license']: licensePlate})
-                }
                 defaultValue={params.duration}
                 placeholder="Duration"
                 iconName="chevron-down"
@@ -113,44 +122,9 @@ const BookingParkingLot = ({navigation, route}) => {
             </View>
           </View>
           <View style={styles.formRight}>
-            <View style={styles.dropDown}>
-              <EZInput
-                styleEZInput={{marginBottom: SPACING.mbInputItem}}
-                onChangeText={licensePlate =>
-                  setParams({...params, ['license']: licensePlate})
-                }
-                defaultValue={params.vehicleType}
-                placeholder="Vehicle type"
-                iconName="chevron-down"
-                editable={false}
-                handlePressIcon={() => setShowVehicle(!showVehicle)}
-              />
-              <View style={styles.dropDownContainer}>
-                {showVehicle &&
-                  VEHICLE_TYPE.map((vehicle, index) => {
-                    return (
-                      <Pressable
-                        key={index}
-                        onPress={() => {
-                          setParams({
-                            ...params,
-                            ['vehicleType']: vehicle.value,
-                          });
-                          setShowVehicle(!vehicle);
-                        }}
-                        style={[styles.dropDownItem]}>
-                        <EZText>{vehicle.label}</EZText>
-                      </Pressable>
-                    );
-                  })}
-              </View>
-            </View>
             <View style={styles.formTime}>
               <EZInput
                 styleEZInput={{width: '47%'}}
-                onChangeText={licensePlate =>
-                  setParams({...params, ['license']: licensePlate})
-                }
                 defaultValue={
                   params.dateStart !== ''
                     ? params.duration === 'daily'
@@ -196,9 +170,6 @@ const BookingParkingLot = ({navigation, route}) => {
               />
               <EZInput
                 styleEZInput={{width: '50%'}}
-                onChangeText={licensePlate =>
-                  setParams({...params, ['license']: licensePlate})
-                }
                 defaultValue={
                   params.dateReturn !== ''
                     ? params.duration === 'daily'
@@ -244,11 +215,24 @@ const BookingParkingLot = ({navigation, route}) => {
             </View>
           </View>
         </View>
-        <EZText bold>Choose a parking slot</EZText>
+        <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
+          <EZText bold>Choose a parking slot</EZText>
+          <TouchableOpacity onPress={handleNextBtn}>
+            <EZText styleEZText={{padding: 6}} bold color={COLORS.primary}>
+              Next
+            </EZText>
+          </TouchableOpacity>
+        </View>
         <FlatList
           data={mutationGetSlots.data?.data || []}
           keyExtractor={item => item.block_id}
-          renderItem={({item}) => <ParkingLotBlock item={item} />}
+          renderItem={({item}) => (
+            <ParkingLotBlock
+              item={item}
+              idSlotArr={idSlotArr}
+              setIdSlotArr={setIdSlotArr}
+            />
+          )}
           ListEmptyComponent={mutationGetSlots.isLoading && <EZLoading />}
           horizontal
           pagingEnabled

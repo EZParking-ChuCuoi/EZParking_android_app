@@ -15,7 +15,7 @@ const EZContainer = props => {
         ...props.styleEZContainer,
       }}>
       {props.children}
-      <EZStatusBar bg={props.bgEZStatusBar} translucent={props.translucent ? true : false}/>
+      <EZStatusBar bg={props.bgEZStatusBar} hidden={props.hiddenEZStatusBar || false} translucent={props.translucent ? true : false}/>
     </View>
   );
 };

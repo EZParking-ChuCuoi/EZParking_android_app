@@ -7,19 +7,21 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import EZText from '../core/EZText';
-import {COLORS, FONTSIZE} from '../../assets/styles/styles';
+import {bgSecondaryDefault, COLORS, FONTSIZE} from '../../assets/styles/styles';
 import Icon from 'react-native-vector-icons/Feather';
 
-const ParkingLotBlock = ({item}) => {
-  let selectedSlot = [];
+const ParkingLotBlock = ({item, idSlotArr, setIdSlotArr}) => {
+  const {BG2ND} = bgSecondaryDefault();
   const handlePressSlot = idSlot => {
-    if(selectedSlot.includes(idSlot)){
-       selectedSlot =  selectedSlot.filter(item=> item!== idSlot)
-    }else{
-      selectedSlot.push(idSlot);
+    let idSlotArrTemp = idSlotArr;
+    if (idSlotArrTemp.includes(idSlot)) {
+      idSlotArrTemp = idSlotArrTemp.filter(item => item !== idSlot);
+    } else {
+      idSlotArrTemp.push(idSlot);
     }
+    setIdSlotArr(idSlotArrTemp);
   };
   const SlotItem = ({slot}) => {
     const [isSelected, setIsSelected] = useState(false);
@@ -27,12 +29,14 @@ const ParkingLotBlock = ({item}) => {
     return (
       <TouchableOpacity
         onPress={() => {
-          handlePressSlot(slot.idSlot);
-          setIsSelected(!isSelected);
+          if (slot?.status === 'available') {
+            handlePressSlot(slot.idSlot);
+            setIsSelected(!isSelected);
+          }
         }}
         style={[{backgroundColor: BG}, styles.slotItem]}>
         <View style={styles.tick}>
-          {selectedSlot.includes(slot?.idSlot) && (
+          {idSlotArr.includes(slot?.idSlot) && (
             <Icon
               name="check-circle"
               size={FONTSIZE.iconMedium}
@@ -44,8 +48,12 @@ const ParkingLotBlock = ({item}) => {
     );
   };
   return (
-    <View style={styles.container}>
-      <EZText>{item.carType}</EZText>
+    <View style={[styles.container]}>
+      {item.carType === '4-16SLOT' ? (
+        <EZText> Less than 16 seats </EZText>
+      ) : (
+        <EZText> Greater than 16 seats </EZText>
+      )}
       <View style={styles.slotList}>
         {item.status.map((slot, index) => {
           return <SlotItem slot={slot} key={index} />;

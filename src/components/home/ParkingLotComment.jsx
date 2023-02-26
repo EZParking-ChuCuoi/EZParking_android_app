@@ -5,8 +5,9 @@ import {useGetParkingLotComment} from '../../hooks/api/getParkingLots';
 import EZText from '../core/EZText';
 import ParkingLotCommentItem from './ParkingLotCommentItem';
 import {useNavigation} from '@react-navigation/native';
-import {SPACING} from '../../assets/styles/styles';
+import {COLORS, SPACING} from '../../assets/styles/styles';
 import EZLoading from '../core/EZLoading';
+import {EZButtonText} from '../core/EZButton';
 
 const ParkingLotComment = props => {
   const {idParkingLot, isScreen = false} = props;
@@ -23,13 +24,6 @@ const ParkingLotComment = props => {
     }
   }, [mutationParkingLotComment.status]);
 
-  const handleScroll = () => {
-    if (!isScreen) {
-      navigation.navigate('reviews', {
-        parkingId: idParkingLot,
-      });
-    }
-  };
   return (
     <FlatList
       data={mutationParkingLotComment.data}
@@ -39,11 +33,21 @@ const ParkingLotComment = props => {
       keyExtractor={item => item.id}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={
-        <EZText bold styleEZText={{marginBottom: 15}}>
-          {reviews.length} ratings and reviews
-        </EZText>
+        <View style={styles.headerFlatlist}>
+          <EZText bold styleEZText={{marginBottom: 15}}>
+            {reviews.length} ratings and reviews
+          </EZText>
+          {!isScreen && <EZButtonText
+            color={COLORS.primary}
+            text="See more"
+            handlePress={() =>
+              navigation.navigate('reviews', {
+                parkingId: idParkingLot,
+              })
+            }
+          />}
+        </View>
       }
-      onScrollEndDrag={handleScroll}
       ListEmptyComponent={
         mutationParkingLotComment.isLoading ? (
           <EZLoading />
@@ -66,4 +70,9 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 20,
   },
+  headerFlatlist: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-start',
+  }
 });

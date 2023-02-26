@@ -6,7 +6,6 @@ export const askLocationDevice = () => {
     fastInterval: 5000,
   })
     .then(data => {
-      console.log(data);
       return data;
       // The user has accepted to enable the location services
       // data can be :

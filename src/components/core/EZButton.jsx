@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
-import {COLORS, FONTSIZE} from '../../assets/styles/styles';
+import {colorDefault, COLORS, FONTSIZE} from '../../assets/styles/styles';
 import EZText from './EZText';
 import {useNavigation} from '@react-navigation/native';
 
@@ -24,7 +24,7 @@ const EZButton = props => {
     bg = 'transparent';
     colorText = COLORS.primary;
     bw = 2;
-  }else if (type === 'secondaryWithColor') {
+  } else if (type === 'secondaryWithColor') {
     bg = 'transparent';
     colorText = color;
     bw = 2;
@@ -62,7 +62,7 @@ const EZButton = props => {
             textTransform: 'capitalize',
             paddingHorizontal: 10,
           }}
-          size={props.sizeText || "medium"}>
+          size={props.sizeText || 'medium'}>
           {props.title}
         </EZText>
       )}
@@ -73,16 +73,32 @@ const EZButton = props => {
 const EZButtonBack = props => {
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
+  const {COLOR} = colorDefault();
   return (
     <TouchableOpacity
       onPress={() => navigation.goBack()}
-      style={[styles.backBtn, {...props.styleEZButtonBack}]}>
+      style={[styles.backBtn, {...props.styleEZButtonBack}, {shadowColor: COLOR}]}>
       <Icon
         name="chevron-left"
         color={isDarkMode ? COLORS.white : COLORS.black}
         size={FONTSIZE.iconSmall}
       />
-      <EZText styleEZText={styles.backBtnText} bold>Back</EZText>
+      <EZText styleEZText={styles.backBtnText} bold>
+        Back
+      </EZText>
+    </TouchableOpacity>
+  );
+};
+
+const EZButtonText = props => {
+  const {COLOR} = colorDefault();
+  return (
+    <TouchableOpacity
+      onPress={() => props.handlePress()}
+      style={[{...props.styleEZButtonText}, {shadowColor: COLOR}]}>
+      <EZText color={props.color} bold>
+        {props.text}
+      </EZText>
     </TouchableOpacity>
   );
 };
@@ -100,6 +116,14 @@ const styles = StyleSheet.create({
     top: 15,
     left: 10,
     zIndex: 1000,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   backBtnText: {
     paddingLeft: 3,
@@ -107,4 +131,4 @@ const styles = StyleSheet.create({
     fontSize: FONTSIZE.small,
   },
 });
-export {EZButton, EZButtonBack};
+export {EZButton, EZButtonBack, EZButtonText};

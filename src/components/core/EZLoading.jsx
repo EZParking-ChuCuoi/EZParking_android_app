@@ -5,14 +5,26 @@ import {
   Text,
   View,
 } from 'react-native';
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import {COLORS} from '../../assets/styles/styles';
+import AnimatedLoader from 'react-native-animated-loader';
 
-const EZLoading = () => {
+const EZLoading = (props) => {
+  const [visible, setVisible] = useState(true);
+  useEffect(() => {
+    setInterval(() => {
+      setVisible(!visible);
+    }, 2000);
+  }, []);
   return (
-    <View style={styles.container}>
-      <ActivityIndicator size="large" color={COLORS.white} />
-    </View>
+    <AnimatedLoader
+      overlayColor={COLORS.overlay}
+      animationStyle={styles.lottie}
+      visible={visible}
+      source={require('../../assets/images/loader.json')}
+      speed={1}>
+      <Text>{props.text || 'Loading...'}</Text>
+    </AnimatedLoader>
   );
 };
 
@@ -30,5 +42,9 @@ const styles = StyleSheet.create({
     left: 0,
     width: Dimensions.get('window').width,
     height: Dimensions.get('window').height,
+  },
+  lottie: {
+    width: 100,
+    height: 100,
   },
 });
