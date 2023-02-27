@@ -6,7 +6,7 @@ const httpRequest = axios.create({
   baseURL: BASE_API_URL,
   headers: {
     'X-Custom-Header': 'foobar',
-    'Content-Type': 'application/json',
+    'Content-Type': 'application/x-www-form-urlencoded',
     Accept: 'application/json',
   },
 });

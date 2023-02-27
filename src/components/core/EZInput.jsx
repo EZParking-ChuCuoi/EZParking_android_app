@@ -31,6 +31,7 @@ const EZInput = props => {
           ]}
           onChangeText={newText => props.onChangeText(newText)}
           defaultValue={props.defaultValue || ''}
+          value={props.value}
           keyboardType={props.keyboardType || 'default'}
           autoFocus={props.autoFocus || false}
           returnKeyType="next"

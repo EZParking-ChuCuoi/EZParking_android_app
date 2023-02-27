@@ -9,9 +9,7 @@ import {AVATAR} from '../../utils/defaultImage';
 
 const Chat = () => {
   const [search, setSearch] = useState('');
-  const handleSearch = () => {
-    console.log('searchingggg');
-  };
+  const handleSearch = () => {};
   return (
     <EZContainer styleEZContainer={{padding: SPACING.pxComponent}}>
       <EZInput
@@ -24,10 +22,13 @@ const Chat = () => {
       <View style={styles.messageItem}>
         <Image source={{uri: AVATAR}} style={styles.avatar} />
         <View style={styles.messageMid}>
-            <EZText bold color={COLORS.primary}>
-              Hoang Tuan Minh
-            </EZText>
-            <EZText lines={2}>Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus, fugit.</EZText>
+          <EZText bold color={COLORS.primary}>
+            Hoang Tuan Minh
+          </EZText>
+          <EZText lines={2}>
+            Lorem ipsum dolor sit amet consectetur adipisicing elit. Temporibus,
+            fugit.
+          </EZText>
         </View>
         <View style={styles.messageRight}>
           <EZText>15:33</EZText>
@@ -70,5 +71,5 @@ const styles = StyleSheet.create({
   },
   messageRight: {
     alignItems: 'center',
-  }
+  },
 });

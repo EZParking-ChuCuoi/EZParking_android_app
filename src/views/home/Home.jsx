@@ -105,12 +105,12 @@ const Home = () => {
           <EZText color={COLORS.white} bold size="large">
             Hi{' '}
             {mutationUserInfo.isSuccess &&
-              mutationUserInfo.data.data[0].fullName}
+              mutationUserInfo.data?.data[0]?.fullName}
           </EZText>
           <Image
             source={{
               uri: mutationUserInfo.isSuccess
-                ? mutationUserInfo.data.data[0].avatar
+                ? mutationUserInfo.data?.data[0]?.avatar
                 : AVATAR,
             }}
             style={styles.image}

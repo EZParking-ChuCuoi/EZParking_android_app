@@ -5,7 +5,7 @@ import {useGetParkingLotComment} from '../../hooks/api/getParkingLots';
 import EZText from '../core/EZText';
 import ParkingLotCommentItem from './ParkingLotCommentItem';
 import {useNavigation} from '@react-navigation/native';
-import {COLORS, SPACING} from '../../assets/styles/styles';
+import {bgDefault, COLORS, SPACING} from '../../assets/styles/styles';
 import EZLoading from '../core/EZLoading';
 import {EZButtonText} from '../core/EZButton';
 
@@ -14,6 +14,7 @@ const ParkingLotComment = props => {
   const navigation = useNavigation();
   const mutationParkingLotComment = useGetParkingLotComment();
   const [reviews, setReviews] = useState([]);
+  const {BG} = bgDefault();
 
   useEffect(() => {
     mutationParkingLotComment.mutate(idParkingLot);
@@ -23,29 +24,31 @@ const ParkingLotComment = props => {
       setReviews(mutationParkingLotComment.data);
     }
   }, [mutationParkingLotComment.status]);
-
   return (
     <FlatList
       data={mutationParkingLotComment.data}
+      stickyHeaderIndices={[0]}
       renderItem={({item}) => (
         <ParkingLotCommentItem key={item.id} item={item} />
       )}
       keyExtractor={item => item.id}
       showsVerticalScrollIndicator={false}
       ListHeaderComponent={
-        <View style={styles.headerFlatlist}>
+        <View style={[styles.headerFlatlist, {backgroundColor: BG}]}>
           <EZText bold styleEZText={{marginBottom: 15}}>
             {reviews.length} ratings and reviews
           </EZText>
-          {!isScreen && <EZButtonText
-            color={COLORS.primary}
-            text="See more"
-            handlePress={() =>
-              navigation.navigate('reviews', {
-                parkingId: idParkingLot,
-              })
-            }
-          />}
+          {!isScreen && (
+            <EZButtonText
+              color={COLORS.primary}
+              text="See more"
+              handlePress={() =>
+                navigation.navigate('reviews', {
+                  parkingId: idParkingLot,
+                })
+              }
+            />
+          )}
         </View>
       }
       ListEmptyComponent={
@@ -74,5 +77,5 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-  }
+  },
 });
