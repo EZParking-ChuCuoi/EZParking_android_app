@@ -20,3 +20,23 @@ export const useHideTabBar = () => {
       });
   }, [navigation]);
 };
+
+export const useUnhideTabBar = () => {
+  const navigation = useNavigation();
+  useEffect(() => {
+    navigation.getParent()?.setOptions({
+      tabBarStyle: {
+        backgroundColor: 'transparent',
+        height: 50,
+        borderTopWidth: 0,
+        position: 'absolute',
+      },
+    });
+    return () =>
+      navigation.getParent()?.setOptions({
+        tabBarStyle: {
+          display: 'none',
+        },
+      });
+  }, [navigation]);
+};

@@ -54,8 +54,6 @@ const Home = () => {
     };
     askPermissionLocation();
   }, []);
-  // todo: get this shit of line away
-  // console.log(mutationUserInfo.data?.data[0]?.avatar);
   useEffect(() => {
     const storeCurrent = () => {
       if (currentRegion !== undefined) {

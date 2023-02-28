@@ -64,3 +64,4 @@ yarn-error.log
 
 # local setting up at Ubuntu OS - lap
 android/local.properties
+.env

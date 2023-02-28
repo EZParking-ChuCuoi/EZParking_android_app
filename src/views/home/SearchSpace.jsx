@@ -81,13 +81,22 @@ const SearchSpace = () => {
             return <MarkerItem key={item.id} item={item} />;
           })}
         {currenRegion !== undefined && (
-          <Circle
-            center={currenRegion}
-            radius={1500}
-            strokeColor={COLORS.secondary}
-            strokeWidth={2}
-            fillColor={COLORS.circleOverlay}
-          />
+          <>
+            <Circle
+              center={currenRegion}
+              radius={1500}
+              strokeColor={COLORS.secondary}
+              strokeWidth={2}
+              fillColor={COLORS.circleOverlay}
+            />
+            <Circle
+              center={currenRegion}
+              radius={10}
+              strokeColor={COLORS.primary}
+              strokeWidth={2}
+              fillColor={COLORS.tertiary}
+            />
+          </>
         )}
       </MapView>
     </EZContainer>
