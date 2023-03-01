@@ -6,7 +6,7 @@ const httpRequest = axios.create({
   baseURL: BASE_API_URL,
   headers: {
     'X-Custom-Header': 'foobar',
-    'Content-Type': 'application/x-www-form-urlencoded',
+    'Content-Type': 'multipart/form-data',
     Accept: 'application/json',
   },
 });
@@ -35,6 +35,11 @@ export const postHttpRequest = async (path, options = {}) => {
 
 export const deleteHttpRequest = async path => {
   const response = await httpRequest.delete(path);
+  return response.data;
+};
+
+export const putHttpRequest = async (path, options = {}) => {
+  const response = await httpRequest.put(path, options);
   return response.data;
 };
 

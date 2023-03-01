@@ -47,6 +47,8 @@ const Home = () => {
     const askPermissionLocation = async () => {
       const permission = await requestLocationPermission(null);
       const EZUid = await getData('EZUid');
+      const toekn = await getData('EZToken');
+      console.log(toekn);
       mutationUserInfo.mutate(EZUid);
       if (permission) {
         getCurrentLocation();

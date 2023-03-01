@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import {EZButton} from '../../components/core/EZButton';
 import EZText from '../../components/core/EZText';
@@ -31,22 +31,21 @@ import {AVATAR} from '../../utils/defaultImage';
 const Account = () => {
   const navigation = useNavigation();
   const {COLOR} = colorDefault();
-  let isSpaceOwnerAccount;
+  const [isSpaceOwnerAccount, setIsSpaceOwnerAccount] = useState(false);
   const mutationUserInfo = useGetUserInfo();
   useEffect(() => {
     const setMutate = async () => {
       const uid = await getData('EZUid');
       const checkSpaceOwner = await isSpaceOwner();
       if (checkSpaceOwner) {
-        isSpaceOwnerAccount = true;
-      } else {
-        isSpaceOwnerAccount = false;
+        setIsSpaceOwnerAccount(true);
       }
       mutationUserInfo.mutate(uid);
     };
     setMutate();
   }, []);
 
+  console.log(isSpaceOwnerAccount);
   return (
     <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
       <View style={styles.topContainer}>
@@ -76,12 +75,14 @@ const Account = () => {
               <Icon name="log-out" size={FONTSIZE.iconLarge} color={COLOR} />
               <EZText styleEZText={{width: '85%'}}>Log out</EZText>
             </TouchableOpacity>
-            <EZButton
-              title="Create a car park"
-              handlePress={() =>
-                navigation.navigate('auth', {screen: 'registerSpaceOwner'})
-              }
-            />
+            {!isSpaceOwnerAccount && (
+              <EZButton
+                title="Create a car park"
+                handlePress={() =>
+                  navigation.navigate('auth', {screen: 'registerSpaceOwner'})
+                }
+              />
+            )}
           </View>
         }
       />

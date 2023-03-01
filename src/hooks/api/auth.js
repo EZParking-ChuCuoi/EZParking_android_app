@@ -48,6 +48,32 @@ export const isSpaceOwner = async () => {
   }
 };
 
+export const useRegisterSpaceOwner = () => {
+  return useMutation({
+    mutationFn: params => {
+      let formData = new FormData();
+      formData.append('phone', params.phone);
+      formData.append('businessScale', params.businessScale);
+      formData.append('_method', 'PUT');
+      formData.append('imageCardIdBef', {
+        uri: params.imageCardIdBef.path,
+        name: params.imageCardIdBef.path.substring(
+          params.imageCardIdBef.path.lastIndexOf('/') + 1,
+        ),
+        type: params.imageCardIdBef.mime,
+      });
+      formData.append('imageCardIdAft', {
+        uri: params.imageCardIdAft.path,
+        name: params.imageCardIdAft.path.substring(
+          params.imageCardIdAft.path.lastIndexOf('/') + 1,
+        ),
+        type: params.imageCardIdAft.mime,
+      });
+      return httpRequest.postHttpRequest(`owner/create/${params.id}`, formData);
+    },
+  });
+};
+
 //Search query example
 export const search = async (param1, param2) => {
   try {
