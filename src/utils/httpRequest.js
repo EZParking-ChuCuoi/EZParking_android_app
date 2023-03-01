@@ -15,7 +15,7 @@ httpRequest.interceptors.request.use(
   async config => {
     const accessToken = await getData('EZToken');
     if (accessToken) {
-      config.headers.Authorization = `bearer ${accessToken}`;
+      config.headers.Authorization = `Bearer ${accessToken}`;
     }
     return config;
   },
