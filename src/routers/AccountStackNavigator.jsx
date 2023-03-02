@@ -27,6 +27,7 @@ const AccountStackNavigators = () => {
           animation: 'flip',
         }}>
         <AccountStack.Screen name="profile" component={Account} />
+        <AccountStack.Screen name="dashboard" component={Dasboard} />
       </AccountStack.Group>
       <AccountStack.Group
         screenOptions={{
@@ -58,11 +59,6 @@ const AccountStackNavigators = () => {
           name="FAQ"
           component={FAQ}
           options={{title: 'FAQ'}}
-        />
-        <AccountStack.Screen
-          name="dashboard"
-          component={Dasboard}
-          options={{title: 'Dashboard'}}
         />
         <AccountStack.Screen
           name="qrcodeSetting"

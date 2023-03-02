@@ -8,7 +8,7 @@ const EditAccount = () => {
   return (
     <>
       <EZDeveloping title="Edit profile" />
-      <EZButton title="push" handlePress={() => LocalNotification('What you know about',' This is the sub text', 'This is the title', 'This is the message')} />
+      <EZButton title="push" handlePress={() => LocalNotification('What you know about', 'This is the title', 'This is the message')} />
     </>
   );
 };

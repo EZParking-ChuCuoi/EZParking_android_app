@@ -17,38 +17,46 @@ const BookingPreview = ({navigation, route}) => {
   const mutationBookingPreview = useBookingPreview();
   const mutationBookingNow = useBookingNow();
   const [errMessage, setErrMessage] = useState('');
+  const [uid, setUid] = useState('');
   const [licensePlate, setLicensePlate] = useState(new Array(idSlotArr.length));
   useEffect(() => {
-    mutationBookingPreview.mutate({
-      ids: idSlotArr,
-      start_datetime: dateStart,
-      end_datetime: dateReturn,
-    });
+    const inital = async () => {
+      mutationBookingPreview.mutate({
+        ids: idSlotArr,
+        start_datetime: dateStart,
+        end_datetime: dateReturn,
+      });
+      const uid = await getData('EZUid');
+      setUid(uid);
+    };
+    inital();
   }, []);
   useEffect(() => {
     if (mutationBookingNow.isSuccess) {
-      navigation.navigate('bookingTicket');
+      navigation.navigate('bookingTicket', {
+        userId: uid,
+        startDateTime: dateStart,
+      });
     }
   }, [mutationBookingNow.status]);
   const handleBooking = async () => {
-    const uid = await getData('EZUid');
     let check = false;
     [...Array(licensePlate.length)].forEach((val, index) => {
       if (licensePlate[index] !== undefined) {
-        if(licensePlate[index].length===8){
+        if (licensePlate[index].length === 8) {
           check = true;
         }
-      }else{
-        check=false;
+      } else {
+        check = false;
         setErrMessage('Please fill in all license plates!');
         return;
       }
     });
     if (check) {
       mutationBookingNow.mutate({
+        licensePlate: licensePlate,
         slot_ids: idSlotArr,
         user_id: uid,
-        price: mutationBookingPreview.data.total,
         start_datetime: dateStart,
         end_datetime: dateReturn,
       });

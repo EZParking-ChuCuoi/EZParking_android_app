@@ -28,6 +28,7 @@ export const FONTSIZE = {
   iconSmall: 17,
   iconMedium: 20,
   iconLarge: 25,
+  iconHuge: 50,
 };
 
 export const SPACING = {

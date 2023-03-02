@@ -1,4 +1,5 @@
 import PushNotification, {Importance} from 'react-native-push-notification';
+import {getCurrentTime, handleDate} from './handleDate';
 
 PushNotification.configure({
   onNotification: notification => {
@@ -28,16 +29,15 @@ PushNotification.createChannel(
 );
 
 export const LocalNotification = (
-  bigText = 'Big text',
-  subText = 'Sub text',
-  title = 'Title',
-  message = 'Message',
+  bigText = 'Explore EZParking now!',
+  title = 'New notification from EZParking',
+  message = 'New message from EZParking',
 ) => {
   PushNotification.localNotification({
     channelId: 'channel-id',
     channelName: 'my channel',
     bigText: bigText,
-    subText: subText,
+    subText: getCurrentTime(),
     title: title,
     actions: ['Yes', 'No'],
     ticker: 'My Notification Ticker',

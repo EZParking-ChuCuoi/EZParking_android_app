@@ -27,6 +27,7 @@ const HomeStackNavigators = () => {
         }}>
         <HomeStack.Screen name="home" component={Home} />
         <HomeStack.Screen name="search" component={SearchSpace} />
+        <HomeStack.Screen name="bookingTicket" component={BookingTicket} />
       </HomeStack.Group>
       <HomeStack.Group
         screenOptions={{
@@ -49,11 +50,6 @@ const HomeStackNavigators = () => {
           name="preview"
           component={BookingPreview}
           options={{title: 'Booking Preview'}}
-        />
-        <HomeStack.Screen
-          name="bookingTicket"
-          component={BookingTicket}
-          options={{title: 'Booking ticket'}}
         />
       </HomeStack.Group>
     </HomeStack.Navigator>

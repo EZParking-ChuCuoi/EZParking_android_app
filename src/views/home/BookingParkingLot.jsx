@@ -59,10 +59,10 @@ const BookingParkingLot = ({navigation, route}) => {
     ) {
       navigation.navigate('preview', {
         dateStart: moment(new Date(params.dateStart)).format(
-          'YYYY-MM-DD hh:mm:ss',
+          'YYYY-MM-DD HH:mm:ss',
         ),
         dateReturn: moment(new Date(params.dateReturn)).format(
-          'YYYY-MM-DD hh:mm:ss',
+          'YYYY-MM-DD HH:mm:ss',
         ),
         idSlotArr,
       });

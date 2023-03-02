@@ -12,6 +12,7 @@ import com.facebook.react.defaults.DefaultReactNativeHost;
 import com.facebook.soloader.SoLoader;
 import com.airbnb.android.react.lottie.LottiePackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
+import com.reactnativecommunity.cameraroll.CameraRollPackage;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -30,6 +31,7 @@ public class MainApplication extends Application implements ReactApplication {
       new RNAndroidLocationEnablerPackage();
       new LottiePackage();
       new ReactNativePushNotificationPackage();
+      new CameraRollPackage();
       // Packages that cannot be autolinked yet can be added manually here, for
       // example:
       // packages.add(new MyReactNativePackage());

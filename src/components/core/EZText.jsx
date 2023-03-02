@@ -28,9 +28,9 @@ const EZText = props => {
     sizeText = FONTSIZE.medium;
   } else if (size === 'large') {
     sizeText = FONTSIZE.large;
-  }else if (size === 'huge') {
+  } else if (size === 'huge') {
     sizeText = FONTSIZE.huge;
-  }else if (size === 'quiteLarge') {
+  } else if (size === 'quiteLarge') {
     sizeText = FONTSIZE.quiteLarge;
   }
   return (
@@ -40,10 +40,11 @@ const EZText = props => {
         fontSize: sizeText,
         fontFamily: ff,
         textAlignVertical: 'center',
+        textAlign: props.textAlign || 'left',
         ...props.styleEZText,
       }}
       numberOfLines={props.lines}
-      ellipsizeMode='tail'>
+      ellipsizeMode="tail">
       {props.children}
     </Text>
   );

@@ -7,7 +7,7 @@ const EZBgTopRounded = props => {
     <View
       style={[
         styles.container,
-        {height: props.height || '20%'},
+        {height: props.height || '25%'},
         {...props.styleEZBgTopRounded},
       ]}>
       {props.children}
