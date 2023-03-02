@@ -28,7 +28,6 @@ import {hasStorePermission} from '../../shared/androidPermission';
 
 const BookingTicket = ({navigation, route}) => {
   const {userId, startDateTime} = route.params;
-  console.log('data==>', userId, startDateTime);
   const {COLOR} = colorDefault();
   const {BG} = bgDefault();
 
@@ -92,7 +91,7 @@ const BookingTicket = ({navigation, route}) => {
             Your parking has been booked successfully
           </EZText>
           <QRCode
-            value="What you know about"
+            value={`${userId}|${startDateTime}`}
             logo={require('../../assets/images/logo.png')}
             logoSize={30}
             logoBackgroundColor="transparent"
@@ -210,5 +209,5 @@ const styles = StyleSheet.create({
   closeBtn: {
     backgroundColor: COLORS.redLight,
     borderRadius: 30,
-  }
+  },
 });

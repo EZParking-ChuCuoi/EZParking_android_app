@@ -31,7 +31,7 @@ import {AVATAR} from '../../utils/defaultImage';
 const Account = () => {
   const navigation = useNavigation();
   const {COLOR} = colorDefault();
-  const [isSpaceOwnerAccount, setIsSpaceOwnerAccount] = useState(false);
+  const [isSpaceOwnerAccount, setIsSpaceOwnerAccount] = useState(undefined);
   const mutationUserInfo = useGetUserInfo();
   useEffect(() => {
     const setMutate = async () => {
@@ -45,7 +45,6 @@ const Account = () => {
     setMutate();
   }, []);
 
-  console.log(isSpaceOwnerAccount);
   return (
     <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
       <View style={styles.topContainer}>

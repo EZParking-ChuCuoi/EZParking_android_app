@@ -6,8 +6,8 @@ import SplashScreen from 'react-native-splash-screen';
 import {COLORS} from '../assets/styles/styles';
 import BottomTab from './BottomTabs';
 import {useNavigation} from '@react-navigation/native';
-import { getData } from '../shared/asyncStorages';
-import { navigateAuthorized } from '../shared/auth';
+import {getData} from '../shared/asyncStorages';
+import {navigateAuthorized} from '../shared/auth';
 
 const RootRoute = () => {
   const navigation = useNavigation();
@@ -17,12 +17,11 @@ const RootRoute = () => {
       const token = await getData('EZToken');
       if (token.length !== 0) {
         navigateAuthorized(navigation);
+      } else {
+        SplashScreen.hide();
       }
     };
     getToken();
-  }, []);
-  useEffect(() => {
-    SplashScreen.hide();
   }, []);
 
   const Stack = createNativeStackNavigator();

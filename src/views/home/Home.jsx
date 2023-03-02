@@ -34,6 +34,7 @@ import {useGetUserInfo} from '../../hooks/api/auth';
 import {AVATAR} from '../../utils/defaultImage';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import RemotePushController from '../../shared/RemotePushController';
+import SplashScreen from 'react-native-splash-screen';
 
 const Home = () => {
   const {COLOR} = colorDefault();
@@ -46,10 +47,9 @@ const Home = () => {
 
   useEffect(() => {
     const askPermissionLocation = async () => {
+      SplashScreen.hide();
       const permission = await requestLocationPermission(null);
       const EZUid = await getData('EZUid');
-      const toekn = await getData('EZToken');
-      console.log(toekn);
       mutationUserInfo.mutate(EZUid);
       if (permission) {
         getCurrentLocation();
@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
     borderColor: COLORS.borderInput,
     borderWidth: 1,
     position: 'absolute',
-    bottom: -15,
+    bottom: -25,
     flexDirection: 'row',
     justifyContent: 'space-between',
     padding: 15,

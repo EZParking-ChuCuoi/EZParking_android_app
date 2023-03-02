@@ -4,9 +4,9 @@ import PushNotification, {Importance} from 'react-native-push-notification';
 const RemotePushController = () => {
   useEffect(() => {
     PushNotification.configure({
-      onRegister: token => {
-        console.log('TOKEN:', token);
-      },
+      // onRegister: token => {
+      //   console.log('TOKEN:', token);
+      // },
       onNotification: notification => {
         console.log('NOTIFICATION:', notification);
       },
