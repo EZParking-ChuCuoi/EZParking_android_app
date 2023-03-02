@@ -30,17 +30,17 @@ export const NAVIGATED_PROFILE_SPACEOWNER = [
   {
     text: 'Edit profile',
     nameIcon: 'edit-3',
-    screenName: 'editProfile',
+    screenName: 'editAccount',
   },
   {
     text: 'Chat',
     nameIcon: 'message-circle',
-    screenName: 'chat',
+    screenName: 'chatSetting',
   },
   {
     text: 'Payment details',
     nameIcon: 'credit-card',
-    screenName: 'payment',
+    screenName: 'paymentSetting',
   },
   {
     text: 'Subcriptions',

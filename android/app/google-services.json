@@ -1,0 +1,39 @@
+{
+  "project_info": {
+    "project_number": "529834463738",
+    "project_id": "ezparking-bb483",
+    "storage_bucket": "ezparking-bb483.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:529834463738:android:3197d0537d0cd324861443",
+        "android_client_info": {
+          "package_name": "com.ezparking"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "529834463738-p86ntg22phna3hi893ftohlmehk6hbbu.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVPCXPPaLz0xccxbrnM0Ha_xV8E3ZH89Q"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "529834463738-p86ntg22phna3hi893ftohlmehk6hbbu.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

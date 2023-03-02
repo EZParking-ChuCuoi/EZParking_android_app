@@ -3,6 +3,8 @@
 buildscript {
     ext.kotlin_version = "1.6.20"
     ext {
+        googlePlayServicesVersion = "+" // default: "+"
+        firebaseMessagingVersion = "+" // default: "21.1.0"
         buildToolsVersion = "33.0.0"
         minSdkVersion = 21
         compileSdkVersion = 33
@@ -30,5 +32,6 @@ buildscript {
         classpath("com.android.tools.build:gradle:7.3.1")
         classpath("com.facebook.react:react-native-gradle-plugin")
         classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.6.20")
+        classpath('com.google.gms:google-services:4.3.3')
     }
 }

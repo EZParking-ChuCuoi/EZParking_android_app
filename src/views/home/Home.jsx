@@ -33,6 +33,7 @@ import {getData, storeDataObj} from '../../shared/asyncStorages';
 import {useGetUserInfo} from '../../hooks/api/auth';
 import {AVATAR} from '../../utils/defaultImage';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
+import RemotePushController from '../../shared/RemotePushController';
 
 const Home = () => {
   const {COLOR} = colorDefault();
@@ -95,6 +96,7 @@ const Home = () => {
 
   return (
     <EZContainer bgEZStatusBar={COLORS.tertiary}>
+      <RemotePushController />
       <EZRBSheet refRBSheet={refRBSheet}>
         <EZContainer>
           <EZText>Hi man</EZText>
