@@ -1,30 +1,30 @@
 import {StyleSheet} from 'react-native';
 import React, {useEffect, useState} from 'react';
-import {COLORS} from '../../assets/styles/styles';
 import AnimatedLoader from 'react-native-animated-loader';
-import EZText from './EZText';
+import {COLORS} from '../../assets/styles/styles';
+import EZText from '../core/EZText';
 
-const EZLoading = props => {
+const PopupDataEmpty = props => {
   const [visible, setVisible] = useState(true);
   useEffect(() => {
     const animate = setInterval(() => {
       setVisible(!visible);
-    }, 2000);
+    }, 3000);
     return () => clearInterval(animate);
   }, []);
   return (
     <AnimatedLoader
-      overlayColor={COLORS.overlay}
+      overlayColor={COLORS.circleOverlay}
       animationStyle={styles.lottie}
       visible={visible}
-      source={require('../../assets/images/loader.json')}
+      source={require('../../assets/images/empty-search.json')}
       speed={1}>
-      <EZText color={COLORS.secondary}>{props.text || 'Loading...'}</EZText>
+      <EZText color={COLORS.primary} bold>{props.text || 'Loading...'}</EZText>
     </AnimatedLoader>
   );
 };
 
-export default EZLoading;
+export default PopupDataEmpty;
 
 const styles = StyleSheet.create({
   lottie: {

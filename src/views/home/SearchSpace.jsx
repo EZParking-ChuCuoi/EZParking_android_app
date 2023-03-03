@@ -1,45 +1,41 @@
-import {
-  StyleSheet,
-  Text,
-  View,
-  Linking,
-  PermissionsAndroid,
-  Platform,
-  TouchableOpacity,
-  useColorScheme,
-  Image,
-  FlatList,
-} from 'react-native';
+import {StyleSheet, useColorScheme} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
-import {useNavigation} from '@react-navigation/native';
 import {EZButtonBack} from '../../components/core/EZButton';
 import MapView, {Circle, Marker, PROVIDER_GOOGLE} from 'react-native-maps';
-import EZInput from '../../components/core/EZInput';
-import {bgDefault, COLORS, FONTSIZE} from '../../assets/styles/styles';
+import {
+  bgDefault,
+  bgSecondaryDefault,
+  colorDefault,
+  COLORS,
+  FONTSIZE,
+} from '../../assets/styles/styles';
 import {GooglePlacesAutocomplete} from 'react-native-google-places-autocomplete';
 import {useHideTabBar} from '../../hooks/useHideTabBar';
 import MarkerItem from '../../components/home/MarkerItem';
 import {getDataObj} from '../../shared/asyncStorages';
-import {
-  UseGetAllParkingLot,
-  useGetNearlyParkingLot,
-} from '../../hooks/api/getParkingLots';
+import {API_GOOGLE_MAP} from '@env';
+import {useGetNearlyParkingLot} from '../../hooks/api/getParkingLots';
+import PopupDataEmpty from '../../components/home/PopupDataEmpty';
+import NightMap from '../../assets/styles/nightMap.json';
+import StandardMap from '../../assets/styles/standard.json';
 
 const SearchSpace = () => {
   const isDarkMode = useColorScheme() === 'dark';
   const {BG} = bgDefault();
-  const navigation = useNavigation();
-  const [search, setSearch] = useState('');
+  const {BG2ND} = bgSecondaryDefault();
+  const {COLOR} = colorDefault();
   const mutationNearlyPark = useGetNearlyParkingLot();
-  // const {data, isLoading, isSuccess} = UseGetAllParkingLot();
-  const refRBSheet = useRef();
   const [currenRegion, setCurrenRegion] = useState(undefined);
-
+  const styleEZ = {
+    backgroundColor: BG,
+    color: COLOR,
+  };
   useEffect(() => {
     const initRegion = async () => {
       const coordinate = await getDataObj('EZCurrentRegion');
+      console.log(coordinate);
       mutationNearlyPark.mutate({
         latitude: coordinate.latitude,
         longitude: coordinate.longitude,
@@ -53,39 +49,99 @@ const SearchSpace = () => {
     };
     initRegion();
   }, []);
+  useEffect(() => {
+    mutationNearlyPark.mutate({
+      latitude: JSON.stringify(currenRegion?.latitude),
+      longitude: JSON.stringify(currenRegion?.longitude),
+    });
+  }, [currenRegion]);
   useHideTabBar();
+
+  const handleSearch = details => {
+    setCurrenRegion({
+      ...currenRegion,
+      ['latitude']: details?.geometry?.location.lat,
+      ['longitude']: details?.geometry?.location.lng,
+    });
+  };
+
+  if (mutationNearlyPark.isError) {
+    console.log('error', mutationNearlyPark.error);
+  }
+  if (mutationNearlyPark.isSuccess) {
+    console.log('success', mutationNearlyPark.data);
+  }
   return (
     <EZContainer bgEZStatusBar="transparent" translucent>
-      <EZButtonBack styleEZButtonBack={{top: 55}} colorText={COLORS.black} />
-      <EZInput
-        placeholder="Where do you want to go?"
-        iconName="send"
-        autoFocus
-        styleEZInput={{
-          position: 'absolute',
-          top: 40,
-          zIndex: 10,
-          right: 15,
-          width: '75%',
-        }}
-        styleEZInputField={{backgroundColor: BG}}
-        onChangeText={newText => setSearch(newText)}
+      <EZButtonBack
+        noText
+        styleEZButtonBack={{top: 60}}
+        colorText={COLORS.black}
       />
-      {/* <GooglePlacesAutocomplete
-        placeholder="Search"
-        onPress={(data, details = null) => {
-          // 'details' is provided when fetchDetails = true
-          console.log(data, details);
+
+      {mutationNearlyPark.data?.length === 0 && (
+        <PopupDataEmpty text="Couldn't find any parking near this location" />
+      )}
+      <GooglePlacesAutocomplete
+        placeholder="Where do you want to go?"
+        autoFocus={true}
+        textInputProps={{
+          placeholderTextColor: COLORS.disable,
         }}
+        GooglePlacesDetailsQuery={{fields: 'geometry'}}
+        onPress={(data, details = null) => {
+          handleSearch(details);
+        }}
+        fetchDetails={true}
+        minLength={6}
         query={{
-          key: '',
+          key: API_GOOGLE_MAP,
           language: 'en',
         }}
-      /> */}
+        styles={{
+          container: {
+            position: 'absolute',
+            top: 50,
+            zIndex: 10,
+            right: 15,
+            width: '85%',
+            backgroundColor: BG,
+            borderRadius: 10,
+            shadowOffset: {
+              width: 0,
+              height: 6,
+            },
+            shadowOpacity: 0.39,
+            shadowRadius: 8.3,
+
+            elevation: 12,
+          },
+          textInputContainer: {
+            backgroundColor: BG,
+            borderRadius: 10,
+          },
+          textInput: {
+            color: COLOR,
+            fontSize: FONTSIZE.medium,
+            fontFamily: 'Poppins-Regular',
+            backgroundColor: BG,
+            borderRadius: 10,
+          },
+          row: styleEZ,
+          poweredContainer: {
+            borderBottomRightRadius: 10,
+            borderBottomLeftRadius: 10,
+            backgroundColor: BG2ND,
+          },
+          separator: {
+            backgroundColor: COLORS.borderInput,
+          },
+        }}
+      />
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}
-        userInterfaceStyle={isDarkMode ? 'dark' : 'light'}
+        customMapStyle={isDarkMode ? NightMap : StandardMap}
         region={currenRegion}>
         {mutationNearlyPark.isSuccess &&
           mutationNearlyPark.data.map(item => {

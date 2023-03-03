@@ -84,9 +84,9 @@ const EZButtonBack = props => {
         size={FONTSIZE.iconSmall}
         style={styles.iconLeft}
       />
-      <EZText styleEZText={styles.backBtnText} bold color={props.colorText}>
+      {!props.noText && <EZText styleEZText={styles.backBtnText} bold color={props.colorText}>
         Back
-      </EZText>
+      </EZText>}
     </TouchableOpacity>
   );
 };
