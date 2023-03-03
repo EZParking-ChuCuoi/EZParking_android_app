@@ -82,8 +82,9 @@ const EZButtonBack = props => {
         name="chevron-left"
         color={isDarkMode ? COLORS.white : COLORS.black}
         size={FONTSIZE.iconSmall}
+        style={styles.iconLeft}
       />
-      <EZText styleEZText={styles.backBtnText} bold>
+      <EZText styleEZText={styles.backBtnText} bold color={props.colorText}>
         Back
       </EZText>
     </TouchableOpacity>
@@ -130,5 +131,10 @@ const styles = StyleSheet.create({
     fontWeight: '600',
     fontSize: FONTSIZE.small,
   },
+  iconLeft: {
+    backgroundColor: COLORS.primary,
+    padding: 5,
+    borderRadius: 20,
+  }
 });
 export {EZButton, EZButtonBack, EZButtonText};

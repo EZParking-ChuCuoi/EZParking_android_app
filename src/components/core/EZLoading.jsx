@@ -8,6 +8,7 @@ import {
 import React, { useEffect, useState } from 'react';
 import {COLORS} from '../../assets/styles/styles';
 import AnimatedLoader from 'react-native-animated-loader';
+import EZText from './EZText';
 
 const EZLoading = (props) => {
   const [visible, setVisible] = useState(true);
@@ -23,7 +24,7 @@ const EZLoading = (props) => {
       visible={visible}
       source={require('../../assets/images/loader.json')}
       speed={1}>
-      <Text>{props.text || 'Loading...'}</Text>
+      <EZText color={COLORS.secondary}>{props.text || 'Loading...'}</EZText>
     </AnimatedLoader>
   );
 };

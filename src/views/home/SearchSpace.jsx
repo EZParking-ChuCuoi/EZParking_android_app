@@ -56,7 +56,7 @@ const SearchSpace = () => {
   useHideTabBar();
   return (
     <EZContainer bgEZStatusBar="transparent" translucent>
-      <EZButtonBack styleEZButtonBack={{top: 55}} />
+      <EZButtonBack styleEZButtonBack={{top: 55}} colorText={COLORS.black} />
       <EZInput
         placeholder="Where do you want to go?"
         iconName="send"
@@ -66,11 +66,22 @@ const SearchSpace = () => {
           top: 40,
           zIndex: 10,
           right: 15,
-          width: '80%',
+          width: '75%',
         }}
         styleEZInputField={{backgroundColor: BG}}
         onChangeText={newText => setSearch(newText)}
       />
+      {/* <GooglePlacesAutocomplete
+        placeholder="Search"
+        onPress={(data, details = null) => {
+          // 'details' is provided when fetchDetails = true
+          console.log(data, details);
+        }}
+        query={{
+          key: '',
+          language: 'en',
+        }}
+      /> */}
       <MapView
         provider={PROVIDER_GOOGLE}
         style={styles.map}

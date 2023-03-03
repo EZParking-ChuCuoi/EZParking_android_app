@@ -19,10 +19,12 @@ import {getData} from '../../shared/asyncStorages';
 import {useRegisterSpaceOwner} from '../../hooks/api/auth';
 import EZLoading from '../../components/core/EZLoading';
 import {useUploadImage} from '../../hooks/api/getBookingParkingLot';
+import {useNavigation} from '@react-navigation/native';
 
 const RegisterSpaceOwner = () => {
   const mutationRegister = useRegisterSpaceOwner();
   const mutationUpload = useUploadImage();
+  const navigation = useNavigation();
   const [params, setParams] = useState({
     id: '',
     phone: '',
@@ -74,9 +76,10 @@ const RegisterSpaceOwner = () => {
   };
 
   if (mutationRegister.isSuccess) {
-    console.log('CCCCCCCCC', mutationRegister.data);
-    console.log('CCCCCCCCC', mutationRegister.variables);
-    console.log('CCCCCCCCC', mutationRegister.error);
+    navigation.navigate('bottomTab', {
+      screen: 'account',
+      params: {screen: 'dashboard'},
+    });
   }
   return (
     <EZContainer

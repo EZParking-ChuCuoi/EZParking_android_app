@@ -14,7 +14,9 @@ import EZText from './EZText';
 const EZInput = props => {
   const isDarkMode = useColorScheme() === 'dark';
   const [styleTextFocused, setStyleTextFocused] = useState({});
-  const [styleIconFocused, setStyleIconFocused] = useState({color: COLORS.borderInput});
+  const [styleIconFocused, setStyleIconFocused] = useState({
+    color: COLORS.borderInput,
+  });
   return (
     <View style={[styles.groupInput, {...props.styleEZInput}]}>
       {props.label && (
@@ -43,9 +45,7 @@ const EZInput = props => {
             setStyleTextFocused(
               props.styleFocus || {borderColor: COLORS.primary, borderWidth: 2},
             );
-            setStyleIconFocused(
-              props.styleFocus || {color: COLORS.primary},
-            );
+            setStyleIconFocused(props.styleFocus || {color: COLORS.primary});
           }}
           onBlur={() => {
             setStyleTextFocused({});
@@ -98,7 +98,8 @@ const styles = StyleSheet.create({
   input: {
     fontSize: FONTSIZE.medium,
     width: '100%',
-    paddingHorizontal: 10,
+    paddingLeft: 10,
+    paddingRight: 40,
     fontFamily: 'Poppins-Regular',
   },
   icon: {
