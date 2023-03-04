@@ -41,6 +41,7 @@ const EZText = props => {
         fontFamily: ff,
         textAlignVertical: 'center',
         textAlign: props.textAlign || 'left',
+        textTransform: props.transform || 'none',
         ...props.styleEZText,
       }}
       numberOfLines={props.lines}

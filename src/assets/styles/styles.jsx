@@ -18,6 +18,8 @@ export const COLORS = {
   bgLight: '#F3F2F8',
   borderInput: '#7D7C80',
   borderBrighter: '#091C3F14',
+  linearBGLight: ['#F3F2F8', '#F2F2F2', '#DBDBDB'],
+  linearBGDark: ['#1B1616', '#232526', '#414345'],
 };
 
 export const FONTSIZE = {

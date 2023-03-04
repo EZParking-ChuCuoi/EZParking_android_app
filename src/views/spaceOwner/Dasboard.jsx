@@ -1,4 +1,10 @@
-import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
@@ -10,23 +16,25 @@ import {
   colorDefault,
   COLORS,
   FONTSIZE,
+  SPACING,
 } from '../../assets/styles/styles';
 import AnimatedLoader from 'react-native-animated-loader';
 import {EZButtonBack} from '../../components/core/EZButton';
 import AnimatedLoading from '../../components/spaceOwner/dashboard/AnimatedLoading';
 import Icon from 'react-native-vector-icons/Feather';
 import EZInput from '../../components/core/EZInput';
+import {Link} from '@react-navigation/native';
+import DashboardItem from '../../components/spaceOwner/dashboard/DashboardItem';
 
 const Dasboard = ({navigation}) => {
-  useHideTabBar();
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const {BG} = bgDefault();
-  const [search, setSearch] = useState('')
+  const [search, setSearch] = useState('');
 
-  const handleSearch = ()=>{
-    console.log(search)
-  }
+  const handleSearch = () => {
+    console.log(search);
+  };
   return (
     <EZContainer bgEZStatusBar={COLORS.tertiary}>
       <TouchableOpacity
@@ -46,12 +54,42 @@ const Dasboard = ({navigation}) => {
             backgroundColor: BG,
             width: '85%',
           }}
+          styleEZInputField={{
+            paddingLeft: 15,
+          }}
           placeholder="Search"
           onChangeText={newText => setSearch(newText)}
           iconName="send"
           handlePressIcon={handleSearch}
         />
       </EZBgTopRounded>
+      <View style={styles.mainContent}>
+        <EZText
+          transform="uppercase"
+          bold
+          styleEZText={{paddingLeft: SPACING.pxComponent}}>
+          Your parking lots
+        </EZText>
+        <ScrollView contentContainerStyle={styles.yourLots}>
+          <DashboardItem
+            navigateTo="createLot"
+            text="Create new lot"
+            iconName="plus"
+          />
+          <DashboardItem
+            navigateTo="createLot"
+            text="Create new lot"
+          />
+          <DashboardItem
+            navigateTo="createLot"
+            text="Create new lot"
+            iconName="plus"
+          />
+          <DashboardItem navigateTo="createLot" text="Create new lot">
+            <EZText>hi</EZText>
+          </DashboardItem>
+        </ScrollView>
+      </View>
     </EZContainer>
   );
 };
@@ -77,5 +115,18 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 8,
+  },
+  yourLots: {
+    width: '100%',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    gap: 15,
+    padding: 10,
+  },
+  mainContent: {
+    marginTop: 30,
+    width: '100%',
   },
 });

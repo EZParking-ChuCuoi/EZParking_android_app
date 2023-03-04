@@ -47,13 +47,13 @@ const Home = () => {
 
   useEffect(() => {
     const askPermissionLocation = async () => {
-      SplashScreen.hide();
       const permission = await requestLocationPermission(null);
       const EZUid = await getData('EZUid');
       mutationUserInfo.mutate(EZUid);
       if (permission) {
         getCurrentLocation();
       }
+      SplashScreen.hide();
     };
     askPermissionLocation();
   }, []);
@@ -68,6 +68,7 @@ const Home = () => {
     };
     return storeCurrent();
   }, [currentRegion]);
+
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       position => {

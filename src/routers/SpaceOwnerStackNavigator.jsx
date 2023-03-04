@@ -9,11 +9,13 @@ import {
 import CreateLot from '../views/spaceOwner/CreateLot';
 import Dasboard from '../views/spaceOwner/Dasboard';
 import LotDetail from '../views/spaceOwner/LotDetail';
+import {useHideTabBar} from '../hooks/useHideTabBar';
 
 const SpaceOwnerStack = createNativeStackNavigator();
 const SpaceOwnerStackNavigators = () => {
   const {COLOR} = colorDefault();
   const {BG} = bgDefault();
+  useHideTabBar();
   return (
     <SpaceOwnerStack.Navigator>
       <SpaceOwnerStack.Group
@@ -22,15 +24,16 @@ const SpaceOwnerStackNavigators = () => {
           animation: 'flip',
         }}>
         <SpaceOwnerStack.Screen name="dashboard" component={Dasboard} />
-        <SpaceOwnerStack.Screen name="createLot" component={CreateLot} />
-        <SpaceOwnerStack.Screen name="lotDetail" component={LotDetail} />
       </SpaceOwnerStack.Group>
       <SpaceOwnerStack.Group
         screenOptions={{
           headerTintColor: COLOR,
           headerStyle: {backgroundColor: BG},
           headerTitleStyle: {fontSize: FONTSIZE.quiteLarge},
-        }}></SpaceOwnerStack.Group>
+        }}>
+        <SpaceOwnerStack.Screen name="createLot" component={CreateLot} options={{title: 'Create lot',}} />
+        <SpaceOwnerStack.Screen name="lotDetail" component={LotDetail} />
+      </SpaceOwnerStack.Group>
     </SpaceOwnerStack.Navigator>
   );
 };
