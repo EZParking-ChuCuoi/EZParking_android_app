@@ -45,7 +45,7 @@ const RegisterSpaceOwner = () => {
     if (mutationRegister.isSuccess) {
       navigation.navigate('bottomTab', {
         screen: 'account',
-        params: {screen: 'dashboard'},
+        params: {screen: 'spaceOwner', params: {screen: 'dashboard'},},
       });
     }
   }, [mutationRegister.status]);

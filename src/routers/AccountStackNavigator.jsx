@@ -12,8 +12,8 @@ import ChatSetting from '../views/account/ChatSetting';
 import PaymentSetting from '../views/account/PaymentSetting';
 import Subcriptions from '../views/account/Subcriptions';
 import FAQ from '../views/account/FAQ';
-import Dasboard from '../views/account/Dasboard';
 import QrcodeSetting from '../views/account/QrcodeSetting';
+import SpaceOwnerStackNavigators from './SpaceOwnerStackNavigator';
 
 const AccountStack = createNativeStackNavigator();
 const AccountStackNavigators = () => {
@@ -27,7 +27,7 @@ const AccountStackNavigators = () => {
           animation: 'flip',
         }}>
         <AccountStack.Screen name="profile" component={Account} />
-        <AccountStack.Screen name="dashboard" component={Dasboard} />
+        <AccountStack.Screen name="spaceOwner" component={SpaceOwnerStackNavigators} />
       </AccountStack.Group>
       <AccountStack.Group
         screenOptions={{
