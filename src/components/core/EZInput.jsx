@@ -83,6 +83,8 @@ const styles = StyleSheet.create({
   groupInput: {
     width: '100%',
     position: 'relative',
+    overflow: 'hidden',
+    borderRadius: 10,
   },
   inputIcon: {
     flexDirection: 'row',

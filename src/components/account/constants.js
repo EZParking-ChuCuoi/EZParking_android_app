@@ -53,7 +53,7 @@ export const NAVIGATED_PROFILE_SPACEOWNER = [
     screenName: 'FAQ',
   },
   {
-    text: 'Management parking car',
+    text: 'Space owner dashboard',
     nameIcon: 'activity',
     screenName: 'dashboard',
   },

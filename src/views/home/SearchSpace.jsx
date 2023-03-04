@@ -35,7 +35,6 @@ const SearchSpace = () => {
   useEffect(() => {
     const initRegion = async () => {
       const coordinate = await getDataObj('EZCurrentRegion');
-      console.log(coordinate);
       mutationNearlyPark.mutate({
         latitude: coordinate.latitude,
         longitude: coordinate.longitude,
@@ -64,13 +63,6 @@ const SearchSpace = () => {
       ['longitude']: details?.geometry?.location.lng,
     });
   };
-
-  if (mutationNearlyPark.isError) {
-    console.log('error', mutationNearlyPark.error);
-  }
-  if (mutationNearlyPark.isSuccess) {
-    console.log('success', mutationNearlyPark.data);
-  }
   return (
     <EZContainer bgEZStatusBar="transparent" translucent>
       <EZButtonBack
@@ -152,15 +144,15 @@ const SearchSpace = () => {
             <Circle
               center={currenRegion}
               radius={1500}
-              strokeColor={COLORS.secondary}
-              strokeWidth={2}
+              // strokeColor={COLORS.secondary}
+              strokeWidth={0}
               fillColor={COLORS.circleOverlay}
             />
             <Circle
               center={currenRegion}
               radius={10}
               strokeColor={COLORS.primary}
-              strokeWidth={2}
+              strokeWidth={0}
               fillColor={COLORS.tertiary}
             />
           </>

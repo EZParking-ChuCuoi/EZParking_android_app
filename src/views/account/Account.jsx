@@ -6,7 +6,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import {EZButton} from '../../components/core/EZButton';
 import EZText from '../../components/core/EZText';
@@ -27,12 +27,14 @@ import {logOut} from '../../shared/auth';
 import {isSpaceOwner, useGetUserInfo} from '../../hooks/api/auth';
 import {getData} from '../../shared/asyncStorages';
 import {AVATAR} from '../../utils/defaultImage';
+import EZRBSheet from '../../components/core/EZRBSheet';
 
 const Account = () => {
   const navigation = useNavigation();
   const {COLOR} = colorDefault();
   const [isSpaceOwnerAccount, setIsSpaceOwnerAccount] = useState(undefined);
   const mutationUserInfo = useGetUserInfo();
+  const refRBSheet = useRef();
   useEffect(() => {
     const setMutate = async () => {
       const uid = await getData('EZUid');
@@ -70,9 +72,9 @@ const Account = () => {
           <View>
             <TouchableOpacity
               style={styles.logoutBtn}
-              onPress={() => logOut(navigation)}>
-              <Icon name="log-out" size={FONTSIZE.iconLarge} color={COLOR} />
-              <EZText styleEZText={{width: '85%'}}>Log out</EZText>
+              onPress={() => refRBSheet.current.open()}>
+              <Icon name="log-out" size={FONTSIZE.iconLarge} color={COLORS.redLight} />
+              <EZText styleEZText={{width: '85%'}} color={COLORS.redLight}>Log out</EZText>
             </TouchableOpacity>
             {!isSpaceOwnerAccount && (
               <EZButton
@@ -85,6 +87,22 @@ const Account = () => {
           </View>
         }
       />
+      <EZRBSheet refRBSheet={refRBSheet} height={200}>
+        <EZContainer
+          styleEZContainer={{alignItems: 'center', justifyContent: 'center'}}>
+          <EZText styleEZText={{marginBottom: 10}}>
+            Are you sure you want to log out of the app?
+          </EZText>
+          <EZButton
+            w="50%"
+            title="Yes"
+            handlePress={() => {
+              refRBSheet.current.close();
+              logOut(navigation);
+            }}
+          />
+        </EZContainer>
+      </EZRBSheet>
     </EZContainer>
   );
 };

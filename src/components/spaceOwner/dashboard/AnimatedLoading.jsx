@@ -9,7 +9,7 @@ const AnimatedLoading = () => {
   useEffect(() => {
     const animate = setInterval(() => {
       setVisible(!visible);
-    }, 3000);
+    }, 4000);
     return () => clearInterval(animate);
   }, []);
   return (

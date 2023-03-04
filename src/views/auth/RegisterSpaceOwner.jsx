@@ -18,13 +18,14 @@ import IconFeather from 'react-native-vector-icons/Feather';
 import {getData} from '../../shared/asyncStorages';
 import {useRegisterSpaceOwner} from '../../hooks/api/auth';
 import EZLoading from '../../components/core/EZLoading';
-import {useUploadImage} from '../../hooks/api/getBookingParkingLot';
 import {useNavigation} from '@react-navigation/native';
+import Lottie from 'lottie-react-native';
 
 const RegisterSpaceOwner = () => {
   const mutationRegister = useRegisterSpaceOwner();
-  const mutationUpload = useUploadImage();
   const navigation = useNavigation();
+  const [errMess, setErrMess] = useState(null);
+
   const [params, setParams] = useState({
     id: '',
     phone: '',
@@ -40,6 +41,14 @@ const RegisterSpaceOwner = () => {
     };
     setUid();
   }, []);
+  useEffect(() => {
+    if (mutationRegister.isSuccess) {
+      navigation.navigate('bottomTab', {
+        screen: 'account',
+        params: {screen: 'dashboard'},
+      });
+    }
+  }, [mutationRegister.status]);
   const pickImage = direction => {
     try {
       ImageCropPicker.openPicker({
@@ -47,7 +56,7 @@ const RegisterSpaceOwner = () => {
         mediaType: 'photo',
         cropping: true,
       }).then(img => {
-        if (direction === 'before') {
+        if (direction === 'front') {
           setParams({...params, ['imageCardIdBef']: img});
         } else {
           setParams({...params, ['imageCardIdAft']: img});
@@ -58,6 +67,15 @@ const RegisterSpaceOwner = () => {
     }
   };
   const handleRegister = () => {
+    if (
+      params.phone === '' ||
+      params.businessScale === '' ||
+      params.imageCardIdAft === null ||
+      params.imageCardIdBef === null
+    ) {
+      setErrMess('Please fill in valid information for all fields');
+      return;
+    }
     mutationRegister.mutate(params);
   };
   const BtnUpload = ({direction}) => {
@@ -70,29 +88,22 @@ const RegisterSpaceOwner = () => {
           size={FONTSIZE.iconMedium}
           color={COLORS.primary}
         />
-        <EZText>Card-Id {direction}</EZText>
+        <EZText>ID Card {direction}</EZText>
       </TouchableOpacity>
     );
   };
-
-  if (mutationRegister.isSuccess) {
-    navigation.navigate('bottomTab', {
-      screen: 'account',
-      params: {screen: 'dashboard'},
-    });
-  }
   return (
     <EZContainer
       styleEZContainer={{
         paddingHorizontal: SPACING.pxComponent,
-        paddingVertical: 20,
       }}>
       {mutationRegister.isLoading && <EZLoading />}
-      {mutationUpload.isLoading && <EZLoading />}
-      <EZButtonBack />
-      <EZText bold size="quiteLarge">
-        Register spaceOwner
-      </EZText>
+      <Lottie
+        source={require('../../assets/images/contract.json')}
+        autoPlay
+        loop
+        style={{position: 'relative'}}
+      />
       <View style={styles.form}>
         <EZInput
           placeholder="Phone number"
@@ -134,7 +145,7 @@ const RegisterSpaceOwner = () => {
         <View style={styles.imageChoice}>
           <View style={styles.imageChoiceItem}>
             {!params.imageCardIdBef ? (
-              <BtnUpload direction="before" />
+              <BtnUpload direction="front" />
             ) : (
               <Image
                 source={{uri: params.imageCardIdBef.path}}
@@ -144,7 +155,7 @@ const RegisterSpaceOwner = () => {
           </View>
           <View style={styles.imageChoiceItem}>
             {!params.imageCardIdAft ? (
-              <BtnUpload direction="after" />
+              <BtnUpload direction="behind" />
             ) : (
               <Image
                 source={{uri: params.imageCardIdAft.path}}
@@ -154,7 +165,19 @@ const RegisterSpaceOwner = () => {
           </View>
         </View>
       </View>
-      <EZButton title="Register" handlePress={handleRegister} />
+      {errMess && (
+        <EZText
+          styleEZText={{marginBottom: 5}}
+          size="small"
+          color={COLORS.redLight}>
+          {errMess}
+        </EZText>
+      )}
+      <EZButton
+        styleEZButton={{marginTop: 20}}
+        title="Register"
+        handlePress={handleRegister}
+      />
     </EZContainer>
   );
 };
@@ -213,5 +236,8 @@ const styles = StyleSheet.create({
     width: '100%',
     resizeMode: 'cover',
     height: 100,
+  },
+  form: {
+    marginTop: 20,
   },
 });

@@ -7,7 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
-import {colorDefault, COLORS, FONTSIZE} from '../../assets/styles/styles';
+import {bgSecondaryDefault, colorDefault, COLORS, FONTSIZE} from '../../assets/styles/styles';
 import EZText from './EZText';
 import {useNavigation} from '@react-navigation/native';
 
@@ -74,6 +74,7 @@ const EZButtonBack = props => {
   const isDarkMode = useColorScheme() === 'dark';
   const navigation = useNavigation();
   const {COLOR} = colorDefault();
+  const {BG2ND} = bgSecondaryDefault();
   return (
     <TouchableOpacity
       onPress={() => navigation.goBack()}
@@ -82,7 +83,7 @@ const EZButtonBack = props => {
         name="chevron-left"
         color={isDarkMode ? COLORS.white : COLORS.black}
         size={FONTSIZE.iconSmall}
-        style={styles.iconLeft}
+        style={[styles.iconLeft, {backgroundColor: BG2ND, shadowColor: COLOR}]}
       />
       {!props.noText && <EZText styleEZText={styles.backBtnText} bold color={props.colorText}>
         Back
@@ -132,9 +133,16 @@ const styles = StyleSheet.create({
     fontSize: FONTSIZE.small,
   },
   iconLeft: {
-    backgroundColor: COLORS.primary,
     padding: 5,
     borderRadius: 20,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   }
 });
 export {EZButton, EZButtonBack, EZButtonText};
