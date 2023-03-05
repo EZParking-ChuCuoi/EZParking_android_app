@@ -10,22 +10,33 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
-import {EZButtonBack, EZButtonText} from '../../components/core/EZButton';
+import {
+  EZButton,
+  EZButtonBack,
+  EZButtonText,
+} from '../../components/core/EZButton';
 import {COLORS, FONTSIZE, SPACING} from '../../assets/styles/styles';
 import EZInput from '../../components/core/EZInput';
 import EZRBSheet from '../../components/core/EZRBSheet';
-import MapView from 'react-native-maps';
-import {getDataObj} from '../../shared/asyncStorages';
+import {getData, getDataObj} from '../../shared/asyncStorages';
 import EZMapView from '../../components/core/EZMapView';
 import Icon from 'react-native-vector-icons/Feather';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import ImageCropPicker from 'react-native-image-crop-picker';
+import EZSlider from '../../components/core/EZSlider';
+import Lottie from 'lottie-react-native';
+import {useCreateParkingLot} from '../../hooks/api/useSpaceOwnerAction';
+import EZLoading from '../../components/core/EZLoading';
+import {useNavigation} from '@react-navigation/native';
 
 const CreateLot = () => {
   const refInput = useRef();
   const refRBSheet = useRef();
+  const mutationCreate = useCreateParkingLot();
+  const navigation = useNavigation();
   const [params, setParams] = useState({
+    uid: '',
     name: '',
     address: '',
     lat: '',
@@ -33,6 +44,7 @@ const CreateLot = () => {
     open: null,
     close: null,
     images: [],
+    desc: '',
   });
   const [showDateTimePicker, setShowDateTimePicker] = useState({
     open: false,
@@ -43,12 +55,20 @@ const CreateLot = () => {
   useEffect(() => {
     const getCoor = async () => {
       const coor = await getDataObj('EZCurrentRegion');
+      const uid = await getData('EZUid');
       setCoordinate(coor);
+      setParams({...params, ['uid']: uid});
     };
     getCoor();
   }, []);
-
-  console.log(params);
+  useEffect(() => {
+    if (mutationCreate.isSuccess) {
+      navigation.navigate('createBlock');
+    }
+  }, [mutationCreate.status]);
+  if (mutationCreate.isSuccess) {
+    console.log('first==>', mutationCreate.data);
+  }
   const handleSearch = details => {
     setCoordinate({
       ...coordinate,
@@ -63,12 +83,21 @@ const CreateLot = () => {
     });
     refRBSheet.current.close();
     if (coordinateDrag !== undefined) {
-      setCoordinate(coordinateDrag);
+      setParams({
+        ...params,
+        ['lat']: coordinateDrag.latitude,
+        ['lng']: coordinateDrag.longitude,
+      });
+    } else {
+      setParams({
+        ...params,
+        ['lat']: coordinate.latitude,
+        ['lng']: coordinate.longitude,
+      });
     }
   };
   const handlePickImage = () => {
     ImageCropPicker.openPicker({
-      includeExif: true,
       mediaType: 'photo',
       multiple: true,
       cropping: true,
@@ -76,8 +105,12 @@ const CreateLot = () => {
       setParams({...params, ['images']: img});
     });
   };
+  const handleCreate = () => {
+    mutationCreate.mutate(params);
+  };
   return (
     <EZContainer styleEZContainer={styles.container}>
+      {mutationCreate.isLoading && <EZLoading />}
       <DatePicker
         modal
         open={showDateTimePicker.open}
@@ -122,13 +155,22 @@ const CreateLot = () => {
           })
         }
       />
-      <ScrollView>
+      <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
         <EZInput
           label="Parking lot name"
           styleEZInput={{marginBottom: SPACING.mbInputItem}}
           placeholder="Name"
+          maxLength={50}
           defaultValue={params.name}
           onChangeText={name => setParams({...params, ['name']: name})}
+        />
+        <EZInput
+          label="Description"
+          styleEZInput={{marginBottom: SPACING.mbInputItem}}
+          lines={5}
+          placeholder="Description"
+          defaultValue={params.desc}
+          onChangeText={desc => setParams({...params, ['desc']: desc})}
         />
         <Pressable
           onPress={() => {
@@ -173,9 +215,24 @@ const CreateLot = () => {
             editable={false}
           />
         </Pressable>
-        <ScrollView contentContainerStyle={styles.images}>
-          
-        </ScrollView>
+        {params.images.length > 0 ? (
+          <EZSlider data={params.images} local />
+        ) : (
+          <Pressable onPress={handlePickImage} style={styles.uploadImage}>
+            <Lottie
+              source={require('../../assets/images/upload.json')}
+              autoPlay
+              loop
+              style={{position: 'relative', width: 100, height: 100}}
+            />
+            <EZText>Upload images </EZText>
+          </Pressable>
+        )}
+        <EZButton
+          styleEZButton={{marginVertical: 20}}
+          title="Next"
+          handlePress={handleCreate}
+        />
       </ScrollView>
       <EZRBSheet
         height={Dimensions.get('window').height}
@@ -215,6 +272,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     padding: SPACING.pxComponent,
   },
+  form: {width: '100%'},
   btnClose: {
     position: 'absolute',
     top: 35,
@@ -233,5 +291,15 @@ const styles = StyleSheet.create({
     bottom: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+  },
+  uploadImage: {
+    width: '100%',
+    height: 200,
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderRadius: 20,
+    borderWidth: 1,
+    borderColor: COLORS.borderInput,
+    borderStyle: 'dashed',
   },
 });

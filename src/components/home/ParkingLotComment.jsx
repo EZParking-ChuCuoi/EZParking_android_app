@@ -24,6 +24,7 @@ const ParkingLotComment = props => {
       setReviews(mutationParkingLotComment.data);
     }
   }, [mutationParkingLotComment.status]);
+  console.log(mutationParkingLotComment.data);
   return (
     <FlatList
       data={mutationParkingLotComment.data}

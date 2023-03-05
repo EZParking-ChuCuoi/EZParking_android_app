@@ -25,13 +25,29 @@ import Icon from 'react-native-vector-icons/Feather';
 import EZInput from '../../components/core/EZInput';
 import {Link} from '@react-navigation/native';
 import DashboardItem from '../../components/spaceOwner/dashboard/DashboardItem';
+import {useGetUsersParkingLot} from '../../hooks/api/useSpaceOwnerAction';
+import {getData} from '../../shared/asyncStorages';
 
 const Dasboard = ({navigation}) => {
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const {BG} = bgDefault();
   const [search, setSearch] = useState('');
+  const mutationParkingLot = useGetUsersParkingLot();
 
+  useEffect(() => {
+    const getLots = async () => {
+      const uid = await getData('EZUid');
+      mutationParkingLot.mutate(uid);
+    };
+    getLots();
+  }, []);
+  // if (mutationParkingLot.isSuccess) {
+  //   console.log(mutationParkingLot.data);
+  // }
+  // if (mutationParkingLot.isError) {
+  //   console.log(mutationParkingLot.error.response);
+  // }
   const handleSearch = () => {
     console.log(search);
   };
@@ -79,15 +95,34 @@ const Dasboard = ({navigation}) => {
           <DashboardItem
             navigateTo="createLot"
             text="Create new lot"
+            iconName="plus"
           />
           <DashboardItem
             navigateTo="createLot"
             text="Create new lot"
             iconName="plus"
           />
-          <DashboardItem navigateTo="createLot" text="Create new lot">
-            <EZText>hi</EZText>
-          </DashboardItem>
+          <DashboardItem
+            navigateTo="createLot"
+            text="Create new lot"
+            iconName="plus"
+          />
+          <DashboardItem
+            navigateTo="createLot"
+            text="Create new lot"
+            iconName="plus"
+          />
+          {mutationParkingLot.isSuccess &&
+            mutationParkingLot.data?.data?.map(item => {
+              return (
+                <DashboardItem
+                  navigateTo={('lotDetail', {idParkingLot: item.idParking})}
+                  key={item.idParking}
+                  text={item.nameParkingLot}>
+                  <EZText>hi</EZText>
+                </DashboardItem>
+              );
+            })}
         </ScrollView>
       </View>
     </EZContainer>
@@ -118,7 +153,7 @@ const styles = StyleSheet.create({
   },
   yourLots: {
     width: '100%',
-    justifyContent: 'space-between',
+    justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',

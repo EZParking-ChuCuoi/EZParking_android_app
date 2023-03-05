@@ -32,6 +32,10 @@ const EZInput = props => {
             {...props.styleEZInputField},
           ]}
           onChangeText={newText => props.onChangeText(newText)}
+          numberOfLines={props.lines || 1}
+          multiline={props.lines ? true : false}
+          maxLength={props.maxLength}
+          textAlignVertical={props.lines ? 'top' : 'center'}
           defaultValue={props.defaultValue || ''}
           value={props.value}
           keyboardType={props.keyboardType || 'default'}

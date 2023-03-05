@@ -14,6 +14,7 @@ import {
 } from '../../assets/styles/styles';
 import {EZButton} from '../../components/core/EZButton';
 import ParkingLotComment from '../../components/home/ParkingLotComment';
+import EZSlider from '../../components/core/EZSlider';
 
 const SpaceDetail = ({navigation, route}) => {
   useHideTabBar();
@@ -41,9 +42,7 @@ const SpaceDetail = ({navigation, route}) => {
     <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
       {parkingLotInfo && (
         <>
-          <View style={styles.images}>
-            <Image source={{uri: parkingLotInfo.image}} style={styles.image} />
-          </View>
+          <EZSlider data={parkingLotInfo.images} />
           <View style={styles.lotContent}>
             <EZText bold size="quiteLarge">
               {parkingLotInfo.nameParkingLot}

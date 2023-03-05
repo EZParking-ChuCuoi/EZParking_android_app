@@ -16,14 +16,12 @@ const ParkingLotCommentItem = ({item}) => {
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const LIMITSTAR = 5;
-  // todo: get this shit of line away
-  // console.log(item.avatar);
 
   return (
     <View style={[styles.container, {backgroundColor: BG2ND}]}>
       <EZText bold>{item.fullName}</EZText>
       <View style={styles.flexRow}>
-        <Image source={{uri: AVATAR}} style={styles.avatar} />
+        <Image source={{uri: item.avatar}} style={styles.avatar} />
         <View style={styles.contentRight}>
           <View style={styles.flexRow}>
             <View style={styles.rating}>
