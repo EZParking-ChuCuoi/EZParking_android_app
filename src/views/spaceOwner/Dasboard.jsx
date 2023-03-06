@@ -42,12 +42,6 @@ const Dasboard = ({navigation}) => {
     };
     getLots();
   }, []);
-  // if (mutationParkingLot.isSuccess) {
-  //   console.log(mutationParkingLot.data);
-  // }
-  // if (mutationParkingLot.isError) {
-  //   console.log(mutationParkingLot.error.response);
-  // }
   const handleSearch = () => {
     console.log(search);
   };
@@ -89,34 +83,20 @@ const Dasboard = ({navigation}) => {
         <ScrollView contentContainerStyle={styles.yourLots}>
           <DashboardItem
             navigateTo="createLot"
-            text="Create new lot"
-            iconName="plus"
-          />
-          <DashboardItem
-            navigateTo="createLot"
-            text="Create new lot"
-            iconName="plus"
-          />
-          <DashboardItem
-            navigateTo="createLot"
-            text="Create new lot"
-            iconName="plus"
-          />
-          <DashboardItem
-            navigateTo="createLot"
-            text="Create new lot"
-            iconName="plus"
-          />
-          <DashboardItem
-            navigateTo="createLot"
-            text="Create new lot"
+            text="Create new parking lot"
             iconName="plus"
           />
           {mutationParkingLot.isSuccess &&
             mutationParkingLot.data?.data?.map(item => {
               return (
                 <DashboardItem
-                  navigateTo={('lotDetail', {idParkingLot: item.idParking})}
+                  navigateTo={{
+                    name: 'lotDetail',
+                    params: {
+                      idParkingLot: item.idParking,
+                      nameParkingLot: item.nameParkingLot
+                    },
+                  }}
                   key={item.idParking}
                   text={item.nameParkingLot}>
                   <EZText>hi</EZText>

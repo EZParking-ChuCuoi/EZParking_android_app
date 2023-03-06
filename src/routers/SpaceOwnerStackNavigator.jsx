@@ -11,6 +11,7 @@ import Dasboard from '../views/spaceOwner/Dasboard';
 import LotDetail from '../views/spaceOwner/LotDetail';
 import {useHideTabBar} from '../hooks/useHideTabBar';
 import CreateBlockAndSlot from '../views/spaceOwner/CreateBlockAndSlot';
+import BlockDetail from '../views/spaceOwner/BlockDetail';
 
 const SpaceOwnerStack = createNativeStackNavigator();
 const SpaceOwnerStackNavigators = () => {
@@ -42,7 +43,16 @@ const SpaceOwnerStackNavigators = () => {
           component={CreateBlockAndSlot}
           options={{title: 'Create blocks and slots'}}
         />
-        <SpaceOwnerStack.Screen name="lotDetail" component={LotDetail} />
+        <SpaceOwnerStack.Screen
+          name="lotDetail"
+          component={LotDetail}
+          options={{title: 'Parking lot detail'}}
+        />
+        <SpaceOwnerStack.Screen
+          name="blockDetail"
+          component={BlockDetail}
+          options={{title: 'Block detail'}}
+        />
       </SpaceOwnerStack.Group>
     </SpaceOwnerStack.Navigator>
   );

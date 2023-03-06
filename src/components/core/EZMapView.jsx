@@ -155,7 +155,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   imgMarker: {
-    width: 30,
-    height: 43,
+    width: 32,
+    height: 46,
   },
 });

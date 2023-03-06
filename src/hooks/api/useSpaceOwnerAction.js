@@ -32,3 +32,19 @@ export const useGetUsersParkingLot = () => {
     },
   });
 };
+
+export const useCreateBlock = () => {
+  return useMutation({
+    mutationFn: newBlock => {
+      return httpRequest.postHttpRequest('parking-lot/block/create', newBlock);
+    },
+  });
+};
+
+export const useGetBlock = () => {
+  return useMutation({
+    mutationFn: idParking => {
+      return httpRequest.getHttpRequest(`parking-lot/${idParking}/blocks`);
+    },
+  });
+};

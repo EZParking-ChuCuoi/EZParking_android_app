@@ -7,13 +7,14 @@ import {
 } from '../../assets/styles/styles';
 import EZText from '../core/EZText';
 import { formatTimeApi } from '../../shared/handleDate';
+import EZSlider from '../core/EZSlider';
 
 const BookingInfoTop = ({info}) => {
   const {BG2ND} = bgSecondaryDefault();
   const {COLOR} = colorDefault();
   return (
     <View>
-      <Image source={{uri: info.image}} style={styles.image} />
+      <EZSlider data={info.images} />
       <View style={[styles.plInfo]}>
         <View
           style={[

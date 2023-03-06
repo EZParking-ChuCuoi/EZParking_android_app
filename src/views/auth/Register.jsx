@@ -49,7 +49,7 @@ const Register = ({navigation}) => {
     }
   }, [mutation]);
   useEffect(() => {
-    if (mutation.isError && mutation.error.response.status === 422) {
+    if (mutation.isError && mutation.error.response?.status === 422) {
       setErrMessage({...errMessage, ['email']: 'Email is duplicated'});
     }
   }, [mutation.isError]);
