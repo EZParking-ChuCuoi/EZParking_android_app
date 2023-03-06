@@ -17,15 +17,15 @@ const SearchSpace = () => {
   useEffect(() => {
     const initRegion = async () => {
       const coordinate = await getDataObj('EZCurrentRegion');
-      mutationNearlyPark.mutate({
-        latitude: coordinate.latitude,
-        longitude: coordinate.longitude,
-      });
       setCurrenRegion({
         latitude: parseFloat(coordinate.latitude),
         longitude: parseFloat(coordinate.longitude),
         latitudeDelta: 0.04,
         longitudeDelta: 0.025,
+      });
+      mutationNearlyPark.mutate({
+        latitude: coordinate.latitude,
+        longitude: coordinate.longitude,
       });
     };
     initRegion();

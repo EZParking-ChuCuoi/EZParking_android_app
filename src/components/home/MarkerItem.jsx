@@ -39,7 +39,8 @@ const MarkerItem = ({item}) => {
       <View style={[styles.marker, {shadowColor: COLORS.black}]}>
         <EZRBSheet refRBSheet={refRBSheet}>
           <EZContainer styleEZContainer={{padding: 10}}>
-            <Image source={{uri: item.image}} style={styles.image} />
+            {/* <EZSlider data={item.images} /> */}
+            <Image source={{uri: item?.images[0]}} style={styles.image} />
             <View style={styles.lotContent}>
               <EZText bold>{item.nameParkingLot}</EZText>
               <View style={styles.flexRow}>
@@ -87,7 +88,7 @@ const MarkerItem = ({item}) => {
           source={require('../../assets/images/markerIcon.png')}
           style={styles.markerP}
         />
-        <EZText styleEZText={styles.label}  size="small" color={COLORS.primary}>
+        <EZText styleEZText={styles.label} size="small" color={COLORS.primary}>
           {item.nameParkingLot}
         </EZText>
       </View>

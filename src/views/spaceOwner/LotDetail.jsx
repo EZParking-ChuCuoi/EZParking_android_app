@@ -10,14 +10,14 @@ import EZInput from '../../components/core/EZInput';
 import EZLoading from '../../components/core/EZLoading';
 import {VEHICLE_TYPE} from '../../utils/defaultDataSelection';
 import DashboardItem from '../../components/spaceOwner/dashboard/DashboardItem';
-import BlockItem from '../../components/spaceOwner/dashboard/BlockItem';
+import FormBlock from '../../components/spaceOwner/block/FormBlock';
+import BlockItem from '../../components/spaceOwner/block/BlockItem';
 
 const LotDetail = ({navigation, route}) => {
   const {idParkingLot, nameParkingLot} = route.params;
   const mutationGetBlock = useGetBlock();
   const mutationCreateBlock = useCreateBlock();
   const refRBSheet = useRef();
-  const [isDisplay, setIsDisplay] = useState(false);
   const [params, setParams] = useState({
     parkingLotId: '',
     nameBlock: '',
@@ -43,83 +43,16 @@ const LotDetail = ({navigation, route}) => {
   const handleCreate = () => {
     mutationCreateBlock.mutate(params);
   };
-  console.log(mutationGetBlock.data);
   return (
     <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
       {mutationCreateBlock.isLoading && <EZLoading />}
       {mutationGetBlock.isLoading && <EZLoading />}
-      <EZRBSheet refRBSheet={refRBSheet}>
-        <EZContainer>
-          <ScrollView
-            showsVerticalScrollIndicator={false}
-            style={{paddingHorizontal: SPACING.pxComponent}}>
-            <EZInput
-              placeholder="Khu A"
-              label="Name block"
-              styleEZInput={{marginVertical: SPACING.mbInputItem}}
-              defaultValue={params.nameBlock}
-              onChangeText={newText =>
-                setParams({...params, ['nameBlock']: newText})
-              }
-            />
-            <EZInput
-              placeholder="4-16 seats"
-              label="Vehicle type"
-              editable={false}
-              defaultValue={params.carType}
-              iconName="chevron-down"
-              handlePressIcon={() => setIsDisplay(!isDisplay)}
-            />
-            {VEHICLE_TYPE.map((item, index) => {
-              return (
-                <Pressable
-                  key={index}
-                  style={[
-                    styles.itemType,
-                    {display: isDisplay ? 'flex' : 'none'},
-                  ]}
-                  onPress={() => {
-                    setParams({...params, ['carType']: item.value});
-                    setIsDisplay(!isDisplay);
-                  }}>
-                  <EZText color={COLORS.primary}>{item.label}</EZText>
-                </Pressable>
-              );
-            })}
-            <EZInput
-              placeholder="Block for 4-16 seats vehicle, high security..."
-              label="Block description"
-              styleEZInput={{marginBottom: SPACING.mbInputItem}}
-              lines={5}
-              defaultValue={params.desc}
-              onChangeText={newText =>
-                setParams({...params, ['desc']: newText})
-              }
-            />
-            <EZInput
-              placeholder="10"
-              label="Number of slots"
-              styleEZInput={{marginBottom: SPACING.mbInputItem}}
-              defaultValue={params.numberOfSlot}
-              keyboardType="numeric"
-              onChangeText={newText =>
-                setParams({...params, ['numberOfSlot']: newText})
-              }
-            />
-            <EZInput
-              placeholder="15000"
-              label="Price per slot"
-              styleEZInput={{marginBottom: SPACING.mbInputItem}}
-              keyboardType="numeric"
-              defaultValue={params.price}
-              onChangeText={newText =>
-                setParams({...params, ['price']: newText})
-              }
-            />
-            <EZButton title="Create" handlePress={handleCreate} />
-          </ScrollView>
-        </EZContainer>
-      </EZRBSheet>
+      <FormBlock
+        refRBSheet={refRBSheet}
+        params={params}
+        setParams={setParams}
+        handleSubmit={handleCreate}
+      />
       <View style={styles.blocks}>
         <BlockItem
           handlePress={() => refRBSheet.current.open()}
@@ -135,6 +68,7 @@ const LotDetail = ({navigation, route}) => {
                   name: 'blockDetail',
                   params: {
                     idBlock: item.id,
+                    nameBlock: item.nameBlock,
                   },
                 }}
                 key={item.id}

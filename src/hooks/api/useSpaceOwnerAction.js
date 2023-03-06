@@ -1,6 +1,34 @@
 import {useMutation, useQuery} from '@tanstack/react-query';
 import * as httpRequest from '../../utils/httpRequest';
 
+// Dashboard API
+export const useGetUsersParkingLot = () => {
+  return useMutation({
+    mutationFn: userId => {
+      return httpRequest.getHttpRequest(`dashboard/parkingLots/${userId}`);
+    },
+  });
+};
+
+export const useGetManagingRevenueParkingLot = () => {
+  return useMutation({
+    mutationFn: idParkingLot => {
+      return httpRequest.getHttpRequest(`dashboard/${idParkingLot}`);
+    },
+  });
+};
+
+export const useGetPeriodManagingRevenueParkingLot = () => {
+  return useMutation({
+    mutationFn: params => {
+      return httpRequest.getHttpRequest(
+        `dashboard/${params.parkingLotId}/revenue/${params.period}`,
+      );
+    },
+  });
+};
+
+// Parkinglot API
 export const useCreateParkingLot = () => {
   return useMutation({
     mutationFn: params => {
@@ -25,14 +53,7 @@ export const useCreateParkingLot = () => {
   });
 };
 
-export const useGetUsersParkingLot = () => {
-  return useMutation({
-    mutationFn: userId => {
-      return httpRequest.getHttpRequest(`dashboard/parkingLots/${userId}`);
-    },
-  });
-};
-
+// Block API
 export const useCreateBlock = () => {
   return useMutation({
     mutationFn: newBlock => {
@@ -45,6 +66,51 @@ export const useGetBlock = () => {
   return useMutation({
     mutationFn: idParking => {
       return httpRequest.getHttpRequest(`parking-lot/${idParking}/blocks`);
+    },
+  });
+};
+
+export const useGetBlockInfo = () => {
+  return useMutation({
+    mutationFn: idBlock => {
+      return httpRequest.getHttpRequest(`parking-lot/block/${idBlock}`);
+    },
+  });
+};
+
+export const useEditBlockInfo = () => {
+  return useMutation({
+    mutationFn: params => {
+      console.log('params', params);
+      let formData = new FormData();
+      formData.append('nameBlock', params.data.nameBlock);
+      formData.append('price', params.data.price);
+      formData.append('desc', params.data.desc);
+      formData.append('carType', params.data.carType);
+      formData.append('_method', 'PUT');
+      return httpRequest.postHttpRequest(
+        `/parking-lot/block/${params.idBlock}/update`,
+        formData,
+      );
+    },
+  });
+};
+
+export const useDeleteBlock = () => {
+  return useMutation({
+    mutationFn: idBlock => {
+      return httpRequest.deleteHttpRequest(
+        `parking-lot/block/${idBlock}/delte`,
+      );
+    },
+  });
+};
+
+// Slot API
+export const useGetSlotsOfBlock = () => {
+  return useMutation({
+    mutationFn: idBlock => {
+      return httpRequest.getHttpRequest(`parking-lot/${idBlock}/slots`);
     },
   });
 };

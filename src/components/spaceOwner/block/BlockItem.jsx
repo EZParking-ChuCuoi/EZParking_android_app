@@ -5,7 +5,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import EZText from '../../core/EZText';
 import Icon from 'react-native-vector-icons/Feather';
 import {
@@ -17,18 +17,60 @@ import {
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {EZButton} from '../../core/EZButton';
+import FormBlock from './FormBlock';
+import {
+  useEditBlockInfo,
+  useGetBlockInfo,
+} from '../../../hooks/api/useSpaceOwnerAction';
+import EZLoading from '../../core/EZLoading';
 
 const BlockItem = props => {
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const navigation = useNavigation();
   const isDarkMode = useColorScheme() === 'dark';
+  const refRBSheet = useRef();
+  const mutationGetBlockInfo = useGetBlockInfo();
+  const mutationEditBlock = useEditBlockInfo();
+  const [params, setParams] = useState({
+    nameBlock: '',
+    price: '',
+    desc: '',
+    carType: '',
+  });
   let bg = [];
   if (props.createBtn) {
     bg = COLORS.linearBGPrimary;
   } else {
     bg = isDarkMode ? COLORS.linearBGDark : COLORS.linearBGLight;
   }
+  const handleUpdate = () => {
+    mutationEditBlock.mutate({
+      idBlock: props.item.id,
+      data: params,
+    });
+  };
+  const handleDelete = idBlock => {
+    console.log(idBlock);
+  };
+  const handleOpenEditForm = idBlock => {
+    refRBSheet.current.open();
+    mutationGetBlockInfo.mutate(idBlock);
+  };
+  useEffect(() => {
+    if (mutationGetBlockInfo.isSuccess) {
+      setParams({
+        ...params,
+        ['nameBlock']: mutationGetBlockInfo.data?.data.nameBlock,
+        ['price']: mutationGetBlockInfo.data?.data.price.toString(),
+        ['desc']: mutationGetBlockInfo.data?.data.desc,
+        ['carType']: mutationGetBlockInfo.data?.data.carType,
+      });
+    }
+    if (mutationEditBlock.isSuccess) {
+      refRBSheet.current.close();
+    }
+  }, [mutationGetBlockInfo.status, mutationEditBlock.status]);
   return (
     <TouchableOpacity
       style={[
@@ -44,6 +86,7 @@ const BlockItem = props => {
           return;
         }
       }}>
+      {mutationEditBlock.isLoading && <EZLoading />}
       <LinearGradient
         start={{x: 0.0, y: 0.25}}
         end={{x: 0.5, y: 1.0}}
@@ -65,30 +108,40 @@ const BlockItem = props => {
           <>
             <View style={styles.left}>
               {props.item.carType === '4-16SLOT' ? (
-                <EZText >4 - 16 seats</EZText>
+                <EZText>4 - 16 seats</EZText>
               ) : (
-                <EZText >16 - 34 seats</EZText>
+                <EZText>16 - 34 seats</EZText>
               )}
             </View>
             <View style={styles.btnGroup}>
               <EZButton
                 type="noneWithColor"
+                styleEZButton={{backgroundColor: BG2ND, marginBottom: 5}}
                 color={COLORS.primary}
                 w={100}
                 icon="edit"
-                handlePress={() => {}}
+                handlePress={() => handleOpenEditForm(props.item.id)}
               />
               <EZButton
                 type="noneWithColor"
                 color={COLORS.redLight}
+                styleEZButton={{backgroundColor: BG2ND}}
                 w={100}
                 icon="delete"
-                handlePress={() => {}}
+                handlePress={() => handleDelete(props.item.id)}
               />
             </View>
           </>
         )}
       </LinearGradient>
+      <FormBlock
+        refRBSheet={refRBSheet}
+        params={params}
+        setParams={setParams}
+        handleSubmit={handleUpdate}
+        editForm
+        mutation={mutationGetBlockInfo}
+      />
     </TouchableOpacity>
   );
 };
@@ -125,5 +178,5 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,
     top: 10,
-  }
+  },
 });
