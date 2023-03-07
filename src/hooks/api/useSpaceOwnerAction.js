@@ -10,14 +10,6 @@ export const useGetUsersParkingLot = () => {
   });
 };
 
-export const useGetManagingRevenueParkingLot = () => {
-  return useMutation({
-    mutationFn: idParkingLot => {
-      return httpRequest.getHttpRequest(`dashboard/${idParkingLot}`);
-    },
-  });
-};
-
 export const useGetPeriodManagingRevenueParkingLot = () => {
   return useMutation({
     mutationFn: params => {
@@ -100,7 +92,7 @@ export const useDeleteBlock = () => {
   return useMutation({
     mutationFn: idBlock => {
       return httpRequest.deleteHttpRequest(
-        `parking-lot/block/${idBlock}/delte`,
+        `parking-lot/block/${idBlock}/delete`,
       );
     },
   });

@@ -13,16 +13,20 @@ import {
   colorDefault,
   COLORS,
   FONTSIZE,
+  SPACING,
 } from '../../../assets/styles/styles';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
 import {EZButton} from '../../core/EZButton';
 import FormBlock from './FormBlock';
 import {
+  useDeleteBlock,
   useEditBlockInfo,
   useGetBlockInfo,
 } from '../../../hooks/api/useSpaceOwnerAction';
 import EZLoading from '../../core/EZLoading';
+import EZRBSheet from '../../core/EZRBSheet';
+import EZContainer from '../../core/EZContainer';
 
 const BlockItem = props => {
   const {COLOR} = colorDefault();
@@ -30,8 +34,10 @@ const BlockItem = props => {
   const navigation = useNavigation();
   const isDarkMode = useColorScheme() === 'dark';
   const refRBSheet = useRef();
+  const refDelete = useRef();
   const mutationGetBlockInfo = useGetBlockInfo();
   const mutationEditBlock = useEditBlockInfo();
+  const mutationDeleteBlock = useDeleteBlock();
   const [params, setParams] = useState({
     nameBlock: '',
     price: '',
@@ -50,8 +56,16 @@ const BlockItem = props => {
       data: params,
     });
   };
+  const handleResetForm = () => {
+    setParams({
+      nameBlock: '',
+      price: '',
+      desc: '',
+      carType: '',
+    });
+  };
   const handleDelete = idBlock => {
-    console.log(idBlock);
+    mutationDeleteBlock.mutate(idBlock);
   };
   const handleOpenEditForm = idBlock => {
     refRBSheet.current.open();
@@ -69,8 +83,18 @@ const BlockItem = props => {
     }
     if (mutationEditBlock.isSuccess) {
       refRBSheet.current.close();
+      props.handleRefresh();
+      handleResetForm();
     }
   }, [mutationGetBlockInfo.status, mutationEditBlock.status]);
+  useEffect(() => {
+    if (mutationDeleteBlock.isSuccess) {
+      props.handleRefresh();
+    }
+    if (mutationDeleteBlock.isError) {
+      console.log(mutationDeleteBlock.error);
+    }
+  }, [mutationDeleteBlock.status]);
   return (
     <TouchableOpacity
       style={[
@@ -87,6 +111,7 @@ const BlockItem = props => {
         }
       }}>
       {mutationEditBlock.isLoading && <EZLoading />}
+      {mutationDeleteBlock.isLoading && <EZLoading />}
       <LinearGradient
         start={{x: 0.0, y: 0.25}}
         end={{x: 0.5, y: 1.0}}
@@ -127,10 +152,24 @@ const BlockItem = props => {
                 color={COLORS.redLight}
                 styleEZButton={{backgroundColor: BG2ND}}
                 w={100}
-                icon="delete"
-                handlePress={() => handleDelete(props.item.id)}
+                icon="trash-2"
+                handlePress={() => refDelete.current.open()}
               />
             </View>
+            <EZRBSheet height={200} refRBSheet={refDelete}>
+              <EZContainer
+                styleEZContainer={{
+                  padding: SPACING.pxComponent,
+                  justifyContent: 'center',
+                  alignItems: 'center',
+                }}>
+                <EZText>Delete <EZText bold>{props.item.nameBlock}</EZText> block</EZText>
+                <EZButton
+                  title="Yes"
+                  handlePress={() => handleDelete(props.item.id)}
+                />
+              </EZContainer>
+            </EZRBSheet>
           </>
         )}
       </LinearGradient>

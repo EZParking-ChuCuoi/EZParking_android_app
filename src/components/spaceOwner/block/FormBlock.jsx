@@ -19,7 +19,7 @@ const FormBlock = ({
 }) => {
   const [isDisplay, setIsDisplay] = useState(false);
   return (
-    <EZRBSheet refRBSheet={refRBSheet}>
+    <EZRBSheet refRBSheet={refRBSheet} height={600}>
       {mutation?.isLoading && <EZLoading />}
       <EZContainer>
         <ScrollView
@@ -38,7 +38,7 @@ const FormBlock = ({
             placeholder="Ex: 4-16 seats"
             label="Vehicle type"
             editable={false}
-            defaultValue={params.carType}
+            defaultValue={params.carType==='4-16SLOT' ? '4 -16 seats' : '16 - 34 seats'}
             iconName="chevron-down"
             handlePressIcon={() => setIsDisplay(!isDisplay)}
           />

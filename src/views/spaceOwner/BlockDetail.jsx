@@ -1,5 +1,5 @@
 import {StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
 import {useGetSlotsOfBlock} from '../../hooks/api/useSpaceOwnerAction';
@@ -12,8 +12,8 @@ const BlockDetail = ({navigation, route}) => {
       title: nameBlock,
     });
     mutationGetSlot.mutate(idBlock);
-    setParams({...params, ['parkingLotId']: idParkingLot});
   }, []);
+  console.log('cc',mutationGetSlot.data);
   return (
     <EZContainer>
       <EZText>BlockDetail</EZText>

@@ -105,7 +105,7 @@ const Home = () => {
       </EZRBSheet>
       <EZBgTopRounded styleEZBgTopRounded={{marginBottom: 30}}>
         <View style={styles.userInfo}>
-          <EZText color={COLORS.white} bold size="large">
+          <EZText styleEZText={{width: '70%'}} color={COLORS.white} bold size="large">
             Hi{' '}
             {mutationUserInfo.isSuccess &&
               mutationUserInfo.data?.data[0]?.fullName}

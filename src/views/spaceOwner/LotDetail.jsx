@@ -34,14 +34,24 @@ const LotDetail = ({navigation, route}) => {
     setParams({...params, ['parkingLotId']: idParkingLot});
   }, []);
   useEffect(() => {
-    mutationGetBlock.mutate(idParkingLot);
     if (mutationCreateBlock.isSuccess) {
       refRBSheet.current.close();
+      mutationGetBlock.mutate(idParkingLot);
     }
   }, [mutationCreateBlock.status]);
-
+  const handleResetForm = () => {
+    setParams({
+      parkingLotId: '',
+      nameBlock: '',
+      carType: '',
+      desc: '',
+      price: '',
+      numberOfSlot: '',
+    });
+  };
   const handleCreate = () => {
     mutationCreateBlock.mutate(params);
+    handleResetForm();
   };
   return (
     <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
@@ -74,6 +84,7 @@ const LotDetail = ({navigation, route}) => {
                 key={item.id}
                 text={item.nameBlock}
                 item={item}
+                handleRefresh={() => mutationGetBlock.mutate(idParkingLot)}
               />
             );
           })}

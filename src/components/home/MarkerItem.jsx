@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React, {useRef} from 'react';
 import {Marker} from 'react-native-maps';
 import EZText from '../core/EZText';
@@ -15,6 +15,7 @@ import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import {EZButton} from '../core/EZButton';
 import {useNavigation} from '@react-navigation/native';
 import {handleDate} from '../../shared/handleDate';
+import EZSlider from '../core/EZSlider';
 
 const MarkerItem = ({item}) => {
   const navigation = useNavigation();
@@ -39,48 +40,58 @@ const MarkerItem = ({item}) => {
       <View style={[styles.marker, {shadowColor: COLORS.black}]}>
         <EZRBSheet refRBSheet={refRBSheet}>
           <EZContainer styleEZContainer={{padding: 10}}>
-            {/* <EZSlider data={item.images} /> */}
-            <Image source={{uri: item?.images[0]}} style={styles.image} />
-            <View style={styles.lotContent}>
-              <EZText bold>{item.nameParkingLot}</EZText>
-              <View style={styles.flexRow}>
-                <Icon name="map-pin" size={FONTSIZE.iconMedium} color={COLOR} />
-                <EZText>{item.address}</EZText>
+            <ScrollView showsVerticalScrollIndicator={false}>
+              <EZSlider data={item.images} />
+              {/* <Image source={{uri: item?.images[0]}} style={styles.image} /> */}
+              <View style={styles.lotContent}>
+                <EZText bold>{item.nameParkingLot}</EZText>
+                <View style={styles.flexRow}>
+                  <Icon
+                    name="map-pin"
+                    size={FONTSIZE.iconMedium}
+                    color={COLOR}
+                  />
+                  <EZText>{item.address}</EZText>
+                </View>
+                <View style={styles.flexRow}>
+                  <Icon
+                    name="shield"
+                    size={FONTSIZE.iconMedium}
+                    color={COLOR}
+                  />
+                  <EZText>Security system</EZText>
+                </View>
+                <View style={styles.flexRow}>
+                  <IconFontAwesome
+                    name="money"
+                    size={FONTSIZE.iconMedium}
+                    color={COLOR}
+                  />
+                  <EZText>16 000vnd</EZText>
+                </View>
+                <EZText bold styleEZText={{marginTop: 10}}>
+                  Description
+                </EZText>
+                <View style={styles.btns}>
+                  <EZButton
+                    title="Go to detail"
+                    type="primary"
+                    w="40%"
+                    handlePress={() => {
+                      navigation.navigate('spaceDetail', {
+                        parkingId: item.id,
+                      });
+                    }}
+                  />
+                  <EZButton
+                    title="Chat"
+                    type="secondary"
+                    w="40%"
+                    handlePress={() => {}}
+                  />
+                </View>
               </View>
-              <View style={styles.flexRow}>
-                <Icon name="shield" size={FONTSIZE.iconMedium} color={COLOR} />
-                <EZText>Security system</EZText>
-              </View>
-              <View style={styles.flexRow}>
-                <IconFontAwesome
-                  name="money"
-                  size={FONTSIZE.iconMedium}
-                  color={COLOR}
-                />
-                <EZText>16 000vnd</EZText>
-              </View>
-              <EZText bold styleEZText={{marginTop: 10}}>
-                Description
-              </EZText>
-              <View style={styles.btns}>
-                <EZButton
-                  title="Go to detail"
-                  type="primary"
-                  w="40%"
-                  handlePress={() => {
-                    navigation.navigate('spaceDetail', {
-                      parkingId: item.id,
-                    });
-                  }}
-                />
-                <EZButton
-                  title="Chat"
-                  type="secondary"
-                  w="40%"
-                  handlePress={() => {}}
-                />
-              </View>
-            </View>
+            </ScrollView>
           </EZContainer>
         </EZRBSheet>
 

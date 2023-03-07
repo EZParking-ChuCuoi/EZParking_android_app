@@ -12,6 +12,7 @@ import PopupDataEmpty from '../../components/home/PopupDataEmpty';
 import EZMapView from '../../components/core/EZMapView';
 
 const SearchSpace = () => {
+  useHideTabBar();
   const mutationNearlyPark = useGetNearlyParkingLot();
   const [currenRegion, setCurrenRegion] = useState(undefined);
   useEffect(() => {
@@ -31,12 +32,13 @@ const SearchSpace = () => {
     initRegion();
   }, []);
   useEffect(() => {
-    mutationNearlyPark.mutate({
-      latitude: JSON.stringify(currenRegion?.latitude),
-      longitude: JSON.stringify(currenRegion?.longitude),
-    });
+    if (currenRegion !== undefined) {
+      mutationNearlyPark.mutate({
+        latitude: JSON.stringify(currenRegion?.latitude),
+        longitude: JSON.stringify(currenRegion?.longitude),
+      });
+    }
   }, [currenRegion]);
-  useHideTabBar();
 
   const handleSearch = details => {
     setCurrenRegion({

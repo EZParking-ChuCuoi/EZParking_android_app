@@ -29,6 +29,7 @@ import {getData} from '../../shared/asyncStorages';
 import {AVATAR} from '../../utils/defaultImage';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import Lottie from 'lottie-react-native';
+import EZLoading from '../../components/core/EZLoading';
 
 const Account = () => {
   const navigation = useNavigation();
@@ -51,75 +52,96 @@ const Account = () => {
   }, []);
 
   return (
-    <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
-      <View style={styles.topContainer}>
-        <Image
-          source={{
-            uri: mutationUserInfo.isSuccess
-              ? mutationUserInfo.data.data[0].avatar
-              : AVATAR,
-          }}
-          style={styles.imageUser}
-        />
-        <EZText bold>
-          {mutationUserInfo.isSuccess && mutationUserInfo.data.data[0].fullName}
-        </EZText>
-      </View>
-      <FlatList
-        renderItem={({item}) => <NavigatedOption data={item} />}
-        keyExtractor={item => item.text}
-        data={navigateArr}
-        ListFooterComponent={
-          <View>
-            <TouchableOpacity
-              style={styles.logoutBtn}
-              onPress={() => refRBSheet.current.open()}>
-              <Icon
-                name="log-out"
-                size={FONTSIZE.iconLarge}
-                color={COLORS.redLight}
-              />
-              <EZText styleEZText={{width: '85%'}} color={COLORS.redLight}>
-                Log out
-              </EZText>
-            </TouchableOpacity>
-            {navigateArr === NAVIGATED_PROFILE && (
-              <EZButton
-                title="Create a car park"
-                handlePress={() =>
-                  navigation.navigate('auth', {screen: 'registerSpaceOwner'})
-                }
-              />
-            )}
-          </View>
-        }
-      />
-      {navigateArr === NAVIGATED_PROFILE_SPACEOWNER && (
-        <TouchableOpacity
-          style={styles.btnDashboard}
-          onPress={() =>
-            navigation.navigate('spaceOwner', {screen: 'dashboard'})
-          }>
-          <Lottie source={require('../../assets/images/dashboard.json')} autoPlay loop style={{position: 'relative', width: 50, height: 50}} />
-        </TouchableOpacity>
-      )}
-      <EZRBSheet refRBSheet={refRBSheet} height={200}>
-        <EZContainer
-          styleEZContainer={{alignItems: 'center', justifyContent: 'center'}}>
-          <EZText styleEZText={{marginBottom: 10}}>
-            Are you sure you want to log out of the app?
-          </EZText>
-          <EZButton
-            w="50%"
-            title="Yes"
-            handlePress={() => {
-              refRBSheet.current.close();
-              logOut(navigation);
-            }}
-          />
+    <>
+      {mutationUserInfo.isLoading && (
+        <EZContainer>
+          <EZLoading />
         </EZContainer>
-      </EZRBSheet>
-    </EZContainer>
+      )}
+      {mutationUserInfo.isSuccess && (
+        <EZContainer
+          styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
+          <View style={styles.topContainer}>
+            <Image
+              source={{
+                uri: mutationUserInfo.isSuccess
+                  ? mutationUserInfo.data.data[0].avatar
+                  : AVATAR,
+              }}
+              style={styles.imageUser}
+            />
+            <EZText bold>
+              {mutationUserInfo.isSuccess &&
+                mutationUserInfo.data.data[0].fullName}
+            </EZText>
+          </View>
+          <FlatList
+            renderItem={({item}) => <NavigatedOption data={item} />}
+            keyExtractor={item => item.text}
+            data={navigateArr}
+            ListFooterComponent={
+              <View>
+                <TouchableOpacity
+                  style={styles.logoutBtn}
+                  onPress={() => refRBSheet.current.open()}>
+                  <Icon
+                    name="log-out"
+                    size={FONTSIZE.iconLarge}
+                    color={COLORS.redLight}
+                  />
+                  <EZText styleEZText={{width: '85%'}} color={COLORS.redLight}>
+                    Log out
+                  </EZText>
+                </TouchableOpacity>
+                {navigateArr === NAVIGATED_PROFILE && (
+                  <EZButton
+                    title="Create a car park"
+                    handlePress={() =>
+                      navigation.navigate('auth', {
+                        screen: 'registerSpaceOwner',
+                      })
+                    }
+                  />
+                )}
+              </View>
+            }
+          />
+          {navigateArr === NAVIGATED_PROFILE_SPACEOWNER && (
+            <TouchableOpacity
+              style={styles.btnDashboard}
+              onPress={() =>
+                navigation.navigate('spaceOwner', {screen: 'dashboard'})
+              }>
+              <Lottie
+                source={require('../../assets/images/dashboard.json')}
+                autoPlay
+                loop
+                style={{position: 'relative', width: 50, height: 50}}
+              />
+            </TouchableOpacity>
+          )}
+          <EZRBSheet refRBSheet={refRBSheet} height={200}>
+            <EZContainer
+              styleEZContainer={{
+                alignItems: 'center',
+                justifyContent: 'center',
+              }}>
+              <EZText styleEZText={{marginBottom: 10}}>
+                Are you sure you want to log out of the app?
+              </EZText>
+              <EZButton
+                w="50%"
+                title="Yes"
+                handlePress={() => {
+                  refRBSheet.current.close();
+                  logOut(navigation);
+                }}
+              />
+            </EZContainer>
+          </EZRBSheet>
+        </EZContainer>
+      )}
+    </>
   );
 };
 

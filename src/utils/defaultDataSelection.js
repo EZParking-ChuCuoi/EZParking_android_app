@@ -23,3 +23,18 @@ export const VEHICLE_TYPE = [
     value: '16-34SLOT',
   },
 ];
+
+export const PERIOD_REVENUE = [
+  {
+    label: 'Day',
+    value: 'day',
+  },
+  {
+    label: 'Month',
+    value: 'month',
+  },
+  {
+    label: 'Year',
+    value: 'year',
+  },
+];

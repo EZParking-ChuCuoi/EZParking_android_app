@@ -39,7 +39,6 @@ export const LocalNotification = (
     bigText: bigText,
     subText: getCurrentTime(),
     title: title,
-    actions: ['Yes', 'No'],
     ticker: 'My Notification Ticker',
     message: message,
     autoCancel: true,

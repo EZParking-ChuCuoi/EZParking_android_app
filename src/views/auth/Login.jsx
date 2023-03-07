@@ -12,7 +12,12 @@ import {EZButton} from '../../components/core/EZButton';
 import EZContainer from '../../components/core/EZContainer';
 import {navigateAuthorized, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
-import {COLORS, SPACING} from '../../assets/styles/styles';
+import {
+  bgSecondaryDefault,
+  colorDefault,
+  COLORS,
+  SPACING,
+} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import ListCountryCode from '../../components/auth/ListCountryCode';
 import {useLogin} from '../../hooks/api/auth';
@@ -21,8 +26,12 @@ import EZLoading from '../../components/core/EZLoading';
 import {useNavigation} from '@react-navigation/native';
 import {storeData} from '../../shared/asyncStorages';
 import EZText from '../../components/core/EZText';
+import Lottie from 'lottie-react-native';
+
 const Login = () => {
   const navigation = useNavigation();
+  const {BG2ND} = bgSecondaryDefault();
+  const {COLOR} = colorDefault();
   const [params, setParams] = useState({
     email: '',
     password: '',
@@ -99,18 +108,21 @@ const Login = () => {
           }
         />
       </EZRBSheet>
-      <ImageBackground
-        source={require('../../assets/images/loginImage.png')}
-        resizeMode="cover"
-        style={styles.imageLogin}>
+      <View style={[styles.imageLogin, {shadowColor: COLOR}]}>
+        <Lottie
+          source={require('../../assets/images/car-insurance-offers-loading-page.json')}
+          autoPlay
+          loop
+          style={[styles.image, {backgroundColor: BG2ND}]}
+        />
         <EZText
           size="large"
           bold
-          styleEZText={{marginTop: 60}}
+          styleEZText={styles.textLogin}
           color={COLORS.primary}>
           Login
         </EZText>
-      </ImageBackground>
+      </View>
       <View>
         <EZInput
           iconName="mail"
@@ -174,8 +186,9 @@ const styles = StyleSheet.create({
   container: {
     justifyContent: 'space-between',
     alignItems: 'center',
-    padding: 10,
     paddingTop: 0,
+    paddingHorizontal: SPACING.pxComponent,
+    paddingBottom: 30,
   },
   loginAndServices: {
     justifyContent: 'center',
@@ -184,13 +197,31 @@ const styles = StyleSheet.create({
   },
   imageLogin: {
     height: 200,
-    minWidth: '100%',
+    width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'center',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    overflow: 'hidden',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+
+    elevation: 10,
   },
   createNew: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  image: {
+    position: 'relative',
+    width: '100%',
+  },
+  textLogin: {
+    position: 'absolute',
   },
 });

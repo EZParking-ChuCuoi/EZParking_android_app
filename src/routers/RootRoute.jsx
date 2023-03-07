@@ -1,5 +1,5 @@
 import {View, Text} from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useState} from 'react';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import AuthStackNavigators from './AuthStackNavigators';
 import SplashScreen from 'react-native-splash-screen';
@@ -8,17 +8,16 @@ import BottomTab from './BottomTabs';
 import {useNavigation} from '@react-navigation/native';
 import {getData} from '../shared/asyncStorages';
 import {navigateAuthorized} from '../shared/auth';
+import WelcomeScreen from './WelcomeScreen';
 
 const RootRoute = () => {
   const navigation = useNavigation();
-
   useEffect(() => {
     const getToken = async () => {
+      SplashScreen.hide();
       const token = await getData('EZToken');
       if (token.length !== 0) {
         navigateAuthorized(navigation);
-      } else {
-        SplashScreen.hide();
       }
     };
     getToken();
@@ -31,6 +30,7 @@ const RootRoute = () => {
         screenOptions={{
           headerShown: false,
         }}>
+        <Stack.Screen name="welcome" component={WelcomeScreen} />
         <Stack.Screen name="auth" component={AuthStackNavigators} />
         <Stack.Screen name="bottomTab" component={BottomTab} />
       </Stack.Group>

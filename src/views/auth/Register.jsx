@@ -14,15 +14,18 @@ import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
 import {navigateAuthorized, validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
-import { COLORS, SPACING} from '../../assets/styles/styles';
+import {bgSecondaryDefault, colorDefault, COLORS, SPACING} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import ListCountryCode from '../../components/auth/ListCountryCode';
 import {useRegister} from '../../hooks/api/auth';
 import {androidNotification} from '../../shared/androidNotification';
 import OTPScreen from '../../components/auth/OTPScreen';
 import EZLoading from '../../components/core/EZLoading';
+import Lottie from 'lottie-react-native';
 
 const Register = ({navigation}) => {
+  const {BG2ND} = bgSecondaryDefault();
+  const {COLOR} = colorDefault();
   const [params, setParams] = useState({
     email: '',
     username: '',
@@ -134,18 +137,21 @@ const Register = ({navigation}) => {
           closeRBSheet={() => refRBSheet.current.close()}
         />
       </EZRBSheet>
-      <ImageBackground
-        source={require('../../assets/images/loginImage.png')}
-        resizeMode="cover"
-        style={styles.imageRegister}>
+      <View style={[styles.imageRegister, {shadowColor: COLOR}]}>
+        <Lottie
+          source={require('../../assets/images/car-insurance-offers-loading-page.json')}
+          autoPlay
+          loop
+          style={[styles.image, {backgroundColor: BG2ND}]}
+        />
         <EZText
           size="large"
           bold
-          styleEZText={{marginTop: 30}}
+          styleEZText={styles.textLogin}
           color={COLORS.primary}>
           Register
         </EZText>
-      </ImageBackground>
+      </View>
       <View>
         <EZInput
           iconName="mail"
@@ -220,13 +226,31 @@ const styles = StyleSheet.create({
   },
   imageRegister: {
     height: 200,
-    minWidth: '100%',
+    width: '100%',
     justifyContent: 'flex-end',
     alignItems: 'center',
+    borderBottomLeftRadius: 20,
+    borderBottomRightRadius: 20,
+    overflow: 'hidden',
+    shadowOffset: {
+      width: 0,
+      height: 5,
+    },
+    shadowOpacity: 0.34,
+    shadowRadius: 6.27,
+
+    elevation: 10,
   },
   createNew: {
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  image: {
+    position: 'relative',
+    width: '100%',
+  },
+  textLogin: {
+    position: 'absolute',
   },
 });

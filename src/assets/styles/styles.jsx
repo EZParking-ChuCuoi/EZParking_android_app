@@ -6,7 +6,7 @@ export const COLORS = {
   tertiary: '#2085D3',
   white: '#FFFFFF',
   black: '#000000',
-  overlay: 'rgba(155, 155, 155, 0.41)',
+  overlay: 'rgba(0, 0, 0, 0.26)',
   circleOverlay: 'rgba(244, 164, 164, 0.41)',
   greenOverlay: 'rgba(190, 244, 164, 0.41)',
   disable: '#7D7C80',

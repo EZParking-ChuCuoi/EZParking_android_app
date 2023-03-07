@@ -57,6 +57,7 @@ const EZMapView = props => {
         onPress={(data, details = null) => {
           handleSearch(details);
         }}
+        minLength={6}
         fetchDetails={true}
         query={{
           key: API_GOOGLE_MAP,
@@ -107,6 +108,7 @@ const EZMapView = props => {
         provider={PROVIDER_GOOGLE}
         style={styleEZMapView}
         customMapStyle={isDarkMode ? NightMap : StandardMap}
+        onPress={(c)=>console.log('CCCCCCCCCC==>',c.nativeEvent)}
         region={initRegion}>
         {children}
         {dragMarker ? (
