@@ -14,6 +14,7 @@ import Subcriptions from '../views/account/Subcriptions';
 import FAQ from '../views/account/FAQ';
 import QrcodeSetting from '../views/account/QrcodeSetting';
 import SpaceOwnerStackNavigators from './SpaceOwnerStackNavigator';
+import BookingHistory from '../views/account/BookingHistory';
 
 const AccountStack = createNativeStackNavigator();
 const AccountStackNavigators = () => {
@@ -39,6 +40,11 @@ const AccountStackNavigators = () => {
           name="editAccount"
           component={EditAccount}
           options={{title: 'Edit account'}}
+        />
+        <AccountStack.Screen
+          name="bookingHistory"
+          component={BookingHistory}
+          options={{title: 'Booking history'}}
         />
         <AccountStack.Screen
           name="chatSetting"

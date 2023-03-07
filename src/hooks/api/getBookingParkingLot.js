@@ -18,3 +18,11 @@ export const useBookingNow = () => {
     },
   });
 };
+
+export const useGetBookingHistory = () => {
+  return useMutation({
+    mutationFn: userId => {
+      return httpRequest.getHttpRequest(`booking/${userId}/history`);
+    },
+  });
+};

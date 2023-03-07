@@ -22,7 +22,7 @@ const ChartLine = () => {
   return (
     <LineChart
       data={data}
-      width={Dimensions.get('screen').width}
+      width={Dimensions.get('screen').width-20}
       
       height={320}
       chartConfig={{

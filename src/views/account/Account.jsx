@@ -53,12 +53,11 @@ const Account = () => {
 
   return (
     <>
-      {mutationUserInfo.isLoading && (
+      {mutationUserInfo.isLoading ? (
         <EZContainer>
           <EZLoading />
         </EZContainer>
-      )}
-      {mutationUserInfo.isSuccess && (
+      ) : (
         <EZContainer
           styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
           <View style={styles.topContainer}>

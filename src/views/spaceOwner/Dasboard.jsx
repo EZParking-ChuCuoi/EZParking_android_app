@@ -45,8 +45,6 @@ const Dasboard = ({navigation}) => {
   const [search, setSearch] = useState('');
   const refRBSheet = useRef();
   const mutationParkingLot = useGetUsersParkingLot();
-  const [periodRevenue, setPeriodRevenue] = useState('day');
-  const mutationPeriodRevenue = useGetPeriodManagingRevenueParkingLot();
   useEffect(() => {
     const getLots = async () => {
       const uid = await getData('EZUid');
@@ -136,26 +134,6 @@ const Dasboard = ({navigation}) => {
               }}>
               Manage revenue
             </EZText>
-            <TouchableOpacity
-              style={{
-                flexDirection: 'row',
-                width: '30%',
-                backgroundColor: BG2ND,
-                justifyContent: 'flex-end',
-                paddingRight: 20,
-                paddingVertical: 10,
-                borderRadius: 6,
-              }}
-              onPress={() => refRBSheet.current.open()}>
-              <EZText bold color={COLORS.primary}>
-                {periodRevenue}{' '}
-              </EZText>
-              <Icon
-                name="chevron-down"
-                size={FONTSIZE.iconLarge}
-                color={COLORS.primary}
-              />
-            </TouchableOpacity>
           </View>
           <ChartLine />
           {mutationParkingLot.isSuccess && (
@@ -164,26 +142,6 @@ const Dasboard = ({navigation}) => {
               label={'booked'}
             />
           )}
-          <EZRBSheet refRBSheet={refRBSheet}>
-            <EZContainer
-              styleEZContainer={{
-                paddingHorizontal: SPACING.pxComponent,
-                paddingVertical: SPACING.pxComponent + 10,
-              }}>
-              {PERIOD_REVENUE.map(item => {
-                return (
-                  <EZButton
-                    title={item.label}
-                    handlePress={() => {
-                      refRBSheet.current.close();
-                      setPeriodRevenue(item.value);
-                    }}
-                    key={item.value}
-                  />
-                );
-              })}
-            </EZContainer>
-          </EZRBSheet>
         </View>
       </ScrollView>
     </EZContainer>

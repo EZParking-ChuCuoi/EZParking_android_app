@@ -7,7 +7,12 @@ import {
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
-import {bgSecondaryDefault, colorDefault, COLORS, FONTSIZE} from '../../assets/styles/styles';
+import {
+  bgSecondaryDefault,
+  colorDefault,
+  COLORS,
+  FONTSIZE,
+} from '../../assets/styles/styles';
 import EZText from './EZText';
 import {useNavigation} from '@react-navigation/native';
 
@@ -78,16 +83,22 @@ const EZButtonBack = props => {
   return (
     <TouchableOpacity
       onPress={() => navigation.goBack()}
-      style={[styles.backBtn, {...props.styleEZButtonBack}, {shadowColor: COLOR}]}>
+      style={[
+        styles.backBtn,
+        {...props.styleEZButtonBack},
+        {shadowColor: COLOR},
+      ]}>
       <Icon
         name="chevron-left"
         color={isDarkMode ? COLORS.white : COLORS.black}
         size={FONTSIZE.iconSmall}
         style={[styles.iconLeft, {backgroundColor: BG2ND, shadowColor: COLOR}]}
       />
-      {!props.noText && <EZText styleEZText={styles.backBtnText} bold color={props.colorText}>
-        Back
-      </EZText>}
+      {!props.noText && (
+        <EZText styleEZText={styles.backBtnText} bold color={props.colorText}>
+          Back
+        </EZText>
+      )}
     </TouchableOpacity>
   );
 };
@@ -101,6 +112,22 @@ const EZButtonText = props => {
       <EZText color={props.color} bold>
         {props.text}
       </EZText>
+    </TouchableOpacity>
+  );
+};
+
+const EZButtonIcon = props => {
+  const {COLOR} = colorDefault();
+  const {BG2ND} = bgSecondaryDefault();
+  return (
+    <TouchableOpacity
+      onPress={() => props.handlePress()}
+      style={[{...props.styleEZButtonIcon}, {backgroundColor: BG2ND}, styles.btnIcon]}>
+      <Icon
+        name={props.iconName}
+        size={FONTSIZE.iconLarge}
+        color={props.color}
+      />
     </TouchableOpacity>
   );
 };
@@ -143,6 +170,11 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
+  },
+  btnIcon: {
+    padding: 8,
+    borderRadius: 4,
   }
+
 });
-export {EZButton, EZButtonBack, EZButtonText};
+export {EZButton, EZButtonBack, EZButtonText, EZButtonIcon};
