@@ -42,9 +42,13 @@ const MarkerItem = ({item}) => {
           <EZContainer styleEZContainer={{padding: 10}}>
             <ScrollView showsVerticalScrollIndicator={false}>
               <EZSlider data={item.images} />
-              {/* <Image source={{uri: item?.images[0]}} style={styles.image} /> */}
               <View style={styles.lotContent}>
-                <EZText bold>{item.nameParkingLot}</EZText>
+                <EZText>
+                  <EZText bold>{item.nameParkingLot} - </EZText>
+                  <EZText bold color={COLORS.secondary}>
+                    {Math.round(item.distance * 100) / 100} Km
+                  </EZText>
+                </EZText>
                 <View style={styles.flexRow}>
                   <Icon
                     name="map-pin"
@@ -99,7 +103,7 @@ const MarkerItem = ({item}) => {
           source={require('../../assets/images/markerIcon.png')}
           style={styles.markerP}
         />
-        <EZText styleEZText={styles.label} size="small" color={COLORS.primary}>
+        <EZText styleEZText={styles.label} size="small">
           {item.nameParkingLot}
         </EZText>
       </View>

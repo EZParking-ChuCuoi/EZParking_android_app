@@ -13,7 +13,7 @@ const BlockDetail = ({navigation, route}) => {
     });
     mutationGetSlot.mutate(idBlock);
   }, []);
-  console.log('cc',mutationGetSlot.data);
+  console.log(mutationGetSlot.data);
   return (
     <EZContainer>
       <EZText>BlockDetail</EZText>

@@ -41,7 +41,9 @@ const ParkingLotItem = props => {
         <EZText>{data.address}</EZText>
         <View style={styles.exceptDes}>
           <EZText color={COLORS.primary}>
-            {data.openTime} - {data.endTime}
+            {data.openTime.toString().slice(0, 5) +
+              ' - ' +
+              data.endTime.toString().slice(0, 5)}
           </EZText>
           <EZText bold color={COLORS.secondary}>
             {Math.round(data.distance * 100) / 100} Km

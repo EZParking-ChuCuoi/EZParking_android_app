@@ -73,7 +73,6 @@ export const useGetBlockInfo = () => {
 export const useEditBlockInfo = () => {
   return useMutation({
     mutationFn: params => {
-      console.log('params', params);
       let formData = new FormData();
       formData.append('nameBlock', params.data.nameBlock);
       formData.append('price', params.data.price);

@@ -38,7 +38,13 @@ const FormBlock = ({
             placeholder="Ex: 4-16 seats"
             label="Vehicle type"
             editable={false}
-            defaultValue={params.carType==='4-16SLOT' ? '4 -16 seats' : '16 - 34 seats'}
+            defaultValue={
+              params.carType === '4-16SLOT'
+                ? '4 -16 seats'
+                : params.carType === '16-34SLOT'
+                ? '16 - 34 seats'
+                : ''
+            }
             iconName="chevron-down"
             handlePressIcon={() => setIsDisplay(!isDisplay)}
           />
@@ -87,7 +93,10 @@ const FormBlock = ({
             value={params.price}
             onChangeText={newText => setParams({...params, ['price']: newText})}
           />
-          <EZButton title={editForm ? "Update" : "Create"} handlePress={handleSubmit} />
+          <EZButton
+            title={editForm ? 'Update' : 'Create'}
+            handlePress={handleSubmit}
+          />
         </ScrollView>
       </EZContainer>
     </EZRBSheet>

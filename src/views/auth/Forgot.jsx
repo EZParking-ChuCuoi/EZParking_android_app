@@ -33,7 +33,6 @@ const Forgot = ({navigation}) => {
     confirmPwd: true,
   });
   const handleForgot = () => {
-    console.log('params=>>', params);
     validate();
     // navigateAuthorized(navigation);
   };

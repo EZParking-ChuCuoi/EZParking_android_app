@@ -10,7 +10,6 @@ import CreateLot from '../views/spaceOwner/CreateLot';
 import Dasboard from '../views/spaceOwner/Dasboard';
 import LotDetail from '../views/spaceOwner/LotDetail';
 import {useHideTabBar} from '../hooks/useHideTabBar';
-import CreateBlockAndSlot from '../views/spaceOwner/CreateBlockAndSlot';
 import BlockDetail from '../views/spaceOwner/BlockDetail';
 
 const SpaceOwnerStack = createNativeStackNavigator();
@@ -37,11 +36,6 @@ const SpaceOwnerStackNavigators = () => {
           name="createLot"
           component={CreateLot}
           options={{title: 'Create lot'}}
-        />
-        <SpaceOwnerStack.Screen
-          name="createBlock"
-          component={CreateBlockAndSlot}
-          options={{title: 'Create blocks and slots'}}
         />
         <SpaceOwnerStack.Screen
           name="lotDetail"

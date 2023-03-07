@@ -91,9 +91,6 @@ const BlockItem = props => {
     if (mutationDeleteBlock.isSuccess) {
       props.handleRefresh();
     }
-    if (mutationDeleteBlock.isError) {
-      console.log(mutationDeleteBlock.error);
-    }
   }, [mutationDeleteBlock.status]);
   return (
     <TouchableOpacity

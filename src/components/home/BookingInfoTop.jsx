@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {
   bgSecondaryDefault,
@@ -6,12 +6,16 @@ import {
   COLORS,
 } from '../../assets/styles/styles';
 import EZText from '../core/EZText';
-import { formatTimeApi } from '../../shared/handleDate';
+import {formatTimeApi} from '../../shared/handleDate';
 import EZSlider from '../core/EZSlider';
+import {openGoogleMapsApp} from '../../shared/map';
 
 const BookingInfoTop = ({info}) => {
   const {BG2ND} = bgSecondaryDefault();
   const {COLOR} = colorDefault();
+  const handleDirection = () => {
+    openGoogleMapsApp(info.address_latitude, info.address_longitude);
+  };
   return (
     <View>
       <EZSlider data={info.images} />
@@ -36,16 +40,17 @@ const BookingInfoTop = ({info}) => {
             {formatTimeApi(info.openTime)} - {formatTimeApi(info.endTime)}
           </EZText>
         </View>
-        <View
+        <Pressable
           style={[
             styles.plInfoItem,
             {backgroundColor: BG2ND, shadowColor: COLOR},
-          ]}>
+          ]}
+          onPress={handleDirection}>
           <EZText bold>Direction</EZText>
           <EZText color={COLORS.primary} size="small">
             Open map
           </EZText>
-        </View>
+        </Pressable>
       </View>
     </View>
   );

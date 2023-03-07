@@ -35,6 +35,7 @@ const ParkingLotBlock = ({item, idSlotArr, setIdSlotArr}) => {
           }
         }}
         style={[{backgroundColor: BG}, styles.slotItem]}>
+        <EZText>{slot.slotName}</EZText>
         <View style={styles.tick}>
           {idSlotArr.includes(slot?.idSlot) && (
             <Icon
@@ -50,9 +51,9 @@ const ParkingLotBlock = ({item, idSlotArr, setIdSlotArr}) => {
   return (
     <View style={[styles.container]}>
       {item.carType === '4-16SLOT' ? (
-        <EZText> Less than 16 seats </EZText>
+        <EZText> 4-16 seats vehicle </EZText>
       ) : (
-        <EZText> Greater than 16 seats </EZText>
+        <EZText> 16-34 seats vehicle </EZText>
       )}
       <View style={styles.slotList}>
         {item.status.map((slot, index) => {

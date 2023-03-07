@@ -22,6 +22,7 @@ const EZMapView = props => {
     handleSearch,
     dragMarker = false,
     handleDragMarker,
+    handleOnPressMap = () => {},
     placeholderSearch = 'Where do you want to go?',
   } = props;
   let initRegion = {
@@ -108,7 +109,7 @@ const EZMapView = props => {
         provider={PROVIDER_GOOGLE}
         style={styleEZMapView}
         customMapStyle={isDarkMode ? NightMap : StandardMap}
-        onPress={(c)=>console.log('CCCCCCCCCC==>',c.nativeEvent)}
+        onPress={coor => handleOnPressMap(coor)}
         region={initRegion}>
         {children}
         {dragMarker ? (
@@ -128,7 +129,8 @@ const EZMapView = props => {
             <Circle
               center={initRegion}
               radius={1500}
-              strokeWidth={0}
+              strokeWidth={1}
+              strokeColor={COLORS.strokeColor}
               fillColor={COLORS.circleOverlay}
             />
             <Circle

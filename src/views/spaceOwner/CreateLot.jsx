@@ -29,6 +29,7 @@ import Lottie from 'lottie-react-native';
 import {useCreateParkingLot} from '../../hooks/api/useSpaceOwnerAction';
 import EZLoading from '../../components/core/EZLoading';
 import {useNavigation} from '@react-navigation/native';
+import Geocoder from 'react-native-geocoder';
 
 const CreateLot = () => {
   const refInput = useRef();
@@ -63,11 +64,10 @@ const CreateLot = () => {
   }, []);
   useEffect(() => {
     if (mutationCreate.isSuccess) {
-      navigation.navigate('createBlock');
+      navigation.navigate('dashboard');
     }
   }, [mutationCreate.status]);
   if (mutationCreate.isSuccess) {
-    console.log('first==>', mutationCreate.data);
   }
   const handleSearch = details => {
     setCoordinate({
@@ -95,6 +95,17 @@ const CreateLot = () => {
         ['lng']: coordinate.longitude,
       });
     }
+  };
+  const handleGetAddress = coordinate => {
+    let lat = coordinate.latitude;
+    let lng = coordinate.longitude;
+    Geocoder.geocodePosition({lat, lng}).then(res => {
+      setParams({
+        ...params,
+        ['address']: res[0].formattedAddress,
+      });
+    });
+    setCoordinateDrag(coordinate);
   };
   const handlePickImage = () => {
     ImageCropPicker.openPicker({
@@ -181,6 +192,7 @@ const CreateLot = () => {
             label="Address"
             styleEZInput={{marginBottom: SPACING.mbInputItem}}
             placeholder="Address"
+            lines={2}
             value={params.address}
             editable={false}
           />
@@ -242,15 +254,23 @@ const CreateLot = () => {
           <TouchableOpacity style={styles.btnClose} onPress={handleClose}>
             <Icon name="x" size={FONTSIZE.iconLarge} color={COLORS.redLight} />
           </TouchableOpacity>
-          <EZText styleEZText={styles.textGuide}>
-            Holding and dragging the marker to the right place will help us
-            pinpoint your exact location
-          </EZText>
+          <View style={styles.textGuide}>
+            <EZText bold size="quiteLarge" color={COLORS.secondary}>
+              Hold and drag the marker
+            </EZText>
+            <EZText bold>{params.address}</EZText>
+            <EZButtonText
+              text="Done"
+              color={COLORS.primary}
+              handlePress={handleClose}
+            />
+          </View>
           <EZMapView
             region={coordinate}
             handleSearch={details => handleSearch(details)}
             dragMarker
-            handleDragMarker={e => setCoordinateDrag(e.nativeEvent.coordinate)}
+            handleDragMarker={e => handleGetAddress(e.nativeEvent.coordinate)}
+            // handleOnPressMap={e => handleGetAddress(e.nativeEvent.coordinate)}
             refInput={refInput}
             placeholderSearch="Your parking lot address"
             setText={params.address}
@@ -283,14 +303,16 @@ const styles = StyleSheet.create({
     position: 'absolute',
     zIndex: 10,
     paddingHorizontal: SPACING.pxComponent,
-    backgroundColor: COLORS.greenOverlay,
+    backgroundColor: COLORS.overlay,
     width: '100%',
     justifyContent: 'flex-start',
-    paddingBottom: 50,
+    paddingBottom: 100,
     paddingTop: 20,
     bottom: 0,
     borderTopLeftRadius: 20,
     borderTopRightRadius: 20,
+    borderTopColor: COLORS.primary,
+    borderTopWidth: 2,
   },
   uploadImage: {
     width: '100%',
