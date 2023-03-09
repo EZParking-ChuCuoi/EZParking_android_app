@@ -14,7 +14,7 @@ export const useGetPeriodManagingRevenueParkingLot = () => {
   return useMutation({
     mutationFn: params => {
       return httpRequest.getHttpRequest(
-        `dashboard/${params.parkingLotId}/revenue/day`,
+        `dashboard/${params.userId}/revenue/${params.period}`,
       );
     },
   });

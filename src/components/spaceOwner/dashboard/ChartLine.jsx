@@ -1,30 +1,32 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {LineChart} from 'react-native-chart-kit';
 
-const ChartLine = () => {
+const ChartLine = ({source}) => {
+  console.log('source', source);
   const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    labels: source.periodLabels,
     datasets: [
       {
-        data: [10, -4, 6, -8, 80, 20],
-        color: (opacity = 1) => `rgba(134, 255, 244, ${opacity})`, // optional
+        data: source.bookingCounts,
+        color: (opacity = 1) => `rgba(134, 255, 244, ${opacity})`,
         strokeWidth: 1,
       },
       {
-        data: [5, 8, 6, 9, 8, 2, -2],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`, // optional
+        data: source.uniqueUsers,
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
         strokeWidth: 2,
       },
     ],
-    legend: ['Revenue day'], // optional
+    legend: ['Revenue day', 'cc'],
   };
   return (
-    <LineChart
+    <ScrollView horizontal showsHorizontalScrollIndicator={false}>
+      <LineChart
       data={data}
-      width={Dimensions.get('screen').width-20}
-      
-      height={320}
+      width={2000}
+      verticalLabelRotation={30}
+      height={500}
       chartConfig={{
         backgroundColor: '#e26a00',
         backgroundGradientFrom: '#fb8c00',
@@ -48,6 +50,7 @@ const ChartLine = () => {
         borderRadius: 16,
       }}
     />
+    </ScrollView>
   );
 };
 

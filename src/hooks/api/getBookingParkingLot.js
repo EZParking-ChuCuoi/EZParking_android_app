@@ -26,3 +26,16 @@ export const useGetBookingHistory = () => {
     },
   });
 };
+
+export const useGetBookingDetailHistory = () => {
+  return useMutation({
+    mutationFn: bookingIds => {
+      let formData = new FormData();
+      formData.append('_method', 'GET');
+      bookingIds.forEach(item => {
+        formData.append('bookingIds[]', item);
+      });
+      return httpRequest.postHttpRequest('booking/history/details', formData);
+    },
+  });
+};

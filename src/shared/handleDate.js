@@ -33,7 +33,7 @@ export const datePostToApi = timestamp => {
 };
 
 export const dateFormatMoment = timestamp => {
-  return moment(new Date()).format('YYYY-MM-DD HH:mm:ss');
+  return moment(new Date(timestamp)).format('YYYY-MM-DD HH:mm:00');
 };
 
 export const getCurrentTime = () => {
@@ -41,7 +41,7 @@ export const getCurrentTime = () => {
 };
 
 export const formatTimeFull = timestamp => {
-  return moment(new Date(timestamp)).format('HH:mm:ss');
+  return moment(new Date(timestamp)).format('HH:mm:00');
 };
 
 export const formatTimeMinute = timestamp => {

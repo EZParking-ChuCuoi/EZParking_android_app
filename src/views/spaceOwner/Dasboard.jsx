@@ -43,13 +43,21 @@ const Dasboard = ({navigation}) => {
   const {BG2ND} = bgSecondaryDefault();
   const {BG} = bgDefault();
   const [search, setSearch] = useState('');
-  const refRBSheet = useRef();
+  const refRBSheetPeriod = useRef();
   const mutationParkingLot = useGetUsersParkingLot();
+  const mutationPeriodRevenue = useGetPeriodManagingRevenueParkingLot();
+  const [periodRevenue, setPeriodRevenue] = useState(PERIOD_REVENUE[0].value);
+  useEffect(() => {
+    const getRevenue = async () => {
+      const uid = await getData('EZUid');
+      mutationPeriodRevenue.mutate({userId: uid, period: periodRevenue});
+    };
+    getRevenue();
+  }, [periodRevenue]);
   useEffect(() => {
     const getLots = async () => {
       const uid = await getData('EZUid');
       mutationParkingLot.mutate(uid);
-      // mutationPeriodRevenue.mutate({parkingLotId: '', period: periodRevenue});
     };
     getLots();
   }, []);
@@ -116,34 +124,59 @@ const Dasboard = ({navigation}) => {
                 );
               })}
           </ScrollView>
-          <View
-            style={{
-              flexDirection: 'row',
-              justifyContent: 'space-between',
-              width: '100%',
-              alignItems: 'flex-end',
-            }}>
+          <View style={styles.titleRevenue}>
             <EZText
               transform="uppercase"
               bold
               color={COLORS.secondary}
               styleEZText={{
-                paddingLeft: SPACING.pxComponent,
                 marginTop: 20,
                 width: '50%',
               }}>
               Manage revenue
             </EZText>
+            <TouchableOpacity
+              style={[styles.btnPeriod, {backgroundColor: BG2ND}]}
+              onPress={() => refRBSheetPeriod.current.open()}>
+              <EZText bold color={COLORS.primary}>
+                {periodRevenue}{' '}
+              </EZText>
+              <Icon
+                name="chevron-down"
+                size={FONTSIZE.iconLarge}
+                color={COLORS.primary}
+              />
+            </TouchableOpacity>
           </View>
-          <ChartLine />
+          {mutationPeriodRevenue.isSuccess && (
+            <ChartLine source={mutationPeriodRevenue?.data?.data} />
+          )}
           {mutationParkingLot.isSuccess && (
-            <ChartBar
-              source={mutationParkingLot.data.data}
-              label={'booked'}
-            />
+            <ChartBar source={mutationParkingLot.data.data} label={'booked'} />
           )}
         </View>
       </ScrollView>
+      <EZRBSheet refRBSheet={refRBSheetPeriod} height={300}>
+        <EZContainer
+          styleEZContainer={{
+            paddingHorizontal: SPACING.pxComponent,
+            paddingVertical: SPACING.pxComponent + 10,
+          }}>
+          {PERIOD_REVENUE.map(item => {
+            return (
+              <EZButton
+                styleEZButton={{backgroundColor: BG2ND, marginBottom: 15}}
+                title={item.label}
+                handlePress={() => {
+                  refRBSheetPeriod.current.close();
+                  setPeriodRevenue(item.value);
+                }}
+                key={item.value}
+              />
+            );
+          })}
+        </EZContainer>
+      </EZRBSheet>
     </EZContainer>
   );
 };
@@ -182,5 +215,23 @@ const styles = StyleSheet.create({
   mainContent: {
     marginTop: 30,
     width: '100%',
+  },
+  titleRevenue: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    width: '100%',
+    alignItems: 'flex-end',
+    marginTop: 20,
+  },
+  periodItem: {
+    marginBottom: 15,
+  },
+  btnPeriod: {
+    flexDirection: 'row',
+    width: 100,
+    justifyContent: 'center',
+    alignItems: 'flex-end',
+    paddingVertical: 10,
+    borderRadius: 6,
   },
 });

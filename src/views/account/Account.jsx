@@ -115,7 +115,7 @@ const Account = () => {
                 source={require('../../assets/images/dashboard.json')}
                 autoPlay
                 loop
-                style={{position: 'relative', width: 50, height: 50}}
+                style={styles.imgDashboard}
               />
             </TouchableOpacity>
           )}
@@ -172,9 +172,16 @@ const styles = StyleSheet.create({
   },
   btnDashboard: {
     position: 'absolute',
-    bottom: 70,
+    bottom: 100,
     right: 30,
-    width: 50,
-    height: 50,
+    width: 70,
+    height: 70,
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imgDashboard: {
+    position: 'relative',
+    width: 70,
+    height: 70,
   },
 });

@@ -33,7 +33,7 @@ import ChartLine from '../../components/spaceOwner/dashboard/ChartLine';
 
 const LotDetail = ({navigation, route}) => {
   const {idParkingLot, nameParkingLot} = route.params;
-  console.log(idParkingLot)
+  console.log(idParkingLot);
   const mutationGetBlock = useGetBlock();
   const mutationCreateBlock = useCreateBlock();
   const mutationPeriodRevenue = useGetPeriodManagingRevenueParkingLot();
@@ -61,20 +61,13 @@ const LotDetail = ({navigation, route}) => {
       refRBSheet.current.close();
       mutationGetBlock.mutate(idParkingLot);
     }
-    if (mutationPeriodRevenue.isSuccess) {
-      console.log(mutationPeriodRevenue.data);
-    }
-  }, [mutationCreateBlock.status, mutationPeriodRevenue.status]);
-  if (mutationPeriodRevenue.isError) {
-    console.log(mutationPeriodRevenue.error.response.data);
-  }
-  console.log(periodRevenue)
-  useEffect(() => {
-    mutationPeriodRevenue.mutate({
-      parkingLotId: idParkingLot,
-      period: periodRevenue,
-    });
-  }, [periodRevenue]);
+  }, [mutationCreateBlock.status]);
+  // useEffect(() => {
+  //   mutationPeriodRevenue.mutate({
+  //     parkingLotId: idParkingLot,
+  //     period: periodRevenue,
+  //   });
+  // }, [periodRevenue]);
 
   const handleResetForm = () => {
     setParams({

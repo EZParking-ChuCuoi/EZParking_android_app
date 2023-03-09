@@ -18,10 +18,13 @@ const ParkingLotItem = props => {
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const {data} = props;
-  // const mutationPrice = useGetParkingPrice();
-  // useEffect(() => {
-  //   mutationPrice.mutate(data.id);
-  // }, []);
+  const mutationPrice = useGetParkingPrice();
+  useEffect(() => {
+    mutationPrice.mutate(data.id);
+  }, []);
+  console.log(
+    mutationPrice.isSuccess ? mutationPrice.data : mutationPrice?.error,
+  );
   return (
     <TouchableOpacity
       onPress={() =>

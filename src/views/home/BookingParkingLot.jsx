@@ -23,8 +23,7 @@ import ParkingLotBlock from '../../components/home/ParkingLotBlock';
 import {useRoute} from '@react-navigation/native';
 import {
   dateFormatMoment,
-  datePostToApi,
-  formatTimeApi,
+  formatTimeFull,
   handleDate,
 } from '../../shared/handleDate';
 import {DURATION, VEHICLE_TYPE} from '../../utils/defaultDataSelection';
@@ -44,7 +43,6 @@ const BookingParkingLot = ({navigation, route}) => {
     dateStart: '',
     dateReturn: '',
   });
-  const [showVehicle, setShowVehicle] = useState(false);
   const [showDuration, setShowDuration] = useState(false);
   const [showDateTimePicker, setShowDateTimePicker] = useState({
     start: false,
@@ -58,12 +56,8 @@ const BookingParkingLot = ({navigation, route}) => {
       idSlotArr.length > 0
     ) {
       navigation.navigate('preview', {
-        dateStart: moment(new Date(params.dateStart)).format(
-          'YYYY-MM-DD HH:mm:ss',
-        ),
-        dateReturn: moment(new Date(params.dateReturn)).format(
-          'YYYY-MM-DD HH:mm:ss',
-        ),
+        dateStart: formatTimeFull(params.dateStart),
+        dateReturn: formatTimeFull(params.dateReturn),
         idSlotArr,
       });
     }
@@ -80,12 +74,13 @@ const BookingParkingLot = ({navigation, route}) => {
       params.dateReturn !== ''
     ) {
       mutationGetSlots.mutate({
-        start_datetime: datePostToApi(params.dateStart),
-        end_datetime: datePostToApi(params.dateReturn),
+        start_datetime: dateFormatMoment(params.dateStart),
+        end_datetime: dateFormatMoment(params.dateReturn),
         id: info.id,
       });
     }
   }, [params.dateStart, params.dateReturn]);
+  console.log(mutationGetSlots?.data);
   return (
     <EZContainer>
       <ScrollView style={styles.wrapper} showsVerticalScrollIndicator={false}>
@@ -94,14 +89,16 @@ const BookingParkingLot = ({navigation, route}) => {
         <View style={styles.form}>
           <View style={styles.formLeft}>
             <View style={styles.dropDown}>
-              <EZInput
-                styleEZInput={{marginBottom: SPACING.mbInputItem}}
-                defaultValue={params.duration}
-                placeholder="Duration"
-                iconName="chevron-down"
-                editable={false}
-                handlePressIcon={() => setShowDuration(!showDuration)}
-              />
+              <TouchableOpacity onPress={() => setShowDuration(!showDuration)}>
+                <EZInput
+                  styleEZInput={{marginBottom: SPACING.mbInputItem}}
+                  defaultValue={params.duration}
+                  placeholder="Duration"
+                  iconName="chevron-down"
+                  editable={false}
+                  handlePressIcon={() => setShowDuration(!showDuration)}
+                />
+              </TouchableOpacity>
               <View style={styles.dropDownContainer}>
                 {showDuration &&
                   DURATION.map((duration, index) => {
@@ -122,37 +119,46 @@ const BookingParkingLot = ({navigation, route}) => {
           </View>
           <View style={styles.formRight}>
             <View style={styles.formTime}>
-              <EZInput
-                styleEZInput={{width: '47%'}}
-                defaultValue={
-                  params.dateStart !== ''
-                    ? params.duration === 'daily'
-                      ? handleDate(params.dateStart).slice(0, 5)
-                      : handleDate(params.dateStart).slice(7)
-                    : ''
-                }
-                placeholder="Date start"
-                iconName="chevron-down"
-                handlePressIcon={() => {
+              <TouchableOpacity
+                onPress={() => {
                   setShowDateTimePicker({
                     ...showDateTimePicker,
                     ['start']: true,
                   });
                 }}
-                editable={false}
-              />
+                style={{width: '47%'}}>
+                <EZInput
+                  defaultValue={
+                    params.dateStart !== ''
+                      ? params.duration === 'daily'
+                        ? handleDate(params.dateStart).slice(0, 5)
+                        : handleDate(params.dateStart).slice(7)
+                      : ''
+                  }
+                  placeholder="Date start"
+                  iconName="chevron-down"
+                  handlePressIcon={() => {
+                    setShowDateTimePicker({
+                      ...showDateTimePicker,
+                      ['start']: true,
+                    });
+                  }}
+                  editable={false}
+                />
+              </TouchableOpacity>
               <DatePicker
                 modal
                 title="Choose booking start"
                 open={showDateTimePicker.start}
-                mode={params.duration === 'daily' ? 'time' : 'date'}
+                mode={
+                  params.duration === 'daily'
+                    ? 'datetime'
+                    : params.duration === 'today'
+                    ? 'time'
+                    : 'date'
+                }
                 date={new Date()}
                 minimumDate={new Date()}
-                maximumDate={
-                  params.dateReturn !== ''
-                    ? new Date(params.dateReturn)
-                    : new Date()
-                }
                 onConfirm={date => {
                   setParams({...params, ['dateStart']: date});
                   setShowDateTimePicker({
@@ -167,31 +173,45 @@ const BookingParkingLot = ({navigation, route}) => {
                   })
                 }
               />
-              <EZInput
-                styleEZInput={{width: '50%'}}
-                defaultValue={
-                  params.dateReturn !== ''
-                    ? params.duration === 'daily'
-                      ? handleDate(params.dateReturn).slice(0, 5)
-                      : handleDate(params.dateReturn).slice(7)
-                    : ''
-                }
-                placeholder="Date return"
-                iconName="chevron-down"
-                handlePressIcon={() => {
+              <TouchableOpacity
+                onPress={() => {
                   setShowDateTimePicker({
                     ...showDateTimePicker,
                     ['end']: !showDateTimePicker.end,
                   });
                 }}
-                editable={false}
-              />
+                style={{width: '50%'}}>
+                <EZInput
+                  defaultValue={
+                    params.dateReturn !== ''
+                      ? params.duration === 'daily'
+                        ? handleDate(params.dateReturn).slice(0, 5)
+                        : handleDate(params.dateReturn).slice(7)
+                      : ''
+                  }
+                  placeholder="Date return"
+                  iconName="chevron-down"
+                  handlePressIcon={() => {
+                    setShowDateTimePicker({
+                      ...showDateTimePicker,
+                      ['end']: !showDateTimePicker.end,
+                    });
+                  }}
+                  editable={false}
+                />
+              </TouchableOpacity>
               <DatePicker
                 modal
                 title="Choose booking return"
                 open={showDateTimePicker.end}
                 date={new Date()}
-                mode={params.duration === 'daily' ? 'time' : 'date'}
+                mode={
+                  params.duration === 'daily'
+                    ? 'datetime'
+                    : params.duration === 'today'
+                    ? 'time'
+                    : 'date'
+                }
                 minimumDate={
                   params.dateStart !== ''
                     ? new Date(params.dateStart)

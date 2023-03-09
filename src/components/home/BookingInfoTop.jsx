@@ -1,4 +1,4 @@
-import {Image, Pressable, StyleSheet, Text, View} from 'react-native';
+import {Image, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {
   bgSecondaryDefault,
@@ -40,7 +40,7 @@ const BookingInfoTop = ({info}) => {
             {formatTimeApi(info.openTime)} - {formatTimeApi(info.endTime)}
           </EZText>
         </View>
-        <Pressable
+        <TouchableOpacity
           style={[
             styles.plInfoItem,
             {backgroundColor: BG2ND, shadowColor: COLOR},
@@ -50,7 +50,7 @@ const BookingInfoTop = ({info}) => {
           <EZText color={COLORS.primary} size="small">
             Open map
           </EZText>
-        </Pressable>
+        </TouchableOpacity>
       </View>
     </View>
   );

@@ -4,7 +4,10 @@ import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
 import {useHideTabBar} from '../../hooks/useHideTabBar';
 import {useRoute} from '@react-navigation/native';
-import {useGetParkingLotInfo} from '../../hooks/api/getParkingLots';
+import {
+  useGetParkingLotInfo,
+  useGetParkingPrice,
+} from '../../hooks/api/getParkingLots';
 import Icon from 'react-native-vector-icons/Feather';
 import {
   colorDefault,
@@ -15,6 +18,7 @@ import {
 import {EZButton} from '../../components/core/EZButton';
 import ParkingLotComment from '../../components/home/ParkingLotComment';
 import EZSlider from '../../components/core/EZSlider';
+import {handleCurrenCy} from '../../shared/handleCurrenCy';
 
 const SpaceDetail = ({navigation, route}) => {
   useHideTabBar();
@@ -22,6 +26,11 @@ const SpaceDetail = ({navigation, route}) => {
   const mutationParkingLotInfo = useGetParkingLotInfo();
   const {parkingId} = route.params;
   const [parkingLotInfo, setParkingLotInfo] = useState(null);
+  const [price, setPrice] = useState('0VND');
+  const mutationPrice = useGetParkingPrice();
+  useEffect(() => {
+    mutationPrice.mutate(parkingId);
+  }, []);
 
   useEffect(() => {
     const getStated = async () => {
@@ -37,7 +46,19 @@ const SpaceDetail = ({navigation, route}) => {
       setParkingLotInfo(mutationParkingLotInfo.data[0]);
     }
   }, [mutationParkingLotInfo.status]);
-
+  useEffect(() => {
+    if (mutationPrice.isSuccess) {
+      if (mutationPrice?.data?.priceFrom === mutationPrice?.data?.priceTo) {
+        setPrice(handleCurrenCy(mutationPrice?.data?.priceFrom));
+      } else {
+        setPrice(
+          handleCurrenCy(mutationPrice?.data?.priceFrom) +
+            ' - ' +
+            handleCurrenCy(mutationPrice?.data?.priceTo),
+        );
+      }
+    }
+  }, [mutationPrice.status]);
   return (
     <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
       {parkingLotInfo && (
@@ -54,6 +75,14 @@ const SpaceDetail = ({navigation, route}) => {
             <View style={styles.flexRow}>
               <Icon name="shield" size={FONTSIZE.iconMedium} color={COLOR} />
               <EZText>Security system</EZText>
+            </View>
+            <View style={styles.flexRow}>
+              <Icon
+                name="credit-card"
+                size={FONTSIZE.iconMedium}
+                color={COLOR}
+              />
+              <EZText>{price}</EZText>
             </View>
             <EZText bold styleEZText={{marginTop: 10}}>
               Description

@@ -41,6 +41,7 @@ const SearchSpace = () => {
   }, [currenRegion]);
 
   const handleSearch = details => {
+    console.log('handleSearch==>', details)
     setCurrenRegion({
       ...currenRegion,
       ['latitude']: details?.geometry?.location.lat,

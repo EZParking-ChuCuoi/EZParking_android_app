@@ -10,8 +10,10 @@ import {EZButtonIcon} from '../../core/EZButton';
 import EZRBSheet from '../../core/EZRBSheet';
 import BookingHistoryInfo from './BookingHistoryInfo';
 import BookingHistoryFeedback from './BookingHistoryFeedback';
+import {handleCurrenCy} from '../../../shared/handleCurrenCy';
 
 const BookingHistoryItem = ({item}) => {
+  console.log('ccc', item);
   const {BG2ND} = bgSecondaryDefault();
   const {COLOR} = colorDefault();
   const refInfo = useRef();
@@ -20,11 +22,14 @@ const BookingHistoryItem = ({item}) => {
     <View
       style={[styles.container, {backgroundColor: BG2ND, shadowColor: COLOR}]}>
       <View style={styles.contentLeft}>
-        <EZText bold color={COLORS.primary}>
-          Name parking lot
+        <EZText bold>{item.parking_lot_name}</EZText>
+        <EZText>{item.address}</EZText>
+        <EZText size="small">
+          {item.bookDate} - {item.returnDate}
         </EZText>
-        <EZText size="small">20:00 8/3/2022 - 20:00 8/3/2022</EZText>
-        <EZText color={COLORS.secondary}>16000</EZText>
+        <EZText color={COLORS.secondary}>
+          {handleCurrenCy(item.total_payment)}
+        </EZText>
       </View>
       <View style={styles.contentRight}>
         <EZButtonIcon
@@ -38,9 +43,8 @@ const BookingHistoryItem = ({item}) => {
           handlePress={() => refFeedBack.current.open()}
         />
       </View>
-      <EZRBSheet
-        refRBSheet={refInfo}>
-        <BookingHistoryInfo bookings={item.bookings} />
+      <EZRBSheet refRBSheet={refInfo}>
+        <BookingHistoryInfo bookings={item.booking_ids} />
       </EZRBSheet>
       <EZRBSheet
         refRBSheet={refFeedBack}
@@ -73,12 +77,12 @@ const styles = StyleSheet.create({
     marginBottom: 15,
   },
   contentLeft: {
-    width: '70%',
+    width: '80%',
     justifyContent: 'center',
     alignItems: 'flex-start',
   },
   contentRight: {
-    width: '28%',
+    width: '16%',
     justifyContent: 'center',
     alignItems: 'flex-end',
     gap: 10,

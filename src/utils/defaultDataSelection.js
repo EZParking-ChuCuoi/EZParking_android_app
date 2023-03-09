@@ -1,15 +1,19 @@
 export const DURATION = [
   {
-    label: 'yearly',
+    label: 'Yearly',
     value: 'yearly',
   },
   {
-    label: 'monthly',
+    label: 'Monthly',
     value: 'monthly',
   },
   {
-    label: 'daily',
+    label: 'Daily',
     value: 'daily',
+  },
+  {
+    label: 'Today',
+    value: 'today',
   },
 ];
 

@@ -35,7 +35,7 @@ const SpaceOwnerStackNavigators = () => {
         <SpaceOwnerStack.Screen
           name="createLot"
           component={CreateLot}
-          options={{title: 'Create lot'}}
+          options={{title: 'Create parking lot'}}
         />
         <SpaceOwnerStack.Screen
           name="lotDetail"

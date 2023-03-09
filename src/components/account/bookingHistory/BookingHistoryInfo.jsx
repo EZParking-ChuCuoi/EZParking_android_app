@@ -1,5 +1,5 @@
 import {FlatList, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import EZContainer from '../../core/EZContainer';
 import EZText from '../../core/EZText';
 import {
@@ -7,32 +7,54 @@ import {
   COLORS,
   SPACING,
 } from '../../../assets/styles/styles';
+import {useGetBookingDetailHistory} from '../../../hooks/api/getBookingParkingLot';
+import {handleCurrenCy} from '../../../shared/handleCurrenCy';
 
 const BookingHistoryInfo = ({bookings}) => {
   const {BG2ND} = bgSecondaryDefault();
-  console.log(bookings);
+  const mutationBookingDetails = useGetBookingDetailHistory();
+  const [bookingInfo, setBookingInfo] = useState([]);
+  useEffect(() => {
+    mutationBookingDetails.mutate(bookings);
+  }, []);
+  useEffect(() => {
+    if (mutationBookingDetails.isSuccess) {
+      setBookingInfo(mutationBookingDetails.data.data.bookings);
+    }
+  }, [mutationBookingDetails.status]);
   const renderItem = ({item}) => {
     return (
       <View style={[styles.container, {backgroundColor: BG2ND}]}>
-        <View style={styles.left}>
-          <EZText>
-            Vehicle type:{' '}
-            {item.carType === '4-16SLOT' ? '4 -16 seats' : '16 - 34 seats'}
-          </EZText>
-          <EZText>
-            Slot name: {item.nameBlock}/{item.slotName}
-          </EZText>
-          <View style={styles.licenseGroup}>
-            <EZText>License plate: </EZText>
-            <View style={styles.license}>
-              <EZText>43A-999.99</EZText>
+        {mutationBookingDetails.isSuccess && (
+          <>
+            <View style={styles.left}>
+              <EZText>
+                Vehicle type:{' '}
+                {item.carType === '4-16SLOT' ? '4 -16 seats' : '16 - 34 seats'}
+              </EZText>
+              <EZText>
+                Slot name: {item.nameBlock}/{item.slotName}
+              </EZText>
+              <View style={styles.licenseGroup}>
+                <EZText>License plate: </EZText>
+                <View style={styles.license}>
+                  <EZText transform="uppercase">{`${item.licensePlate.slice(
+                    0,
+                    3,
+                  )}-${item.licensePlate.slice(3, 6)}.${item.licensePlate.slice(
+                    6,
+                    8,
+                  )}`}</EZText>
+                </View>
+              </View>
             </View>
-          </View>
-        </View>
-        <View style={styles.right}>
-          <EZText color={COLORS.primary}>{item.bookDate}</EZText>
-          <EZText color={COLORS.secondary}>{item.payment}</EZText>
-        </View>
+            <View style={styles.right}>
+              <EZText color={COLORS.secondary}>
+                {handleCurrenCy(item.payment)}
+              </EZText>
+            </View>
+          </>
+        )}
       </View>
     );
   };
@@ -43,9 +65,10 @@ const BookingHistoryInfo = ({bookings}) => {
         paddingVertical: 20,
       }}>
       <FlatList
-        data={bookings}
+        data={bookingInfo}
         renderItem={renderItem}
         keyExtractor={(_, index) => index}
+        showsVerticalScrollIndicator={false}
       />
     </EZContainer>
   );
@@ -59,7 +82,7 @@ const styles = StyleSheet.create({
     paddingTop: 10,
     paddingBottom: 15,
     borderRadius: 10,
-    marginBottom: 20,
+    marginBottom: 15,
     position: 'relative',
   },
   right: {

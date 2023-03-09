@@ -68,7 +68,6 @@ const Home = () => {
     };
     return storeCurrent();
   }, [currentRegion]);
-
   const getCurrentLocation = () => {
     Geolocation.getCurrentPosition(
       position => {
