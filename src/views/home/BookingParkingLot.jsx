@@ -1,4 +1,5 @@
 import {
+  Animated,
   FlatList,
   Image,
   Pressable,
@@ -33,6 +34,7 @@ import {useGetSlots} from '../../hooks/api/getParkingLots';
 import EZLoading from '../../components/core/EZLoading';
 import {EZButton} from '../../components/core/EZButton';
 import moment, {duration} from 'moment';
+import EZSliderPagination from '../../components/core/EZSliderPagination';
 
 const BookingParkingLot = ({navigation, route}) => {
   const {info} = route.params;
@@ -48,6 +50,29 @@ const BookingParkingLot = ({navigation, route}) => {
     start: false,
     end: false,
   });
+  const [index, setIndex] = useState(0);
+  const scrollX = useRef(new Animated.Value(0)).current;
+  const handleScroll = e => {
+    Animated.event(
+      [
+        {
+          nativeEvent: {
+            contentOffset: {
+              x: scrollX,
+            },
+          },
+        },
+      ],
+      {useNativeDriver: false},
+    )(e);
+  };
+  const handleViewableItemsChanged = useRef(({viewableItems}) => {
+    setIndex(viewableItems[0].index);
+  }).current;
+  const handleviewabilityConfig = useRef({
+    itemVisiblePercentThreshold: 50,
+  }).current;
+
   const handleNextBtn = () => {
     if (
       params.duration !== '' &&
@@ -80,7 +105,6 @@ const BookingParkingLot = ({navigation, route}) => {
       });
     }
   }, [params.dateStart, params.dateReturn]);
-  console.log(mutationGetSlots?.data);
   return (
     <EZContainer>
       <ScrollView style={styles.wrapper} showsVerticalScrollIndicator={false}>
@@ -242,6 +266,14 @@ const BookingParkingLot = ({navigation, route}) => {
             </EZText>
           </TouchableOpacity>
         </View>
+        {mutationGetSlots.isSuccess && (
+          <EZSliderPagination
+            data={mutationGetSlots.data?.data || []}
+            scrollX={scrollX}
+            index={index}
+            top
+          />
+        )}
         <FlatList
           data={mutationGetSlots.data?.data || []}
           keyExtractor={item => item.block_id}
@@ -255,6 +287,10 @@ const BookingParkingLot = ({navigation, route}) => {
           ListEmptyComponent={mutationGetSlots.isLoading && <EZLoading />}
           horizontal
           pagingEnabled
+          snapToAlignment="center"
+          onScroll={handleScroll}
+          onViewableItemsChanged={handleViewableItemsChanged}
+          viewabilityConfig={handleviewabilityConfig}
         />
       </ScrollView>
     </EZContainer>

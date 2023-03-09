@@ -3,9 +3,9 @@ import React from 'react';
 import {COLORS} from '../../assets/styles/styles';
 
 const {width} = Dimensions.get('screen');
-const EZSliderPagination = ({data, scrollX, index}) => {
+const EZSliderPagination = ({data, scrollX, index, top}) => {
   return (
-    <View style={styles.container}>
+    <View style={top ? styles.containerForTop : styles.container}>
       {data.map((_, idx) => {
         const inputRange = [(idx - 1) * width, idx * width, (idx + 1) * width];
         const dotWidth = scrollX.interpolate({
@@ -44,6 +44,12 @@ const styles = StyleSheet.create({
   container: {
     position: 'absolute',
     bottom: 20,
+    flexDirection: 'row',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  containerForTop: {
     flexDirection: 'row',
     width: '100%',
     justifyContent: 'center',

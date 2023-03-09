@@ -122,10 +122,14 @@ const EZButtonIcon = props => {
   return (
     <TouchableOpacity
       onPress={() => props.handlePress()}
-      style={[{...props.styleEZButtonIcon}, {backgroundColor: BG2ND}, styles.btnIcon]}>
+      style={[
+        {...props.styleEZButtonIcon},
+        {backgroundColor: BG2ND},
+        styles.btnIcon,
+      ]}>
       <Icon
         name={props.iconName}
-        size={FONTSIZE.iconLarge}
+        size={props.size || FONTSIZE.iconLarge}
         color={props.color}
       />
     </TouchableOpacity>
@@ -174,7 +178,6 @@ const styles = StyleSheet.create({
   btnIcon: {
     padding: 8,
     borderRadius: 4,
-  }
-
+  },
 });
 export {EZButton, EZButtonBack, EZButtonText, EZButtonIcon};

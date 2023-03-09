@@ -11,7 +11,8 @@ import React, {useEffect, useState} from 'react';
 import EZText from '../core/EZText';
 import {bgSecondaryDefault, COLORS, FONTSIZE} from '../../assets/styles/styles';
 import Icon from 'react-native-vector-icons/Feather';
-
+import Lottie from 'lottie-react-native';
+import { handleCurrenCy } from '../../shared/handleCurrenCy';
 const ParkingLotBlock = ({item, idSlotArr, setIdSlotArr}) => {
   const {BG2ND} = bgSecondaryDefault();
   const handlePressSlot = idSlot => {
@@ -51,14 +52,34 @@ const ParkingLotBlock = ({item, idSlotArr, setIdSlotArr}) => {
   return (
     <View style={[styles.container]}>
       {item.carType === '4-16SLOT' ? (
-        <EZText> 4-16 seats vehicle </EZText>
+        <EZText>
+          {' '}
+          4-16 seats vehicle -{' '}
+          <EZText color={COLORS.redLight} bold>
+            {handleCurrenCy(item.price)}
+          </EZText>{' '}
+        </EZText>
       ) : (
-        <EZText> 16-34 seats vehicle </EZText>
+        <EZText>
+          {' '}
+          16-34 seats vehicle -{' '}
+          <EZText color={COLORS.redLight} bold>
+            {handleCurrenCy(item.price)}
+          </EZText>
+        </EZText>
       )}
       <View style={styles.slotList}>
         {item.status.map((slot, index) => {
           return <SlotItem slot={slot} key={index} />;
         })}
+        {item.status.length < 1 && (
+          <Lottie
+            source={require('../../assets/images/emptySlot.json')}
+            autoPlay
+            loop
+            style={styles.image}
+          />
+        )}
       </View>
     </View>
   );
@@ -94,5 +115,9 @@ const styles = StyleSheet.create({
     top: 3,
     right: 3,
     elevation: 8,
+  },
+  image: {
+    position: 'relative',
+    width: '100%',
   },
 });
