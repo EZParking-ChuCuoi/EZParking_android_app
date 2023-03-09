@@ -7,16 +7,21 @@ const ChartBar = () => {
     labels: ['January', 'February', 'March', 'April', 'May', 'June'],
     datasets: [
       {
-        data: [1,2,3,4,7,9,11],
+        data: [1, 2, 3, 4, 7, 9, 11],
+        color: (opacity = 1) => `rgba(134, 255, 244, ${opacity})`,
+      },
+      {
+        data: [1, 2, 3, 4, 7, 9, 11],
+        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
       },
     ],
   };
   return (
     <BarChart
       data={data}
-      width={Dimensions.get('screen').width-20}
-      yAxisLabel=''
-      yAxisSuffix=''
+      width={Dimensions.get('screen').width - 20}
+      yAxisLabel=""
+      yAxisSuffix=""
       yAxisInterval={9}
       height={400}
       chartConfig={{

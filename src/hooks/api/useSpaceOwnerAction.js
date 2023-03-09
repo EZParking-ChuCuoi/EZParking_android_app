@@ -101,7 +101,7 @@ export const useDeleteBlock = () => {
 export const useGetSlotsOfBlock = () => {
   return useMutation({
     mutationFn: idBlock => {
-      return httpRequest.getHttpRequest(`parking-lot/${idBlock}/slots`);
+      return httpRequest.getHttpRequest(`parking-lot/block/${idBlock}/slots`);
     },
   });
 };

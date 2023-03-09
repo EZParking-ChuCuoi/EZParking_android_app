@@ -22,9 +22,7 @@ const ParkingLotItem = props => {
   useEffect(() => {
     mutationPrice.mutate(data.id);
   }, []);
-  console.log(
-    mutationPrice.isSuccess ? mutationPrice.data : mutationPrice?.error,
-  );
+
   return (
     <TouchableOpacity
       onPress={() =>

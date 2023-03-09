@@ -144,7 +144,7 @@ const LotDetail = ({navigation, route}) => {
             />
           </TouchableOpacity>
         </View>
-        <ChartLine />
+        {/* <ChartLine /> */}
         <EZRBSheet refRBSheet={refRBSheetPeriod} height={300}>
           <EZContainer
             styleEZContainer={{

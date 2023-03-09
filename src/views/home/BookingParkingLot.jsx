@@ -56,8 +56,8 @@ const BookingParkingLot = ({navigation, route}) => {
       idSlotArr.length > 0
     ) {
       navigation.navigate('preview', {
-        dateStart: formatTimeFull(params.dateStart),
-        dateReturn: formatTimeFull(params.dateReturn),
+        dateStart: dateFormatMoment(params.dateStart),
+        dateReturn: dateFormatMoment(params.dateReturn),
         idSlotArr,
       });
     }
@@ -130,7 +130,7 @@ const BookingParkingLot = ({navigation, route}) => {
                 <EZInput
                   defaultValue={
                     params.dateStart !== ''
-                      ? params.duration === 'daily'
+                      ? params.duration === 'today'
                         ? handleDate(params.dateStart).slice(0, 5)
                         : handleDate(params.dateStart).slice(7)
                       : ''
@@ -184,7 +184,7 @@ const BookingParkingLot = ({navigation, route}) => {
                 <EZInput
                   defaultValue={
                     params.dateReturn !== ''
-                      ? params.duration === 'daily'
+                      ? params.duration === 'today'
                         ? handleDate(params.dateReturn).slice(0, 5)
                         : handleDate(params.dateReturn).slice(7)
                       : ''

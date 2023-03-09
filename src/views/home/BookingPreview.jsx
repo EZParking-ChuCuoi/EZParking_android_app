@@ -31,6 +31,7 @@ const BookingPreview = ({navigation, route}) => {
     };
     inital();
   }, []);
+  console.log(dateStart, dateReturn, idSlotArr)
   useEffect(() => {
     if (mutationBookingNow.isSuccess) {
       navigation.navigate('bookingTicket', {
@@ -91,7 +92,7 @@ const BookingPreview = ({navigation, route}) => {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={styles.listItem}>
         {mutationBookingPreview.isSuccess &&
-          mutationBookingPreview.data.slots.map((item, index) => (
+          mutationBookingPreview?.data?.slots?.map((item, index) => (
             <View style={styles.row} key={index}>
               <EZInput
                 placeholder="License plate"
