@@ -10,11 +10,6 @@ export const NAVIGATED_PROFILE = [
     screenName: 'bookingHistory',
   },
   {
-    text: 'Chat',
-    nameIcon: 'message-circle',
-    screenName: 'chatSetting',
-  },
-  {
     text: 'Payment details',
     nameIcon: 'credit-card',
     screenName: 'paymentSetting',
@@ -41,11 +36,6 @@ export const NAVIGATED_PROFILE_SPACEOWNER = [
     text: 'Booking history',
     nameIcon: 'clock',
     screenName: 'bookingHistory',
-  },
-  {
-    text: 'Chat',
-    nameIcon: 'message-circle',
-    screenName: 'chatSetting',
   },
   {
     text: 'Payment details',

@@ -8,7 +8,6 @@ import {
 } from '../assets/styles/styles';
 import Account from '../views/account/Account';
 import EditAccount from '../views/account/EditAccount';
-import ChatSetting from '../views/account/ChatSetting';
 import PaymentSetting from '../views/account/PaymentSetting';
 import Subcriptions from '../views/account/Subcriptions';
 import FAQ from '../views/account/FAQ';
@@ -45,11 +44,6 @@ const AccountStackNavigators = () => {
           name="bookingHistory"
           component={BookingHistory}
           options={{title: 'Booking history'}}
-        />
-        <AccountStack.Screen
-          name="chatSetting"
-          component={ChatSetting}
-          options={{title: 'Chat setting setting'}}
         />
         <AccountStack.Screen
           name="paymentSetting"
