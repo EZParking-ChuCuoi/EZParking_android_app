@@ -20,6 +20,7 @@ const BookingHistory = () => {
     };
     mutating();
   }, []);
+  console.log(mutationBookingHistory?.data?.data[0]?.booking_ids)
   return (
     <EZContainer>
       {mutationBookingHistory.isLoading && <EZLoading />}

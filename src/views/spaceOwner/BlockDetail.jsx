@@ -28,7 +28,7 @@ const BlockDetail = ({navigation, route}) => {
   const refCreate = useRef();
   const refEdit = useRef();
   const [idSlotArr, setIdSlotArr] = useState([]);
-  const [idEdit, setIdEdit] = useState();
+  const [slotItem, setSlotItem] = useState();
   const handlePressSlot = id => {
     if (idSlotArr.includes(id)) {
       setIdSlotArr(prev => prev.filter(item => item !== id));
@@ -79,7 +79,7 @@ const BlockDetail = ({navigation, route}) => {
         }}
         onLongPress={() => {
           refEdit.current.open();
-          setIdEdit(slot.id);
+          setSlotItem(slot);
         }}
         style={[{backgroundColor: BG}, styles.slotItem]}>
         <EZText>{slot.slotName}</EZText>
@@ -107,7 +107,7 @@ const BlockDetail = ({navigation, route}) => {
           blockId={idBlock}
           refForm={refEdit}
           refresh={refresh}
-          idEdit={idEdit}
+          slotItem={slotItem}
         />
       </EZRBSheet>
       <ScrollView contentContainerStyle={styles.slotContainer}>

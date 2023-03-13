@@ -10,16 +10,25 @@ import EZInput from '../../core/EZInput';
 import {SPACING} from '../../../assets/styles/styles';
 import {EZButton} from '../../core/EZButton';
 import EZContainer from '../../core/EZContainer';
+import EZLoading from '../../core/EZLoading';
 
-const FormSlot = ({blockId, refForm, refresh, idEdit}) => {
+const FormSlot = ({blockId, refForm, refresh, slotItem}) => {
   const [params, setParams] = useState({
     slotName: '',
     blockId: blockId,
   });
   const mutationCreate = useCreateSlot();
-  const mutationGetDetail = useGetSlotDetail();
   const mutationEdit = useEditSlot();
-  console.log('first', idEdit);
+  useEffect(() => {
+    if (mutationEdit.isSuccess) {
+      refForm.current.close();
+      setParams({});
+      refresh();
+    }
+    if (mutationEdit.isError) {
+      console.log(mutationEdit?.error?.response?.data);
+    }
+  }, [mutationEdit.status]);
   const handleCreate = () => {
     if (params.slotName !== '') {
       mutationCreate.mutate(params);
@@ -28,16 +37,11 @@ const FormSlot = ({blockId, refForm, refresh, idEdit}) => {
   const handleEdit = () => {
     if (params.slotName !== '') {
       mutationEdit.mutate({
-        idSlot: idEdit,
+        idSlot: slotItem.id,
         slotName: params.slotName,
       });
     }
   };
-  useEffect(() => {
-    if (idEdit) {
-      mutationGetDetail.mutate(idEdit);
-    }
-  }, []);
   useEffect(() => {
     if (mutationCreate.isError) {
       console.log(mutationCreate?.error?.response?.data);
@@ -56,7 +60,10 @@ const FormSlot = ({blockId, refForm, refresh, idEdit}) => {
         justifyContent: 'flex-start',
         alignItems: 'center',
       }}>
-      <EZText size="quiteLarge">{idEdit ? 'Edit slot' : 'Create slot'}</EZText>
+      {mutationEdit.isLoading && <EZLoading />}
+      <EZText size="quiteLarge">
+        {slotItem ? `Edit slot "${slotItem.slotName}"` : 'Create slot'}
+      </EZText>
       <EZInput
         placeholder="Ex: D8"
         label="Slot name"
@@ -65,8 +72,8 @@ const FormSlot = ({blockId, refForm, refresh, idEdit}) => {
         styleEZInput={{marginBottom: SPACING.mbInputItem}}
       />
       <EZButton
-        title={idEdit ? 'Edit' : 'Create'}
-        handlePress={idEdit ? handleEdit : handleCreate}
+        title={slotItem ? 'Edit' : 'Create'}
+        handlePress={slotItem ? handleEdit : handleCreate}
       />
     </EZContainer>
   );
