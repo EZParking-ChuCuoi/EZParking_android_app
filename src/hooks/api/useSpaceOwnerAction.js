@@ -106,6 +106,14 @@ export const useGetSlotsOfBlock = () => {
   });
 };
 
+export const useGetSlotDetail = () => {
+  return useMutation({
+    mutationFn: idSlot => {
+      return httpRequest.getHttpRequest(`parking-lot/block/slots/${idSlot}`);
+    },
+  });
+};
+
 export const useCreateSlot = () => {
   return useMutation({
     mutationFn: params => {
@@ -123,6 +131,20 @@ export const useDeleteSlot = () => {
       return httpRequest.postHttpRequest('parking-lot/block/slots/delete', {
         ids: params.idSlotArr,
       });
+    },
+  });
+};
+
+export const useEditSlot = () => {
+  return useMutation({
+    mutationFn: params => {
+      let formData = new FormData();
+      formData.append('slotName', params.slotName);
+      formData.append('_method', 'PUT');
+      return httpRequest.postHttpRequest(
+        `/parking-lot/block/slots/update${params.idSlot}`,
+        formData,
+      );
     },
   });
 };

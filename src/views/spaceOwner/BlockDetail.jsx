@@ -26,7 +26,9 @@ const BlockDetail = ({navigation, route}) => {
   const muationDeleteSlot = useDeleteSlot();
   const {idBlock, nameBlock} = route.params;
   const refCreate = useRef();
+  const refEdit = useRef();
   const [idSlotArr, setIdSlotArr] = useState([]);
+  const [idEdit, setIdEdit] = useState();
   const handlePressSlot = id => {
     if (idSlotArr.includes(id)) {
       setIdSlotArr(prev => prev.filter(item => item !== id));
@@ -75,7 +77,10 @@ const BlockDetail = ({navigation, route}) => {
             handlePressSlot(slot.id);
           }
         }}
-        onLongPress={e => console.log(e)}
+        onLongPress={() => {
+          refEdit.current.open();
+          setIdEdit(slot.id);
+        }}
         style={[{backgroundColor: BG}, styles.slotItem]}>
         <EZText>{slot.slotName}</EZText>
         <View style={styles.tick}>
@@ -96,6 +101,14 @@ const BlockDetail = ({navigation, route}) => {
       {muationDeleteSlot.isLoading && <EZLoading />}
       <EZRBSheet refRBSheet={refCreate} height={300}>
         <FormSlot blockId={idBlock} refForm={refCreate} refresh={refresh} />
+      </EZRBSheet>
+      <EZRBSheet refRBSheet={refEdit} height={300}>
+        <FormSlot
+          blockId={idBlock}
+          refForm={refEdit}
+          refresh={refresh}
+          idEdit={idEdit}
+        />
       </EZRBSheet>
       <ScrollView contentContainerStyle={styles.slotContainer}>
         {mutationGetSlot.isLoading && <EZLoading />}

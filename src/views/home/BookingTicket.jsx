@@ -34,7 +34,7 @@ const BookingTicket = ({navigation, route}) => {
   const handleCapture = () => {
     captureScreen({
       format: 'jpg',
-      quality: 0.8,
+      quality: 1,
     }).then(
       uri => {
         if (hasStorePermission()) {
