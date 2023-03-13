@@ -64,7 +64,18 @@ const CreateLot = () => {
   }, []);
   useEffect(() => {
     if (mutationCreate.isSuccess) {
-      navigation.navigate('dashboard');
+      navigation.reset({
+        index: 0,
+        routes: [
+          {
+            name: 'lotDetail',
+            params: {
+              idParkingLot: mutationCreate.data.data.id,
+              nameParkingLot: mutationCreate.data.data.nameParkingLot,
+            },
+          },
+        ],
+      });
     }
   }, [mutationCreate.status]);
   if (mutationCreate.isSuccess) {
@@ -166,7 +177,10 @@ const CreateLot = () => {
           })
         }
       />
-      <ScrollView style={styles.form} showsVerticalScrollIndicator={false}>
+      <ScrollView
+        style={styles.form}
+        showsVerticalScrollIndicator={false}
+        keyboardShouldPersistTaps="handled">
         <EZInput
           label="Parking lot name"
           styleEZInput={{marginBottom: SPACING.mbInputItem}}

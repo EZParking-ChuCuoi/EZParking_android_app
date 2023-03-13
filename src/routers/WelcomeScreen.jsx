@@ -6,7 +6,6 @@ import EZLoading from '../components/core/EZLoading';
 const WelcomeScreen = () => {
   return (
     <View style={styles.container}>
-      <EZLoading text=' ' />
       <Image
         source={require('../assets/images/logo.png')}
         style={styles.image}

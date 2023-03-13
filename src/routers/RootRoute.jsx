@@ -18,6 +18,8 @@ const RootRoute = () => {
       const token = await getData('EZToken');
       if (token.length !== 0) {
         navigateAuthorized(navigation);
+      } else {
+        navigation.navigate('auth');
       }
     };
     getToken();

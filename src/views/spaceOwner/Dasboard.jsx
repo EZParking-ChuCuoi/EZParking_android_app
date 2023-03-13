@@ -50,7 +50,9 @@ const Dasboard = ({navigation}) => {
   useEffect(() => {
     const getRevenue = async () => {
       const uid = await getData('EZUid');
-      mutationPeriodRevenue.mutate({userId: uid, period: periodRevenue});
+      if (mutationParkingLot?.data?.data?.length > 0) {
+        mutationPeriodRevenue.mutate({userId: uid, period: periodRevenue});
+      }
     };
     getRevenue();
   }, [periodRevenue]);

@@ -13,7 +13,6 @@ import BookingHistoryFeedback from './BookingHistoryFeedback';
 import {handleCurrenCy} from '../../../shared/handleCurrenCy';
 
 const BookingHistoryItem = ({item}) => {
-  console.log('ccc', item);
   const {BG2ND} = bgSecondaryDefault();
   const {COLOR} = colorDefault();
   const refInfo = useRef();

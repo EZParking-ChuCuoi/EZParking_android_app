@@ -1,19 +1,35 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import EZContainer from '../../core/EZContainer';
 import EZText from '../../core/EZText';
 import {
+  bgDefault,
   bgSecondaryDefault,
+  colorDefault,
   COLORS,
   SPACING,
 } from '../../../assets/styles/styles';
 import {useGetBookingDetailHistory} from '../../../hooks/api/getBookingParkingLot';
 import {handleCurrenCy} from '../../../shared/handleCurrenCy';
+import {EZButtonText} from '../../core/EZButton';
+import QRCode from 'react-native-qrcode-svg';
+import {getData} from '../../../shared/asyncStorages';
 
 const BookingHistoryInfo = ({bookings}) => {
+  const {COLOR} = colorDefault();
+  const {BG} = bgDefault();
   const {BG2ND} = bgSecondaryDefault();
   const mutationBookingDetails = useGetBookingDetailHistory();
   const [bookingInfo, setBookingInfo] = useState([]);
+  const [display, setDisplay] = useState(false);
+  const [valueQrCode, setValueQrCode] = useState('');
   useEffect(() => {
     mutationBookingDetails.mutate(bookings);
   }, []);
@@ -22,7 +38,7 @@ const BookingHistoryInfo = ({bookings}) => {
       setBookingInfo(mutationBookingDetails.data.data.bookings);
     }
   }, [mutationBookingDetails.status]);
-  const renderItem = ({item}) => {
+  const BookingInfoItem = ({item}) => {
     return (
       <View style={[styles.container, {backgroundColor: BG2ND}]}>
         {mutationBookingDetails.isSuccess && (
@@ -58,18 +74,43 @@ const BookingHistoryInfo = ({bookings}) => {
       </View>
     );
   };
+  const handleRegenerate = async () => {
+    if (bookingInfo.length > 0) {
+      const bookDate = bookingInfo[0].bookDate;
+      const uid = await getData('EZUid');
+      setValueQrCode(`${uid}|${bookDate}`);
+    }
+    setDisplay(true);
+  };
   return (
     <EZContainer
       styleEZContainer={{
         paddingHorizontal: SPACING.pxComponent,
         paddingVertical: 20,
       }}>
-      <FlatList
-        data={bookingInfo}
-        renderItem={renderItem}
-        keyExtractor={(_, index) => index}
-        showsVerticalScrollIndicator={false}
-      />
+      <ScrollView showsVerticalScrollIndicator={false}>
+        <EZButtonText
+          text="Regenerate QR code"
+          color={COLORS.primary}
+          handlePress={handleRegenerate}
+        />
+        {display && (
+          <View style={styles.ticket}>
+            <QRCode
+              value={valueQrCode}
+              logo={require('../../../assets/images/logo.png')}
+              logoSize={30}
+              logoBackgroundColor="transparent"
+              size={150}
+              color={COLOR}
+              backgroundColor={BG}
+            />
+          </View>
+        )}
+        {bookingInfo.map(item => {
+          return <BookingInfoItem item={item} key={item.booking_id} />;
+        })}
+      </ScrollView>
     </EZContainer>
   );
 };
@@ -100,5 +141,11 @@ const styles = StyleSheet.create({
     padding: 10,
     backgroundColor: COLORS.circleOverlay,
     borderRadius: 5,
+  },
+  ticket: {
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
+    height: 180,
   },
 });

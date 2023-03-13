@@ -54,6 +54,7 @@ const EZMapView = props => {
           placeholderTextColor: COLORS.disable,
         }}
         GooglePlacesDetailsQuery={{fields: 'geometry'}}
+        keepResultsAfterBlur={true}
         ref={props.refInput || null}
         onPress={(data, details = null) => {
           handleSearch(details);

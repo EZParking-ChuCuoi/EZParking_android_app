@@ -7,7 +7,7 @@ import {SPACING} from '../../../assets/styles/styles';
 import {EZButton} from '../../core/EZButton';
 import EZContainer from '../../core/EZContainer';
 
-const FormSlot = ({blockId, refForm, mutationGetSlot}) => {
+const FormSlot = ({blockId, refForm, refresh}) => {
   const [params, setParams] = useState({
     slotName: '',
     blockId: blockId,
@@ -16,8 +16,6 @@ const FormSlot = ({blockId, refForm, mutationGetSlot}) => {
   const handleCreate = () => {
     if (params.slotName !== '') {
       mutationCreate.mutate(params);
-      refForm.current.close();
-      mutationGetSlot.mutate(blockId);
     }
   };
   useEffect(() => {
@@ -26,6 +24,8 @@ const FormSlot = ({blockId, refForm, mutationGetSlot}) => {
     }
     if (mutationCreate.isSuccess) {
       console.log(mutationCreate?.data);
+      refForm.current.close();
+      refresh();
     }
   }, [mutationCreate.status]);
   return (

@@ -120,15 +120,9 @@ export const useCreateSlot = () => {
 export const useDeleteSlot = () => {
   return useMutation({
     mutationFn: params => {
-      let formData = new FormData();
-      formData.append('_method', 'DELETE');
-      params.idSlotArr.forEach(item => {
-        formData.append('ids', item);
+      return httpRequest.postHttpRequest('parking-lot/block/slots/delete', {
+        ids: params.idSlotArr,
       });
-      return httpRequest.deleteHttpRequest(
-        `parking-lot/block/${params.idBlock}slots/delete`,
-        formData,
-      );
     },
   });
 };

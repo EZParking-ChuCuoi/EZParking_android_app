@@ -23,7 +23,6 @@ import FormSlot from '../../components/spaceOwner/block/FormSlot';
 
 const BlockDetail = ({navigation, route}) => {
   const mutationGetSlot = useGetSlotsOfBlock();
-  const mutationCreateSlot = useCreateSlot();
   const muationDeleteSlot = useDeleteSlot();
   const {idBlock, nameBlock} = route.params;
   const refCreate = useRef();
@@ -51,7 +50,12 @@ const BlockDetail = ({navigation, route}) => {
     });
     mutationGetSlot.mutate(idBlock);
   }, []);
-console.log(mutationGetSlot?.error?.response?.data)
+  useEffect(() => {
+    if (muationDeleteSlot.isSuccess) {
+      refresh();
+      setIdSlotArr([]);
+    }
+  }, [muationDeleteSlot.status]);
   const handleDeleteSlot = () => {
     muationDeleteSlot.mutate({
       idSlotArr,
@@ -59,6 +63,9 @@ console.log(mutationGetSlot?.error?.response?.data)
     });
   };
 
+  const refresh = () => {
+    mutationGetSlot.mutate(idBlock);
+  };
   const SlotItem = ({slot}) => {
     const BG = slot?.status === 'available' ? COLORS.tertiary : COLORS.disable;
     return (
@@ -68,6 +75,7 @@ console.log(mutationGetSlot?.error?.response?.data)
             handlePressSlot(slot.id);
           }
         }}
+        onLongPress={e => console.log(e)}
         style={[{backgroundColor: BG}, styles.slotItem]}>
         <EZText>{slot.slotName}</EZText>
         <View style={styles.tick}>
@@ -85,14 +93,11 @@ console.log(mutationGetSlot?.error?.response?.data)
 
   return (
     <EZContainer>
+      {muationDeleteSlot.isLoading && <EZLoading />}
+      <EZRBSheet refRBSheet={refCreate} height={300}>
+        <FormSlot blockId={idBlock} refForm={refCreate} refresh={refresh} />
+      </EZRBSheet>
       <ScrollView contentContainerStyle={styles.slotContainer}>
-        <EZRBSheet refRBSheet={refCreate} height={300}>
-          <FormSlot
-            blockId={idBlock}
-            refForm={refCreate}
-            mutationGetSlot={mutationGetSlot}
-          />
-        </EZRBSheet>
         {mutationGetSlot.isLoading && <EZLoading />}
         {mutationGetSlot.isSuccess &&
           mutationGetSlot.data.map(slot => {
