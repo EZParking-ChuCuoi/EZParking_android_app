@@ -1,4 +1,10 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
@@ -16,6 +22,7 @@ import Lottie from 'lottie-react-native';
 const ScanQRCode = () => {
   const [hasPermission, setHasPermission] = useState(false);
   const devices = useCameraDevices();
+  const valueQrcode = useState('');
   const device = devices.back;
 
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
@@ -27,7 +34,12 @@ const ScanQRCode = () => {
       setHasPermission(status === 'authorized');
     })();
   }, []);
-  useEffect(() => {}, [barcodes]);
+  useEffect(() => {
+    console.log(barcodes)
+  }, [barcodes]);
+  const handleCancle = () => {
+    console.log('cancle');
+  };
   return (
     device != null &&
     hasPermission && (
@@ -35,7 +47,7 @@ const ScanQRCode = () => {
         bgEZStatusBar={COLORS.tertiary}
         styleEZContainer={styles.container}>
         <EZBgTopRounded styleEZBgTopRounded={styles.bgTop} height={120}>
-          <EZText size="large" bold>
+          <EZText size="large" bold color={COLORS.white}>
             Scan QR code
           </EZText>
         </EZBgTopRounded>
@@ -54,15 +66,13 @@ const ScanQRCode = () => {
               autoPlay
               loop
               style={styles.imageScan}
+              speed={0.7}
             />
           </View>
           <View style={styles.content}>
-            <EZText>Scan result:</EZText>
-            {barcodes.map((barcode, idx) => (
-              <EZText key={idx} style={styles.barcodeTextURL}>
-                {barcode.displayValue}
-              </EZText>
-            ))}
+            <TouchableOpacity handlePress={handleCancle}>
+              <EZText>Cancle</EZText>
+            </TouchableOpacity>
           </View>
         </View>
       </EZContainer>

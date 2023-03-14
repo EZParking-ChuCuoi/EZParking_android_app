@@ -8,7 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect} from 'react';
+import React, {useEffect, useRef} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
 import QRCode from 'react-native-qrcode-svg';
@@ -19,7 +19,7 @@ import {
   FONTSIZE,
 } from '../../assets/styles/styles';
 import IconIon from 'react-native-vector-icons/Ionicons';
-import {captureScreen} from 'react-native-view-shot';
+import ViewShot, {captureScreen} from 'react-native-view-shot';
 import {EZButton} from '../../components/core/EZButton';
 import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {LocalNotification} from '../../shared/LocalPushController';
@@ -27,22 +27,25 @@ import {androidNotification} from '../../shared/androidNotification';
 import {hasStorePermission} from '../../shared/androidPermission';
 
 const BookingTicket = ({navigation, route}) => {
-  const {userId, startDateTime} = route.params;
+  const {spaceOwnerId, idBookings} = route.params;
   const {COLOR} = colorDefault();
   const {BG} = bgDefault();
-
+  const refViewShot = useRef();
+  let valueQrCode = `${spaceOwnerId}`;
+  idBookings.forEach(item => {
+    valueQrCode = valueQrCode.concat('|', item);
+  });
   const handleCapture = () => {
-    captureScreen({
-      format: 'jpg',
-      quality: 1,
-    }).then(
+    refViewShot.current.capture().then(
       uri => {
+        console.log('uri', uri);
         if (hasStorePermission()) {
           CameraRoll.save(uri, {type: 'photo', album: 'EZParking'});
           LocalNotification(
-            'Screenshot has been saved in your storage',
-            'Take screenshot successfuly',
-            'Your screenshot saved in your storage',
+            'Your QRcode has been saved in your storage',
+            'Take QRcode photo successfuly',
+            'Your QRcode photo saved in your storage',
+            uri,
           );
         } else {
           return;
@@ -90,15 +93,23 @@ const BookingTicket = ({navigation, route}) => {
           <EZText styleEZText={styles.contentTop} textAlign="center">
             Your parking has been booked successfully
           </EZText>
-          <QRCode
-            value={`${userId}|${startDateTime}`}
-            logo={require('../../assets/images/logo.png')}
-            logoSize={30}
-            logoBackgroundColor="transparent"
-            size={150}
-            color={COLOR}
-            backgroundColor={BG}
-          />
+          <ViewShot
+            ref={refViewShot}
+            options={{
+              fileName: `QR_code_screenshot_${new Date().toString()}`,
+              format: 'jpg',
+              quality: 1,
+            }}>
+            <QRCode
+              value={valueQrCode}
+              logo={require('../../assets/images/logo.png')}
+              logoSize={30}
+              logoBackgroundColor="transparent"
+              size={200}
+              color={COLOR}
+              backgroundColor={BG}
+            />
+          </ViewShot>
           <EZText
             styleEZText={{marginTop: 10, width: '60%'}}
             textAlign="center"
@@ -116,7 +127,7 @@ const BookingTicket = ({navigation, route}) => {
             size={FONTSIZE.iconLarge}
             color={COLORS.primary}
           />
-          <EZText color={COLORS.disable}>Take screenshot</EZText>
+          <EZText color={COLORS.disable}>Save to phone</EZText>
         </TouchableOpacity>
         <TouchableOpacity
           onPress={() => navigation.navigate('home')}

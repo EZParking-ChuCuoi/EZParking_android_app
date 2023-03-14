@@ -21,15 +21,16 @@ import {handleCurrenCy} from '../../../shared/handleCurrenCy';
 import {EZButtonText} from '../../core/EZButton';
 import QRCode from 'react-native-qrcode-svg';
 import {getData} from '../../../shared/asyncStorages';
+import EZLoading from '../../core/EZLoading';
 
-const BookingHistoryInfo = ({bookings}) => {
+const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
   const {COLOR} = colorDefault();
   const {BG} = bgDefault();
   const {BG2ND} = bgSecondaryDefault();
   const mutationBookingDetails = useGetBookingDetailHistory();
   const [bookingInfo, setBookingInfo] = useState([]);
   const [display, setDisplay] = useState(false);
-  const [valueQrCode, setValueQrCode] = useState('');
+  let valueQrCode = `${idSpaceOwner}`;
   useEffect(() => {
     mutationBookingDetails.mutate(bookings);
   }, []);
@@ -41,6 +42,7 @@ const BookingHistoryInfo = ({bookings}) => {
   const BookingInfoItem = ({item}) => {
     return (
       <View style={[styles.container, {backgroundColor: BG2ND}]}>
+        {mutationBookingDetails.isLoading && <EZLoading text=" " />}
         {mutationBookingDetails.isSuccess && (
           <>
             <View style={styles.left}>
@@ -76,10 +78,11 @@ const BookingHistoryInfo = ({bookings}) => {
   };
   const handleRegenerate = async () => {
     if (bookingInfo.length > 0) {
-      const bookDate = bookingInfo[0].bookDate;
-      const uid = await getData('EZUid');
-      setValueQrCode(`${uid}|${bookDate}`);
+      bookings.forEach(item => {
+        valueQrCode = valueQrCode.concat('|', item);
+      });
     }
+    console.log(valueQrCode)
     setDisplay(true);
   };
   return (

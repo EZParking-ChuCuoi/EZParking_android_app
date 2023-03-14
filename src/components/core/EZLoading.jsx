@@ -12,7 +12,7 @@ const EZLoading = props => {
       visible={true}
       source={require('../../assets/images/loader.json')}
       speed={1}>
-      <EZText color={COLORS.secondary}>{props.text || 'Loading...'}</EZText>
+      <EZText color={COLORS.secondary}>{props.text || ''}</EZText>
     </AnimatedLoader>
   );
 };

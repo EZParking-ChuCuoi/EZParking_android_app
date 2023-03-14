@@ -43,7 +43,10 @@ const BookingHistoryItem = ({item}) => {
         />
       </View>
       <EZRBSheet refRBSheet={refInfo}>
-        <BookingHistoryInfo bookings={item.booking_ids} />
+        <BookingHistoryInfo
+          bookings={item.booking_ids}
+          idSpaceOwner={item.idSpaceOwner}
+        />
       </EZRBSheet>
       <EZRBSheet
         refRBSheet={refFeedBack}

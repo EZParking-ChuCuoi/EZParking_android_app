@@ -31,12 +31,11 @@ const BookingPreview = ({navigation, route}) => {
     };
     inital();
   }, []);
-  console.log(dateStart, dateReturn, idSlotArr)
   useEffect(() => {
     if (mutationBookingNow.isSuccess) {
       navigation.navigate('bookingTicket', {
-        userId: uid,
-        startDateTime: dateStart,
+        spaceOwnerId: mutationBookingNow.data.data.idSpaceOwner,
+        idBookings: mutationBookingNow.data.data.idBookings,
       });
     }
   }, [mutationBookingNow.status]);
@@ -101,7 +100,9 @@ const BookingPreview = ({navigation, route}) => {
                 onChangeText={license => handleChange(license, index)}
                 styleEZInputField={{textTransform: 'uppercase'}}
               />
-              <EZText size="small">{item.carType}</EZText>
+              <EZText size="small">
+                {item.carType === '4-16SLOT' ? '4-16 seats' : '16-34 seats'}
+              </EZText>
               <EZText size="small">{item.blockName}</EZText>
               <EZText size="small">{item.price}</EZText>
             </View>

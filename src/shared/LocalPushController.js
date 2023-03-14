@@ -3,6 +3,7 @@ import {getCurrentTime, handleDate} from './handleDate';
 
 PushNotification.configure({
   onNotification: notification => {
+    console.log('image', notification.picture);
     console.log('NOTIFICATION:', notification);
   },
 
@@ -32,6 +33,7 @@ export const LocalNotification = (
   bigText = 'Explore EZParking now!',
   title = 'New notification from EZParking',
   message = 'New message from EZParking',
+  picture = undefined,
 ) => {
   PushNotification.localNotification({
     channelId: 'channel-id',
@@ -47,5 +49,7 @@ export const LocalNotification = (
     importance: Importance.HIGH,
     vibrate: true,
     vibration: 1000,
+    bigPictureUrl: picture,
+    picture: picture,
   });
 };
