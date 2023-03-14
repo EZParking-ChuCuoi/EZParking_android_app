@@ -20,6 +20,16 @@ export const useGetPeriodManagingRevenueParkingLot = () => {
   });
 };
 
+export const useGetPeriodRevenueByParkingLots = () => {
+  return useMutation({
+    mutationFn: params => {
+      return httpRequest.getHttpRequest(
+        `dashboard/parkingLots/${params.id}/${params.period}`,
+      );
+    },
+  });
+};
+
 // Parkinglot API
 export const useCreateParkingLot = () => {
   return useMutation({
@@ -41,6 +51,16 @@ export const useCreateParkingLot = () => {
         });
       });
       return httpRequest.postHttpRequest('parking-lot/create/', formData);
+    },
+  });
+};
+
+export const useDeleteParkingLot = () => {
+  return useMutation({
+    mutationFn: idParkingLot => {
+      return httpRequest.deleteHttpRequest(
+        `parking-lot/delete/${idParkingLot}`,
+      );
     },
   });
 };

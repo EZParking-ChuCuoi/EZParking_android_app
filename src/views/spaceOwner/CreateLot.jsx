@@ -78,8 +78,6 @@ const CreateLot = () => {
       });
     }
   }, [mutationCreate.status]);
-  if (mutationCreate.isSuccess) {
-  }
   const handleSearch = details => {
     setCoordinate({
       ...coordinate,
@@ -132,7 +130,7 @@ const CreateLot = () => {
   };
   return (
     <EZContainer styleEZContainer={styles.container}>
-      {mutationCreate.isLoading && <EZLoading />}
+      {mutationCreate.isLoading && <EZLoading text=' ' />}
       <DatePicker
         modal
         open={showDateTimePicker.open}

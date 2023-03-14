@@ -28,6 +28,7 @@ const DashboardItem = props => {
         styles.managetedItem,
         {backgroundColor: BG2ND, shadowColor: COLOR},
       ]}
+      onLongPress={() => props.handleLongPress()}
       onPress={() => navigation.navigate(props.navigateTo)}>
       <LinearGradient
         start={{x: 0.0, y: 0.25}}
@@ -42,7 +43,9 @@ const DashboardItem = props => {
             color={COLORS.primary}
           />
         )}
-        <EZText lines={2} size="small">{props.text}</EZText>
+        <EZText lines={2}>
+          {props.text}
+        </EZText>
         {props.children}
       </LinearGradient>
     </TouchableOpacity>

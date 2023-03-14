@@ -1,8 +1,15 @@
 import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {LineChart} from 'react-native-chart-kit';
+import {COLORS} from '../../../assets/styles/styles';
+import EZText from '../../core/EZText';
+import {
+  handleCurrenCy,
+  handleCurrenCyWithout,
+} from '../../../shared/handleCurrenCy';
 
 const ChartLine = ({source}) => {
+  console.log(source);
   const data = {
     labels: source.periodLabels,
     datasets: [
@@ -18,11 +25,11 @@ const ChartLine = ({source}) => {
       // },
       {
         data: source.salesTotals,
-        color: (opacity = 1) => `rgba(134, 123, 244, ${opacity})`,
+        color: (opacity = 1) => COLORS.secondary,
         strokeWidth: 5,
       },
     ],
-    legend: ['Revenue day'],
+    legend: ['Total amount'],
   };
   return (
     <ScrollView
@@ -33,6 +40,18 @@ const ChartLine = ({source}) => {
         data={data}
         width={1000}
         verticalLabelRotation={30}
+        horizontalLabelRotation={50}
+        renderDotContent={({x, y, indexData, index}) => (
+          <View
+            style={{
+              position: 'absolute',
+              top: y + 50,
+              left: x - 15,
+            }}
+            key={index}>
+            <EZText size="small">{handleCurrenCy(indexData)}</EZText>
+          </View>
+        )}
         // withHorizontalLines={false}
         withVerticalLines={false}
         // withHorizontalLabels={false}
@@ -41,21 +60,22 @@ const ChartLine = ({source}) => {
         height={500}
         yAxisLabel="(VND) "
         chartConfig={{
-          backgroundColor: '#e26a00',
-          backgroundGradientFrom: '#fb8c00',
-          backgroundGradientTo: '#ffa726',
-          decimalPlaces: 0, // optional, defaults to 2dp
-          color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-          labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
+          backgroundColor: COLORS.tertiary,
+          backgroundGradientFrom: COLORS.primary,
+          backgroundGradientTo: COLORS.strokeColor,
+          decimalPlaces: 0,
+          color: (opacity = 1) => COLORS.yellow,
+          labelColor: (opacity = 1) => COLORS.yellow,
           style: {
             borderRadius: 16,
             marginHorizontal: 10,
           },
           propsForDots: {
-            r: '5',
+            r: '6',
             strokeWidth: '0',
             stroke: '#fff',
-            onLongPress: e => console.log(e),
+            fill: COLORS.secondary,
+
           },
         }}
         bezier

@@ -22,21 +22,17 @@ import {
   SPACING,
 } from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
-import EZInput from '../../components/core/EZInput';
 import EZLoading from '../../components/core/EZLoading';
 import {PERIOD_REVENUE, VEHICLE_TYPE} from '../../utils/defaultDataSelection';
-import DashboardItem from '../../components/spaceOwner/dashboard/DashboardItem';
 import FormBlock from '../../components/spaceOwner/block/FormBlock';
 import BlockItem from '../../components/spaceOwner/block/BlockItem';
 import Icon from 'react-native-vector-icons/Feather';
-import ChartLine from '../../components/spaceOwner/dashboard/ChartLine';
 
 const LotDetail = ({navigation, route}) => {
   const {idParkingLot, nameParkingLot} = route.params;
   console.log(idParkingLot);
   const mutationGetBlock = useGetBlock();
   const mutationCreateBlock = useCreateBlock();
-  const mutationPeriodRevenue = useGetPeriodManagingRevenueParkingLot();
   const refRBSheet = useRef();
   const refRBSheetPeriod = useRef();
   const {BG2ND} = bgSecondaryDefault();
@@ -62,12 +58,6 @@ const LotDetail = ({navigation, route}) => {
       mutationGetBlock.mutate(idParkingLot);
     }
   }, [mutationCreateBlock.status]);
-  // useEffect(() => {
-  //   mutationPeriodRevenue.mutate({
-  //     parkingLotId: idParkingLot,
-  //     period: periodRevenue,
-  //   });
-  // }, [periodRevenue]);
 
   const handleResetForm = () => {
     setParams({
@@ -120,7 +110,7 @@ const LotDetail = ({navigation, route}) => {
               );
             })}
         </View>
-        <View style={styles.titleRevenue}>
+        {/* <View style={styles.titleRevenue}>
           <EZText
             transform="uppercase"
             bold
@@ -144,7 +134,7 @@ const LotDetail = ({navigation, route}) => {
             />
           </TouchableOpacity>
         </View>
-        {/* <ChartLine /> */}
+        <ChartLine />
         <EZRBSheet refRBSheet={refRBSheetPeriod} height={300}>
           <EZContainer
             styleEZContainer={{
@@ -165,7 +155,7 @@ const LotDetail = ({navigation, route}) => {
               );
             })}
           </EZContainer>
-        </EZRBSheet>
+        </EZRBSheet> */}
       </ScrollView>
     </EZContainer>
   );

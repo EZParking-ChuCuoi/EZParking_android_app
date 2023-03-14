@@ -27,6 +27,7 @@ import EZInput from '../../components/core/EZInput';
 import {Link} from '@react-navigation/native';
 import DashboardItem from '../../components/spaceOwner/dashboard/DashboardItem';
 import {
+  useDeleteParkingLot,
   useGetManagingRevenueParkingLot,
   useGetPeriodManagingRevenueParkingLot,
   useGetUsersParkingLot,
@@ -42,11 +43,19 @@ const Dasboard = ({navigation}) => {
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const {BG} = bgDefault();
-  const [search, setSearch] = useState('');
   const refRBSheetPeriod = useRef();
+  const refDelete = useRef();
   const mutationParkingLot = useGetUsersParkingLot();
   const mutationPeriodRevenue = useGetPeriodManagingRevenueParkingLot();
+  const mutationDelete = useDeleteParkingLot();
   const [periodRevenue, setPeriodRevenue] = useState(PERIOD_REVENUE[0].value);
+  useEffect(() => {
+    const getLots = async () => {
+      const uid = await getData('EZUid');
+      mutationParkingLot.mutate(uid);
+    };
+    getLots();
+  }, []);
   useEffect(() => {
     const getRevenue = async () => {
       const uid = await getData('EZUid');
@@ -55,20 +64,17 @@ const Dasboard = ({navigation}) => {
       }
     };
     getRevenue();
-  }, [periodRevenue]);
-  useEffect(() => {
-    const getLots = async () => {
-      const uid = await getData('EZUid');
-      mutationParkingLot.mutate(uid);
-    };
-    getLots();
-  }, []);
+  }, [periodRevenue, mutationParkingLot.status]);
 
-  const handleSearch = () => {
-    console.log(search);
+  const handleDelete = idParking => {
+    mutationDelete.mutate(idParking);
+    refDelete.current.close();
   };
+
   return (
     <EZContainer bgEZStatusBar={COLORS.tertiary}>
+      {mutationDelete.isLoading && <EZLoading text=" " />}
+      {mutationParkingLot.isLoading && <EZLoading text=" " />}
       <TouchableOpacity
         style={[styles.btnBack, {backgroundColor: BG2ND, shadowColor: COLOR}]}
         onPress={() => navigation.navigate('profile')}>
@@ -80,21 +86,6 @@ const Dasboard = ({navigation}) => {
           <EZText size="large" bold>
             Dashoard
           </EZText>
-          <EZInput
-            styleEZInput={{
-              position: 'absolute',
-              bottom: -20,
-              backgroundColor: BG,
-              width: '85%',
-            }}
-            styleEZInputField={{
-              paddingLeft: 15,
-            }}
-            placeholder="Search"
-            onChangeText={newText => setSearch(newText)}
-            iconName="send"
-            handlePressIcon={handleSearch}
-          />
         </EZBgTopRounded>
         <View style={styles.mainContent}>
           <EZText
@@ -104,7 +95,9 @@ const Dasboard = ({navigation}) => {
             styleEZText={{paddingLeft: SPACING.pxComponent}}>
             Your parking lots
           </EZText>
-          <ScrollView contentContainerStyle={styles.yourLots}>
+          <ScrollView
+            contentContainerStyle={styles.yourLots}
+            showsVerticalScrollIndicator={false}>
             <DashboardItem
               navigateTo="createLot"
               text="Create new"
@@ -122,7 +115,27 @@ const Dasboard = ({navigation}) => {
                       },
                     }}
                     key={item.idParking}
-                    text={item.nameParkingLot}></DashboardItem>
+                    handleLongPress={() => {
+                      refDelete.current.open();
+                    }}
+                    text={item.nameParkingLot}>
+                    <EZRBSheet refRBSheet={refDelete} height={200}>
+                      <EZContainer
+                        styleEZContainer={{
+                          paddingHorizontal: SPACING.pxComponent,
+                          paddingVertical: SPACING.pxComponent + 10,
+                          alignItems: 'center',
+                          justifyContent: 'center',
+                        }}>
+                        <EZButton
+                          title="Delete"
+                          iconName="trash-2"
+                          type="secondary"
+                          handlePress={() => handleDelete(item.idParking)}
+                        />
+                      </EZContainer>
+                    </EZRBSheet>
+                  </DashboardItem>
                 );
               })}
           </ScrollView>
@@ -153,9 +166,10 @@ const Dasboard = ({navigation}) => {
           {mutationPeriodRevenue.isSuccess && (
             <ChartLine source={mutationPeriodRevenue?.data?.data} />
           )}
-          {mutationParkingLot.isSuccess && (
+          {mutationPeriodRevenue.isLoading && <EZLoading text=" " />}
+          {/* {mutationParkingLot.isSuccess && (
             <ChartBar source={mutationParkingLot.data.data} label={'booked'} />
-          )}
+          )} */}
         </View>
       </ScrollView>
       <EZRBSheet refRBSheet={refRBSheetPeriod} height={300}>

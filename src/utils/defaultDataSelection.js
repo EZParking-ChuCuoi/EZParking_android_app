@@ -23,7 +23,7 @@ export const VEHICLE_TYPE = [
     value: '4-16SLOT',
   },
   {
-    label: 'Vehicles from 16 to 32 seats',
+    label: 'Vehicles from 16 to 34 seats',
     value: '16-34SLOT',
   },
 ];
