@@ -9,7 +9,6 @@ import {
 } from '../../../shared/handleCurrenCy';
 
 const ChartLine = ({source}) => {
-  console.log(source);
   const data = {
     labels: source.periodLabels,
     datasets: [

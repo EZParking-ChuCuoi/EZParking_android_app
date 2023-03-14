@@ -30,7 +30,6 @@ import Icon from 'react-native-vector-icons/Feather';
 
 const LotDetail = ({navigation, route}) => {
   const {idParkingLot, nameParkingLot} = route.params;
-  console.log(idParkingLot);
   const mutationGetBlock = useGetBlock();
   const mutationCreateBlock = useCreateBlock();
   const refRBSheet = useRef();
