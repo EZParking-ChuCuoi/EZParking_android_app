@@ -30,9 +30,9 @@ import {AVATAR} from '../../utils/defaultImage';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import Lottie from 'lottie-react-native';
 import EZLoading from '../../components/core/EZLoading';
+import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 
-const Account = () => {
-  const navigation = useNavigation();
+const Account = ({navigation, route}) => {
   const {COLOR} = colorDefault();
   const [navigateArr, setNavigateArr] = useState([]);
   const mutationUserInfo = useGetUserInfo();
@@ -119,7 +119,7 @@ const Account = () => {
               />
             </TouchableOpacity>
           )}
-          <EZRBSheet refRBSheet={refRBSheet} height={200}>
+          {/* <EZRBSheet refRBSheet={refRBSheet} height={200}>
             <EZContainer
               styleEZContainer={{
                 alignItems: 'center',
@@ -137,7 +137,26 @@ const Account = () => {
                 }}
               />
             </EZContainer>
-          </EZRBSheet>
+          </EZRBSheet> */}
+          <EZRBSheetModal refRBSheet={refRBSheet} height={200}>
+            <EZText styleEZText={{marginBottom: 10}}>Log out?</EZText>
+            <View style={styles.btnModal}>
+              <EZButton
+                w="40%"
+                title="Yes"
+                type="secondary"
+                handlePress={() => {
+                  refRBSheet.current.close();
+                  logOut(navigation);
+                }}
+              />
+              <EZButton
+                w="40%"
+                title="No"
+                handlePress={() => refRBSheet.current.close()}
+              />
+            </View>
+          </EZRBSheetModal>
         </EZContainer>
       )}
     </>
@@ -183,5 +202,11 @@ const styles = StyleSheet.create({
     position: 'relative',
     width: 70,
     height: 70,
+  },
+  btnModal: {
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    gap: 10,
   },
 });

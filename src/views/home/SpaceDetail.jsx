@@ -59,8 +59,11 @@ const SpaceDetail = ({navigation, route}) => {
       }
     }
   }, [mutationPrice.status]);
+  const handleSave = ()=>{
+    console.log('id', parkingId)
+  }
   return (
-    <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
+    <EZContainer>
       {parkingLotInfo && (
         <>
           <EZSlider data={parkingLotInfo.images} />
@@ -100,10 +103,11 @@ const SpaceDetail = ({navigation, route}) => {
                 }
               />
               <EZButton
-                title="Chat"
+                title="Save"
                 type="secondary"
                 w="40%"
-                handlePress={() => {}}
+                handlePress={handleSave}
+                iconFontAwesome="bookmark-o"
               />
             </View>
             <ParkingLotComment idParkingLot={parkingId} />
@@ -123,7 +127,8 @@ const styles = StyleSheet.create({
     borderRadius: 10,
   },
   lotContent: {
-    // paddingHorizontal: SPACING.pxComponent,
+    paddingHorizontal: SPACING.pxComponent,
+    gap: 6,
   },
   flexRow: {
     flexDirection: 'row',

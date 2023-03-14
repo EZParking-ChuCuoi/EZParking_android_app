@@ -22,6 +22,7 @@ import {EZButtonText} from '../../core/EZButton';
 import QRCode from 'react-native-qrcode-svg';
 import {getData} from '../../../shared/asyncStorages';
 import EZLoading from '../../core/EZLoading';
+import {dateFormatMoment} from '../../../shared/handleDate';
 
 const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
   const {COLOR} = colorDefault();
@@ -82,7 +83,7 @@ const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
         valueQrCode = valueQrCode.concat('|', item);
       });
     }
-    console.log(valueQrCode)
+    console.log(valueQrCode);
     setDisplay(true);
   };
   return (
@@ -92,11 +93,14 @@ const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
         paddingVertical: 20,
       }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        <EZButtonText
-          text="Regenerate QR code"
-          color={COLORS.primary}
-          handlePress={handleRegenerate}
-        />
+        {new Date(mutationBookingDetails.data?.data?.bookings[0]?.bookDate) <
+          new Date() && (
+          <EZButtonText
+            text="Regenerate QR code"
+            color={COLORS.primary}
+            handlePress={handleRegenerate}
+          />
+        )}
         {display && (
           <View style={styles.ticket}>
             <QRCode

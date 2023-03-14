@@ -79,7 +79,7 @@ const ChartLine = ({source}) => {
         }}
         bezier
         style={{
-          marginVertical: 8,
+          marginVertical: 20,
           borderRadius: 16,
         }}
       />

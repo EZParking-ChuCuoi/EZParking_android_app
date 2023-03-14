@@ -25,6 +25,9 @@ const MarkerItem = ({item}) => {
     latitude: item.address_latitude,
     longitude: item.address_longitude,
   };
+  const handleSave = () => {
+    console.log('id', item.id);
+  };
   return (
     <Marker
       title={item.nameParkingLot}
@@ -88,10 +91,11 @@ const MarkerItem = ({item}) => {
                     }}
                   />
                   <EZButton
-                    title="Chat"
+                    title="Save"
                     type="secondary"
                     w="40%"
-                    handlePress={() => {}}
+                    handlePress={handleSave}
+                    iconFontAwesome="bookmark-o"
                   />
                 </View>
               </View>

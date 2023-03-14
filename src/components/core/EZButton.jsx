@@ -7,6 +7,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import Icon from 'react-native-vector-icons/Feather';
+import IconFontAwesome from 'react-native-vector-icons/FontAwesome';
 import {
   bgSecondaryDefault,
   colorDefault,
@@ -58,6 +59,13 @@ const EZButton = props => {
       ]}>
       {props.icon && (
         <Icon name={props.icon} color={colorText} size={FONTSIZE.iconMedium} />
+      )}
+      {props.iconFontAwesome && (
+        <IconFontAwesome
+          name={props.iconFontAwesome}
+          color={colorText}
+          size={FONTSIZE.iconMedium}
+        />
       )}
       {props.title && (
         <EZText
@@ -140,7 +148,7 @@ const styles = StyleSheet.create({
   btnContainer: {
     flexDirection: 'row',
     justifyContent: 'center',
-    alignItems: 'flex-end',
+    alignItems: 'center',
   },
   backBtn: {
     flexDirection: 'row',

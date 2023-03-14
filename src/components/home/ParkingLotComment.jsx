@@ -27,6 +27,7 @@ const ParkingLotComment = props => {
   return (
     <FlatList
       data={mutationParkingLotComment.data}
+      nestedScrollEnabled
       stickyHeaderIndices={[0]}
       renderItem={({item}) => (
         <ParkingLotCommentItem key={item.id} item={item} />

@@ -154,7 +154,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   ticket: {
-    width: 383,
+    width: '95%',
     height: 564,
     position: 'relative',
     justifyContent: 'center',
@@ -163,7 +163,7 @@ const styles = StyleSheet.create({
   },
   bgTicket: {
     position: 'absolute',
-    width: 383,
+    width: '100%',
     height: 564,
     resizeMode: 'contain',
   },

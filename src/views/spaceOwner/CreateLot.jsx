@@ -78,6 +78,9 @@ const CreateLot = () => {
       });
     }
   }, [mutationCreate.status]);
+  console.log(
+    mutationCreate.isError ? mutationCreate.error?.response?.data : 'nothing',
+  );
   const handleSearch = details => {
     setCoordinate({
       ...coordinate,
@@ -130,7 +133,7 @@ const CreateLot = () => {
   };
   return (
     <EZContainer styleEZContainer={styles.container}>
-      {mutationCreate.isLoading && <EZLoading text=' ' />}
+      {mutationCreate.isLoading && <EZLoading text=" " />}
       <DatePicker
         modal
         open={showDateTimePicker.open}

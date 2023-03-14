@@ -18,12 +18,13 @@ import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
 import EZBgTopRounded from '../../components/core/EZBgTopRounded';
 import Lottie from 'lottie-react-native';
+import EZLoading from '../../components/core/EZLoading';
 
 const ScanQRCode = () => {
   const [hasPermission, setHasPermission] = useState(false);
   const devices = useCameraDevices();
-  const valueQrcode = useState('');
   const device = devices.back;
+  const [isChecking, setIsChecking] = useState(false);
 
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
@@ -35,10 +36,16 @@ const ScanQRCode = () => {
     })();
   }, []);
   useEffect(() => {
-    console.log(barcodes)
+    if (barcodes.length > 0) {
+      setIsChecking(true);
+      barcodes.forEach(item => {
+        console.log(item.displayValue);
+      });
+    }
   }, [barcodes]);
   const handleCancle = () => {
     console.log('cancle');
+    setIsChecking(!isChecking);
   };
   return (
     device != null &&
@@ -46,6 +53,7 @@ const ScanQRCode = () => {
       <EZContainer
         bgEZStatusBar={COLORS.tertiary}
         styleEZContainer={styles.container}>
+        {isChecking && <EZLoading />}
         <EZBgTopRounded styleEZBgTopRounded={styles.bgTop} height={120}>
           <EZText size="large" bold color={COLORS.white}>
             Scan QR code
@@ -56,7 +64,7 @@ const ScanQRCode = () => {
             <Camera
               style={styles.camera}
               device={device}
-              isActive={true}
+              isActive={isChecking ? false : true}
               frameProcessor={frameProcessor}
               frameProcessorFps={5}
               enableZoomGesture={true}
@@ -71,7 +79,7 @@ const ScanQRCode = () => {
           </View>
           <View style={styles.content}>
             <TouchableOpacity handlePress={handleCancle}>
-              <EZText>Cancle</EZText>
+              <EZText bold>Cancle</EZText>
             </TouchableOpacity>
           </View>
         </View>

@@ -127,6 +127,9 @@ const Dasboard = ({navigation}) => {
                           alignItems: 'center',
                           justifyContent: 'center',
                         }}>
+                        <EZText styleEZText={{marginBottom: 20}}>
+                          Delete <EZText bold>{item.nameParkingLot}</EZText>?
+                        </EZText>
                         <EZButton
                           title="Delete"
                           iconName="trash-2"

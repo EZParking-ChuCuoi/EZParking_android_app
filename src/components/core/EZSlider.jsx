@@ -38,6 +38,7 @@ const EZSlider = ({data, local=false}) => {
         showsHorizontalScrollIndicator={false}
         onScroll={handleScroll}
         onViewableItemsChanged={handleViewableItemsChanged}
+        contentContainerStyle={{gap: 10}}
         viewabilityConfig={handleviewabilityConfig}
       />
       <EZSliderPagination data={data} scrollX={scrollX} index={index} />

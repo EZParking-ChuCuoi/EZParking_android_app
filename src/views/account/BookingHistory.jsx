@@ -42,5 +42,6 @@ const styles = StyleSheet.create({
   container: {
     width: '100%',
     paddingHorizontal: SPACING.pxComponent,
+    paddingVertical: 15,
   },
 });
