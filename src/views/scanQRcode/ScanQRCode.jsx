@@ -5,7 +5,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
 import {
@@ -19,16 +19,21 @@ import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
 import EZBgTopRounded from '../../components/core/EZBgTopRounded';
 import Lottie from 'lottie-react-native';
 import EZLoading from '../../components/core/EZLoading';
+import {useScanBookingQRcode} from '../../hooks/api/useScanQRcode';
+import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 
 const ScanQRCode = () => {
   const [hasPermission, setHasPermission] = useState(false);
   const devices = useCameraDevices();
   const device = devices.back;
+  const refInfo = useRef();
   const [isChecking, setIsChecking] = useState(false);
-
+  const mutationScan = useScanBookingQRcode();
+  const [idSpaceOwner, setIdSpaceOwner] = useState(undefined);
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
   });
+
   useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
@@ -38,13 +43,30 @@ const ScanQRCode = () => {
   useEffect(() => {
     if (barcodes.length > 0) {
       setIsChecking(true);
-      barcodes.forEach(item => {
-        console.log(item.displayValue);
+      const arr = barcodes[0].displayValue.split('|');
+      let bookingIds = [];
+      arr.forEach((item, index) => {
+        if (index !== 0) {
+          bookingIds.push(item);
+        }
       });
+      setIdSpaceOwner(arr[0]);
+      mutationScan.mutate(bookingIds);
     }
   }, [barcodes]);
+  console.log('idSpaceOwner', idSpaceOwner);
+  useEffect(() => {
+    if (mutationScan.isSuccess) {
+      console.log(
+        'mutationScan.data',
+        mutationScan.data.data,
+      );
+      // setIsChecking(false);
+      refInfo.current.open();
+    }
+  }, [mutationScan.status]);
+
   const handleCancle = () => {
-    console.log('cancle');
     setIsChecking(!isChecking);
   };
   return (
@@ -53,7 +75,7 @@ const ScanQRCode = () => {
       <EZContainer
         bgEZStatusBar={COLORS.tertiary}
         styleEZContainer={styles.container}>
-        {isChecking && <EZLoading />}
+        {mutationScan.isLoading && <EZLoading />}
         <EZBgTopRounded styleEZBgTopRounded={styles.bgTop} height={120}>
           <EZText size="large" bold color={COLORS.white}>
             Scan QR code
@@ -74,15 +96,27 @@ const ScanQRCode = () => {
               autoPlay
               loop
               style={styles.imageScan}
-              speed={0.7}
+              speed={isChecking ? 0 : 0.7}
             />
           </View>
           <View style={styles.content}>
-            <TouchableOpacity handlePress={handleCancle}>
-              <EZText bold>Cancle</EZText>
+            <TouchableOpacity onPress={handleCancle}>
+              <EZText bold>{isChecking ? 'Start scan' : 'Cancle'}</EZText>
             </TouchableOpacity>
           </View>
         </View>
+        <EZRBSheetModal refRBSheet={refInfo} height="auto">
+          <Lottie
+            source={require('../../assets/images/tick.json')}
+            autoPlay
+            loop
+            style={styles.imageTicket}
+            speed={1}
+          />
+          <EZText color={COLORS.primary} bold>
+            Scan ticket success!
+          </EZText>
+        </EZRBSheetModal>
       </EZContainer>
     )
   );
@@ -130,5 +164,10 @@ const styles = StyleSheet.create({
     marginTop: 20,
     width: '100%',
     alignItems: 'center',
+  },
+  imageTicket: {
+    width: 100,
+    height: 100,
+    resizeMode: 'cover',
   },
 });

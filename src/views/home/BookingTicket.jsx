@@ -44,7 +44,7 @@ const BookingTicket = ({navigation, route}) => {
           LocalNotification(
             'Your QRcode has been saved in your storage',
             'Take QRcode photo successfuly',
-            'Your QRcode photo saved in your storage',
+            'Your QRcode photo saved in your storage in EZParking album',
             uri,
           );
         } else {

@@ -162,7 +162,7 @@ export const useEditSlot = () => {
       formData.append('slotName', params.slotName);
       formData.append('_method', 'PUT');
       return httpRequest.postHttpRequest(
-        `/parking-lot/block/slots/update/${params.idSlot}`,
+        `parking-lot/block/slots/update/${params.idSlot}`,
         formData,
       );
     },

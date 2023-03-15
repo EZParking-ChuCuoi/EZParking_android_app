@@ -11,6 +11,7 @@ import {COLORS, SPACING} from '../../assets/styles/styles';
 import {EZButton} from '../../components/core/EZButton';
 import EZLoading from '../../components/core/EZLoading';
 import {getData} from '../../shared/asyncStorages';
+import {handleCurrenCy} from '../../shared/handleCurrenCy';
 
 const BookingPreview = ({navigation, route}) => {
   const {dateStart, dateReturn, idSlotArr} = route.params;
@@ -112,7 +113,8 @@ const BookingPreview = ({navigation, route}) => {
             Quantity : {idSlotArr.length}
           </EZText>
           <EZText bold color={COLORS.primary}>
-            Total price: {mutationBookingPreview.data?.total}
+            Total price:{' '}
+            {handleCurrenCy(Math.round(mutationBookingPreview.data?.total))}
           </EZText>
         </View>
         {errMessage !== '' && (

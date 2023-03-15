@@ -17,13 +17,20 @@ const BookingHistoryItem = ({item}) => {
   const {COLOR} = colorDefault();
   const refInfo = useRef();
   const refFeedBack = useRef();
+  console.log(item)
   return (
     <View
       style={[styles.container, {backgroundColor: BG2ND, shadowColor: COLOR}]}>
       <View style={styles.contentLeft}>
         <EZText bold>{item.parking_lot_name}</EZText>
         <EZText>{item.address}</EZText>
-        <EZText size="small">
+        <EZText
+          size="small"
+          styleEZText={{
+            backgroundColor: COLORS.circleOverlay,
+            paddingHorizontal: 2,
+            borderRadius: 2,
+          }}>
           {item.bookDate} - {item.returnDate}
         </EZText>
         <EZText color={COLORS.secondary}>
