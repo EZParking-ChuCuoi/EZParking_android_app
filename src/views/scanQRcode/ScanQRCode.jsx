@@ -54,13 +54,9 @@ const ScanQRCode = () => {
       mutationScan.mutate(bookingIds);
     }
   }, [barcodes]);
-  console.log('idSpaceOwner', idSpaceOwner);
   useEffect(() => {
     if (mutationScan.isSuccess) {
-      console.log(
-        'mutationScan.data',
-        mutationScan.data.data,
-      );
+      console.log('mutationScan.data', mutationScan.data.data);
       // setIsChecking(false);
       refInfo.current.open();
     }

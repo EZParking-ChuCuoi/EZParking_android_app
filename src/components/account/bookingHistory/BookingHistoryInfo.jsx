@@ -32,6 +32,9 @@ const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
   const [bookingInfo, setBookingInfo] = useState([]);
   const [display, setDisplay] = useState(false);
   let valueQrCode = `${idSpaceOwner}`;
+  bookings.forEach(item => {
+    valueQrCode = valueQrCode.concat('|', item);
+  });
   useEffect(() => {
     mutationBookingDetails.mutate(bookings);
   }, []);
@@ -40,7 +43,6 @@ const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
       setBookingInfo(mutationBookingDetails.data.data.bookings);
     }
   }, [mutationBookingDetails.status]);
-  console.log('CCC',mutationBookingDetails.data?.data?.bookings)
   const BookingInfoItem = ({item}) => {
     return (
       <View style={[styles.container, {backgroundColor: BG2ND}]}>
@@ -79,12 +81,6 @@ const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
     );
   };
   const handleRegenerate = async () => {
-    if (bookingInfo.length > 0) {
-      bookings.forEach(item => {
-        valueQrCode = valueQrCode.concat('|', item);
-      });
-    }
-    console.log(valueQrCode)
     setDisplay(true);
   };
   return (

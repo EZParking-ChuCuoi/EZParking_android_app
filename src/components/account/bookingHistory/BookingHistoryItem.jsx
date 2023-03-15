@@ -17,7 +17,6 @@ const BookingHistoryItem = ({item}) => {
   const {COLOR} = colorDefault();
   const refInfo = useRef();
   const refFeedBack = useRef();
-  console.log(item)
   return (
     <View
       style={[styles.container, {backgroundColor: BG2ND, shadowColor: COLOR}]}>
