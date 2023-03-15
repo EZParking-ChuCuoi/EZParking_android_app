@@ -13,8 +13,10 @@ export const useGetNearlyParkingLot = () => {
 
 export const useGetParkingLotInfo = () => {
   return useMutation({
-    mutationFn: id => {
-      return httpRequest.getHttpRequest(`parking-lot/${id}/info`);
+    mutationFn: params => {
+      return httpRequest.getHttpRequest(
+        `parking-lot/${params.parkingId}/info/${params.uid}`,
+      );
     },
   });
 };

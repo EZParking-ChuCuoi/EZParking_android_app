@@ -12,7 +12,7 @@ import Icon from 'react-native-vector-icons/Feather';
 import EZContainer from './EZContainer';
 
 const EZRBSheetModal = props => {
-  const {refRBSheet, height = 500, closeBtn = false} = props;
+  const {refRBSheet, height = 500, closeBtn = true} = props;
   const {COLOR} = colorDefault();
   return (
     <RBSheet
@@ -48,18 +48,17 @@ const EZRBSheetModal = props => {
         },
       }}>
       {closeBtn && (
-        <TouchableOpacity onPress={() => refRBSheet.current.close()}>
-          <Icon
-            name="chevron-down"
-            size={FONTSIZE.iconLarge}
-            color={COLORS.secondary}
-          />
+        <TouchableOpacity
+          onPress={() => refRBSheet.current.close()}
+          style={{position: 'absolute', top: 15, right: 15, zIndex: 10,}}>
+          <Icon name="x" size={FONTSIZE.iconLarge} color={COLORS.redLight} />
         </TouchableOpacity>
       )}
       <EZContainer
         styleEZContainer={{
           alignItems: 'center',
           justifyContent: 'center',
+          paddingVertical: 20,
         }}>
         {props.children}
       </EZContainer>

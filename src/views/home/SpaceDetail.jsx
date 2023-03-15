@@ -19,6 +19,7 @@ import {EZButton} from '../../components/core/EZButton';
 import ParkingLotComment from '../../components/home/ParkingLotComment';
 import EZSlider from '../../components/core/EZSlider';
 import {handleCurrenCy} from '../../shared/handleCurrenCy';
+import {getData} from '../../shared/asyncStorages';
 
 const SpaceDetail = ({navigation, route}) => {
   useHideTabBar();
@@ -34,10 +35,13 @@ const SpaceDetail = ({navigation, route}) => {
 
   useEffect(() => {
     const getStated = async () => {
-      mutationParkingLotInfo.mutate(parkingId);
+      const uid = await getData('EZUid');
+      console.log(uid);
+      mutationParkingLotInfo.mutate({parkingId, uid});
     };
     getStated();
   }, []);
+  console.log(mutationParkingLotInfo.error?.response?.data)
   useEffect(() => {
     if (mutationParkingLotInfo.isSuccess) {
       navigation.setOptions({
@@ -59,9 +63,9 @@ const SpaceDetail = ({navigation, route}) => {
       }
     }
   }, [mutationPrice.status]);
-  const handleSave = ()=>{
-    console.log('id', parkingId)
-  }
+  const handleSave = () => {
+    console.log('id', parkingId);
+  };
   return (
     <EZContainer>
       {parkingLotInfo && (

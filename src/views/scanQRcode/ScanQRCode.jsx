@@ -21,15 +21,18 @@ import Lottie from 'lottie-react-native';
 import EZLoading from '../../components/core/EZLoading';
 import {useScanBookingQRcode} from '../../hooks/api/useScanQRcode';
 import EZRBSheetModal from '../../components/core/EZRBSheetModal';
+import ScanQRSuccess from '../../components/scanner/ScanQRSuccess';
 
 const ScanQRCode = () => {
   const [hasPermission, setHasPermission] = useState(false);
   const devices = useCameraDevices();
   const device = devices.back;
   const refInfo = useRef();
+  const refFailed = useRef();
   const [isChecking, setIsChecking] = useState(false);
   const mutationScan = useScanBookingQRcode();
   const [idSpaceOwner, setIdSpaceOwner] = useState(undefined);
+  const [scanData, setScanData] = useState({});
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
   });
@@ -54,11 +57,15 @@ const ScanQRCode = () => {
       mutationScan.mutate(bookingIds);
     }
   }, [barcodes]);
+  console.log(mutationScan.data?.data?.bookings[0].idSpaceOwner)
   useEffect(() => {
     if (mutationScan.isSuccess) {
-      console.log('mutationScan.data', mutationScan.data.data);
-      // setIsChecking(false);
-      refInfo.current.open();
+      if (mutationScan.data?.data?.bookings[0].idSpaceOwner == idSpaceOwner) {
+        refInfo.current.open();
+      } else {
+        refFailed.current.open();
+      }
+      setScanData(mutationScan.data?.data);
     }
   }, [mutationScan.status]);
 
@@ -97,20 +104,28 @@ const ScanQRCode = () => {
           </View>
           <View style={styles.content}>
             <TouchableOpacity onPress={handleCancle}>
-              <EZText bold>{isChecking ? 'Start scan' : 'Cancle'}</EZText>
+              <EZText
+                bold
+                size="quiteLarge"
+                color={isChecking ? COLORS.primary : COLORS.redLight}>
+                {isChecking ? 'Start scan' : 'Cancle'}
+              </EZText>
             </TouchableOpacity>
           </View>
         </View>
         <EZRBSheetModal refRBSheet={refInfo} height="auto">
+          <ScanQRSuccess data={scanData} />
+        </EZRBSheetModal>
+        <EZRBSheetModal refRBSheet={refFailed} height="auto">
           <Lottie
-            source={require('../../assets/images/tick.json')}
+            source={require('../../assets/images/failed.json')}
             autoPlay
             loop
             style={styles.imageTicket}
             speed={1}
           />
-          <EZText color={COLORS.primary} bold>
-            Scan ticket success!
+          <EZText color={COLORS.redLight} bold>
+            Scan ticket failed!
           </EZText>
         </EZRBSheetModal>
       </EZContainer>

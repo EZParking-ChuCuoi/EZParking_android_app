@@ -83,7 +83,7 @@ const Dasboard = ({navigation}) => {
       <ScrollView style={{paddingBottom: 50}}>
         <AnimatedLoading />
         <EZBgTopRounded height={150}>
-          <EZText size="large" bold>
+          <EZText size="large" bold color={COLORS.white}>
             Dashoard
           </EZText>
         </EZBgTopRounded>

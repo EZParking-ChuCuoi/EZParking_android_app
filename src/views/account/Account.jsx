@@ -191,7 +191,7 @@ const styles = StyleSheet.create({
   },
   btnDashboard: {
     position: 'absolute',
-    bottom: 100,
+    bottom: 70,
     right: 30,
     width: 70,
     height: 70,
