@@ -31,25 +31,31 @@ import EZRBSheet from '../../components/core/EZRBSheet';
 import Lottie from 'lottie-react-native';
 import EZLoading from '../../components/core/EZLoading';
 import EZRBSheetModal from '../../components/core/EZRBSheetModal';
+import EditAccount from './EditAccount';
 
 const Account = ({navigation, route}) => {
   const {COLOR} = colorDefault();
   const [navigateArr, setNavigateArr] = useState([]);
   const mutationUserInfo = useGetUserInfo();
   const refRBSheet = useRef();
+  const refEdit = useRef();
   useEffect(() => {
     const setMutate = async () => {
-      const uid = await getData('EZUid');
       const checkSpaceOwner = await isSpaceOwner();
       if (checkSpaceOwner) {
         setNavigateArr(NAVIGATED_PROFILE_SPACEOWNER);
       } else {
         setNavigateArr(NAVIGATED_PROFILE);
       }
-      mutationUserInfo.mutate(uid);
+      getUserInfo();
     };
     setMutate();
   }, []);
+
+  const getUserInfo = async () => {
+    const uid = await getData('EZUid');
+    mutationUserInfo.mutate(uid);
+  };
 
   return (
     <>
@@ -69,7 +75,7 @@ const Account = ({navigation, route}) => {
               }}
               style={styles.imageUser}
             />
-            <EZText bold>
+            <EZText bold size="quiteLarge">
               {mutationUserInfo.isSuccess &&
                 mutationUserInfo.data.data[0].fullName}
             </EZText>
@@ -78,6 +84,21 @@ const Account = ({navigation, route}) => {
             renderItem={({item}) => <NavigatedOption data={item} />}
             keyExtractor={item => item.text}
             data={navigateArr}
+            ListHeaderComponent={
+              <TouchableOpacity
+                style={styles.container}
+                onPress={() => refEdit.current.open()}>
+                <Icon name="edit-3" color={COLOR} size={FONTSIZE.iconLarge} />
+                <View style={styles.content}>
+                  <EZText>Edit profile</EZText>
+                  <Icon
+                    name="chevron-right"
+                    color={COLORS.borderInput}
+                    size={FONTSIZE.iconMedium}
+                  />
+                </View>
+              </TouchableOpacity>
+            }
             ListFooterComponent={
               <View>
                 <TouchableOpacity
@@ -119,25 +140,16 @@ const Account = ({navigation, route}) => {
               />
             </TouchableOpacity>
           )}
-          {/* <EZRBSheet refRBSheet={refRBSheet} height={200}>
+          <EZRBSheet refRBSheet={refEdit} height={700}>
             <EZContainer
               styleEZContainer={{
                 alignItems: 'center',
                 justifyContent: 'center',
+                paddingVertical: 20,
               }}>
-              <EZText styleEZText={{marginBottom: 10}}>
-                Are you sure you want to log out of the app?
-              </EZText>
-              <EZButton
-                w="50%"
-                title="Yes"
-                handlePress={() => {
-                  refRBSheet.current.close();
-                  logOut(navigation);
-                }}
-              />
+              <EditAccount onRefresh={getUserInfo} refEdit={refEdit} />
             </EZContainer>
-          </EZRBSheet> */}
+          </EZRBSheet>
           <EZRBSheetModal refRBSheet={refRBSheet} height={200}>
             <EZText styleEZText={{marginBottom: 10}}>Log out?</EZText>
             <View style={styles.btnModal}>
@@ -179,6 +191,8 @@ const styles = StyleSheet.create({
     borderRadius: 70,
     resizeMode: 'cover',
     marginBottom: 15,
+    borderWidth: 2,
+    borderColor: COLORS.primary,
   },
   logoutBtn: {
     paddingVertical: 15,
@@ -208,5 +222,25 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     gap: 10,
+  },
+  container: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    flexDirection: 'row',
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    width: '85%',
+    borderBottomColor: COLORS.borderBrighter,
+    borderBottomWidth: 1,
+    paddingVertical: 15,
+  },
+  text: {
+    fontSize: 15,
+    fontWeight: '500',
   },
 });

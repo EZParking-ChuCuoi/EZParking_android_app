@@ -1,10 +1,5 @@
 export const NAVIGATED_PROFILE = [
   {
-    text: 'Edit profile',
-    nameIcon: 'edit-3',
-    screenName: 'editAccount',
-  },
-  {
     text: 'Booking history',
     nameIcon: 'clock',
     screenName: 'bookingHistory',
@@ -27,11 +22,6 @@ export const NAVIGATED_PROFILE = [
 ];
 
 export const NAVIGATED_PROFILE_SPACEOWNER = [
-  {
-    text: 'Edit profile',
-    nameIcon: 'edit-3',
-    screenName: 'editAccount',
-  },
   {
     text: 'Booking history',
     nameIcon: 'clock',

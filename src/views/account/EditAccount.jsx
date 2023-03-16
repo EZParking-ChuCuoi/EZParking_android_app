@@ -11,8 +11,9 @@ import {EZButton} from '../../components/core/EZButton';
 import {getData} from '../../shared/asyncStorages';
 import {useEditProfile} from '../../hooks/api/auth';
 import EZLoading from '../../components/core/EZLoading';
+import {useNavigation} from '@react-navigation/native';
 
-const EditAccount = ({navigation}) => {
+const EditAccount = ({onRefresh, refEdit}) => {
   const mutationEditProfile = useEditProfile();
   const [params, setParams] = useState({
     userId: '',
@@ -29,7 +30,8 @@ const EditAccount = ({navigation}) => {
   }, []);
   useEffect(() => {
     if (mutationEditProfile.isSuccess) {
-      navigation.navigate('profile')
+      refEdit.current.close();
+      onRefresh();
     }
   }, [mutationEditProfile.status]);
   const handlePickImage = () => {
