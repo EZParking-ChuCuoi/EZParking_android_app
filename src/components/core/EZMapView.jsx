@@ -59,7 +59,7 @@ const EZMapView = props => {
         onPress={(data, details = null) => {
           handleSearch(details);
         }}
-        minLength={6}
+        // minLength={6}
         fetchDetails={true}
         query={{
           key: API_GOOGLE_MAP,

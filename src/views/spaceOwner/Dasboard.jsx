@@ -1,5 +1,6 @@
 import {
   FlatList,
+  RefreshControl,
   ScrollView,
   StyleSheet,
   Text,
@@ -49,11 +50,11 @@ const Dasboard = ({navigation}) => {
   const mutationPeriodRevenue = useGetPeriodManagingRevenueParkingLot();
   const mutationDelete = useDeleteParkingLot();
   const [periodRevenue, setPeriodRevenue] = useState(PERIOD_REVENUE[0].value);
+  const getLots = async () => {
+    const uid = await getData('EZUid');
+    mutationParkingLot.mutate(uid);
+  };
   useEffect(() => {
-    const getLots = async () => {
-      const uid = await getData('EZUid');
-      mutationParkingLot.mutate(uid);
-    };
     getLots();
   }, []);
   useEffect(() => {
@@ -80,7 +81,16 @@ const Dasboard = ({navigation}) => {
         onPress={() => navigation.navigate('profile')}>
         <Icon name="chevron-left" size={FONTSIZE.iconLarge} color={COLOR} />
       </TouchableOpacity>
-      <ScrollView style={{paddingBottom: 50}}>
+      <ScrollView
+        style={{paddingBottom: 50}}
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => {
+              getLots();
+            }}
+          />
+        }>
         <AnimatedLoading />
         <EZBgTopRounded height={150}>
           <EZText size="large" bold color={COLORS.white}>

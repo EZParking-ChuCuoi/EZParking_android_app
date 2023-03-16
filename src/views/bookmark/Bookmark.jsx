@@ -18,6 +18,7 @@ import {useGetSavedParkingLot} from '../../hooks/api/getParkingLots';
 import {getData} from '../../shared/asyncStorages';
 import EZLoading from '../../components/core/EZLoading';
 import BookmarkItem from '../../components/bookmark/BookmarkItem';
+import {Pusher} from '@pusher/pusher-websocket-react-native';
 
 const Bookmark = () => {
   const mutationGetSavedParkingLot = useGetSavedParkingLot();
@@ -25,16 +26,20 @@ const Bookmark = () => {
     const uid = await getData('EZUid');
     mutationGetSavedParkingLot.mutate(uid);
   };
+
   useEffect(() => {
     initalMutate();
   }, []);
+
   return (
-    <EZContainer styleEZContainer={{padding: SPACING.pxComponent}}>
+    <EZContainer>
       {mutationGetSavedParkingLot.isLoading && <EZLoading />}
       <FlatList
         data={mutationGetSavedParkingLot?.data || []}
         keyExtractor={item => item.parking_lot_id}
-        renderItem={({item}) => <BookmarkItem data={item} />}
+        renderItem={({item}) => (
+          <BookmarkItem data={item} onRefresh={initalMutate} />
+        )}
         refreshControl={
           <RefreshControl
             refreshing={false}

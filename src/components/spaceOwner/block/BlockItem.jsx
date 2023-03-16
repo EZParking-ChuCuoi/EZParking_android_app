@@ -27,6 +27,7 @@ import {
 import EZLoading from '../../core/EZLoading';
 import EZRBSheet from '../../core/EZRBSheet';
 import EZContainer from '../../core/EZContainer';
+import EZRBSheetModal from '../../core/EZRBSheetModal';
 
 const BlockItem = props => {
   const {COLOR} = colorDefault();
@@ -153,20 +154,25 @@ const BlockItem = props => {
                 handlePress={() => refDelete.current.open()}
               />
             </View>
-            <EZRBSheet height={200} refRBSheet={refDelete}>
+            <EZRBSheetModal height={200} refRBSheet={refDelete}>
               <EZContainer
                 styleEZContainer={{
                   padding: SPACING.pxComponent,
                   justifyContent: 'center',
                   alignItems: 'center',
                 }}>
-                <EZText>Delete <EZText bold>{props.item.nameBlock}</EZText> block</EZText>
+                <EZText>
+                  Delete <EZText bold>{props.item.nameBlock}</EZText>?
+                </EZText>
                 <EZButton
                   title="Yes"
+                  styleEZButton={{marginTop: 10}}
+                  w="60%"
+                  type="secondary"
                   handlePress={() => handleDelete(props.item.id)}
                 />
               </EZContainer>
-            </EZRBSheet>
+            </EZRBSheetModal>
           </>
         )}
       </LinearGradient>

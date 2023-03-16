@@ -78,9 +78,6 @@ const CreateLot = () => {
       });
     }
   }, [mutationCreate.status]);
-  console.log(
-    mutationCreate.isError ? mutationCreate.error?.response?.data : 'nothing',
-  );
   const handleSearch = details => {
     setCoordinate({
       ...coordinate,

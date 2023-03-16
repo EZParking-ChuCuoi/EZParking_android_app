@@ -192,7 +192,7 @@ const styles = StyleSheet.create({
   btnDashboard: {
     position: 'absolute',
     bottom: 70,
-    right: 30,
+    right: 10,
     width: 70,
     height: 70,
     justifyContent: 'center',
