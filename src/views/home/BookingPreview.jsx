@@ -99,7 +99,7 @@ const BookingPreview = ({navigation, route}) => {
                 styleEZInput={{width: '30%'}}
                 defaultValue={licensePlate[index]}
                 onChangeText={license => handleChange(license, index)}
-                styleEZInputField={{textTransform: 'uppercase'}}
+                styleEZInputField={{textTransform: 'uppercase', paddingRight: 10}}
               />
               <EZText size="small">
                 {item.carType === '4-16SLOT' ? '4-16 seats' : '16-34 seats'}
@@ -112,7 +112,7 @@ const BookingPreview = ({navigation, route}) => {
           <EZText bold color={COLORS.primary}>
             Quantity : {idSlotArr.length}
           </EZText>
-          <EZText bold color={COLORS.primary}>
+          <EZText bold color={COLORS.secondary}>
             Total price:{' '}
             {handleCurrenCy(Math.round(mutationBookingPreview.data?.total))}
           </EZText>
