@@ -47,3 +47,21 @@ export const formatTimeFull = timestamp => {
 export const formatTimeMinute = timestamp => {
   return moment(new Date(timestamp)).format('HH:mm');
 };
+
+export const formatRelativeTime = timestamp => {
+  if (moment(new Date(timestamp)).year() === moment(new Date()).year()) {
+    if (moment(new Date(timestamp)).month() === moment(new Date()).month()) {
+      if (moment(new Date(timestamp)).week() === moment(new Date()).week()) {
+        return moment(new Date(timestamp)).startOf('minute').fromNow();
+      }
+      return moment(new Date(timestamp)).startOf('hour').fromNow();
+    }
+    return (
+      moment(new Date(timestamp)).fromNow() +
+      ' - ' +
+      moment(new Date(timestamp)).format('MMM Do YY')
+    );
+  } else {
+    return moment(new Date(timestamp)).format('YYYY-MM-DD');
+  }
+};

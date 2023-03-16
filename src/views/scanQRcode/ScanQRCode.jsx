@@ -13,7 +13,11 @@ import {
   EZButtonBack,
   EZButtonText,
 } from '../../components/core/EZButton';
-import {COLORS, EZStatusBar} from '../../assets/styles/styles';
+import {
+  bgSecondaryDefault,
+  COLORS,
+  EZStatusBar,
+} from '../../assets/styles/styles';
 import {Camera, useCameraDevices} from 'react-native-vision-camera';
 import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
 import EZBgTopRounded from '../../components/core/EZBgTopRounded';
@@ -24,6 +28,7 @@ import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 import ScanQRSuccess from '../../components/scanner/ScanQRSuccess';
 
 const ScanQRCode = () => {
+  const {BG2ND} = bgSecondaryDefault();
   const [hasPermission, setHasPermission] = useState(false);
   const devices = useCameraDevices();
   const device = devices.back;
@@ -57,7 +62,7 @@ const ScanQRCode = () => {
       mutationScan.mutate(bookingIds);
     }
   }, [barcodes]);
-  console.log(mutationScan.data?.data?.bookings[0].idSpaceOwner)
+  console.log(mutationScan.data?.data?.bookings[0].idSpaceOwner);
   useEffect(() => {
     if (mutationScan.isSuccess) {
       if (mutationScan.data?.data?.bookings[0].idSpaceOwner == idSpaceOwner) {
@@ -103,7 +108,9 @@ const ScanQRCode = () => {
             />
           </View>
           <View style={styles.content}>
-            <TouchableOpacity onPress={handleCancle}>
+            <TouchableOpacity
+              onPress={handleCancle}
+              style={[styles.btnScan, {backgroundColor: BG2ND}]}>
               <EZText
                 bold
                 size="quiteLarge"
@@ -114,7 +121,7 @@ const ScanQRCode = () => {
           </View>
         </View>
         <EZRBSheetModal refRBSheet={refInfo} height="auto">
-          <ScanQRSuccess data={scanData} />
+          <ScanQRSuccess data={scanData} refInfo={refInfo} />
         </EZRBSheetModal>
         <EZRBSheetModal refRBSheet={refFailed} height="auto">
           <Lottie
@@ -180,5 +187,10 @@ const styles = StyleSheet.create({
     width: 100,
     height: 100,
     resizeMode: 'cover',
+  },
+  btnScan: {
+    paddingHorizontal: 20,
+    paddingVertical: 10,
+    borderRadius: 8,
   },
 });

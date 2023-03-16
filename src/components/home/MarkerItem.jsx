@@ -25,9 +25,6 @@ const MarkerItem = ({item}) => {
     latitude: item.address_latitude,
     longitude: item.address_longitude,
   };
-  const handleSave = () => {
-    console.log('id', item.id);
-  };
   return (
     <Marker
       title={item.nameParkingLot}
@@ -83,19 +80,12 @@ const MarkerItem = ({item}) => {
                   <EZButton
                     title="Go to detail"
                     type="primary"
-                    w="40%"
+                    w="90%"
                     handlePress={() => {
                       navigation.navigate('spaceDetail', {
                         parkingId: item.id,
                       });
                     }}
-                  />
-                  <EZButton
-                    title="Save"
-                    type="secondary"
-                    w="40%"
-                    handlePress={handleSave}
-                    iconFontAwesome="bookmark-o"
                   />
                 </View>
               </View>
@@ -154,7 +144,7 @@ const styles = StyleSheet.create({
   btns: {
     paddingVertical: 20,
     flexDirection: 'row',
-    justifyContent: 'space-between',
+    justifyContent: 'center',
     alignItems: 'center',
     borderBottomColor: COLORS.borderInput,
     borderBottomWidth: 1,

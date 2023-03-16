@@ -34,6 +34,7 @@ export const LocalNotification = (
   title = 'New notification from EZParking',
   message = 'New message from EZParking',
   picture = undefined,
+  dateScheduled = new Date(new Date().getTime() + 3000),
 ) => {
   PushNotification.localNotification({
     channelId: 'channel-id',
@@ -51,5 +52,6 @@ export const LocalNotification = (
     vibration: 1000,
     bigPictureUrl: picture,
     picture: picture,
+    date: dateScheduled,
   });
 };

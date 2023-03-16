@@ -37,7 +37,7 @@ export const FONTSIZE = {
 };
 
 export const SPACING = {
-  pxComponent: 10,
+  pxComponent: 6,
   mbInputItem: 10,
 };
 

@@ -11,18 +11,12 @@ import {
 } from '../../assets/styles/styles';
 import Icon from 'react-native-vector-icons/Feather';
 import {useNavigation} from '@react-navigation/native';
-import {useGetParkingPrice} from '../../hooks/api/getParkingLots';
 
 const ParkingLotItem = props => {
   const navigation = useNavigation();
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const {data} = props;
-  const mutationPrice = useGetParkingPrice();
-  useEffect(() => {
-    mutationPrice.mutate(data.id);
-  }, []);
-
   return (
     <TouchableOpacity
       onPress={() =>

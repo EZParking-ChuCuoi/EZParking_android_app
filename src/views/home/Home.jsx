@@ -49,6 +49,8 @@ const Home = () => {
     const askPermissionLocation = async () => {
       const permission = await requestLocationPermission(null);
       const EZUid = await getData('EZUid');
+      // const token = await getData('EZToken');
+      // console.log(token)
       mutationUserInfo.mutate(EZUid);
       if (permission) {
         getCurrentLocation();
@@ -104,7 +106,11 @@ const Home = () => {
       </EZRBSheet>
       <EZBgTopRounded styleEZBgTopRounded={{marginBottom: 30}}>
         <View style={styles.userInfo}>
-          <EZText styleEZText={{width: '70%'}} color={COLORS.white} bold size="large">
+          <EZText
+            styleEZText={{width: '70%'}}
+            color={COLORS.white}
+            bold
+            size="large">
             Hi{' '}
             {mutationUserInfo.isSuccess &&
               mutationUserInfo.data?.data[0]?.fullName}

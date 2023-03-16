@@ -8,19 +8,15 @@ import {
   COLORS,
   FONTSIZE,
 } from '../assets/styles/styles';
-import Home from '../views/home/Home';
-import Chat from '../views/chat/Chat';
-import Setting from '../views/account/Account';
 import ScanQRCode from '../views/scanQRcode/ScanQRCode';
 import Notification from '../views/notification/Notification';
 import EZText from '../components/core/EZText';
-import Account from '../views/account/Account';
 import HomeStackNavigators from './HomeStackNavigator';
-import {EZButtonBack} from '../components/core/EZButton';
 import {useNavigation} from '@react-navigation/native';
 import {isSpaceOwner} from '../hooks/api/auth';
 import {useEffect, useState} from 'react';
 import AccountStackNavigators from './AccountStackNavigator';
+import Bookmark from '../views/bookmark/Bookmark';
 
 const BottomTab = () => {
   const navigation = useNavigation();
@@ -82,17 +78,17 @@ const BottomTab = () => {
         }}
       />
       <Tab.Screen
-        name="chat"
-        component={Chat}
+        name="saved"
+        component={Bookmark}
         options={() => {
           return {
             tabBarLabel: ({focused}) => {
-              return <EZText styleEZText={focusText(focused)}>Chat</EZText>;
+              return <EZText styleEZText={focusText(focused)}>Saved</EZText>;
             },
             tabBarIcon: ({focused}) => {
               return (
                 <Icon
-                  name="message-circle"
+                  name="bookmark"
                   style={[
                     focusIcon(focused),
                     {color: focused ? COLOR : COLORS.disable},
@@ -104,7 +100,7 @@ const BottomTab = () => {
               paddingBottom: 5,
               backgroundColor: BG,
             },
-            title: 'Chat',
+            title: 'Saved parking lot',
           };
         }}
       />

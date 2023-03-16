@@ -6,7 +6,7 @@ import {useHideTabBar} from '../../hooks/useHideTabBar';
 import {useRoute} from '@react-navigation/native';
 import {
   useGetParkingLotInfo,
-  useGetParkingPrice,
+  useHandleSavedParkingLot,
 } from '../../hooks/api/getParkingLots';
 import Icon from 'react-native-vector-icons/Feather';
 import {
@@ -20,54 +20,46 @@ import ParkingLotComment from '../../components/home/ParkingLotComment';
 import EZSlider from '../../components/core/EZSlider';
 import {handleCurrenCy} from '../../shared/handleCurrenCy';
 import {getData} from '../../shared/asyncStorages';
+import EZLoading from '../../components/core/EZLoading';
 
 const SpaceDetail = ({navigation, route}) => {
   useHideTabBar();
   const {COLOR} = colorDefault();
   const mutationParkingLotInfo = useGetParkingLotInfo();
+  const mutationHandleSaved = useHandleSavedParkingLot();
   const {parkingId} = route.params;
   const [parkingLotInfo, setParkingLotInfo] = useState(null);
-  const [price, setPrice] = useState('0VND');
-  const mutationPrice = useGetParkingPrice();
+  const [isSaved, setIsSaved] = useState(false);
+  const getInfo = async () => {
+    const uid = await getData('EZUid');
+    mutationParkingLotInfo.mutate({parkingId, uid});
+  };
   useEffect(() => {
-    mutationPrice.mutate(parkingId);
+    getInfo();
   }, []);
-
-  useEffect(() => {
-    const getStated = async () => {
-      const uid = await getData('EZUid');
-      console.log(uid);
-      mutationParkingLotInfo.mutate({parkingId, uid});
-    };
-    getStated();
-  }, []);
-  console.log(mutationParkingLotInfo.error?.response?.data)
+  
   useEffect(() => {
     if (mutationParkingLotInfo.isSuccess) {
       navigation.setOptions({
         title: mutationParkingLotInfo.data[0].nameParkingLot,
       });
       setParkingLotInfo(mutationParkingLotInfo.data[0]);
+      setIsSaved(mutationParkingLotInfo.data[0]?.statusWishlist == 1);
     }
   }, [mutationParkingLotInfo.status]);
   useEffect(() => {
-    if (mutationPrice.isSuccess) {
-      if (mutationPrice?.data?.priceFrom === mutationPrice?.data?.priceTo) {
-        setPrice(handleCurrenCy(mutationPrice?.data?.priceFrom));
-      } else {
-        setPrice(
-          handleCurrenCy(mutationPrice?.data?.priceFrom) +
-            ' - ' +
-            handleCurrenCy(mutationPrice?.data?.priceTo),
-        );
-      }
+    if (mutationHandleSaved.isSuccess) {
+      setIsSaved(!isSaved);
+      getInfo();
     }
-  }, [mutationPrice.status]);
-  const handleSave = () => {
-    console.log('id', parkingId);
+  }, [mutationHandleSaved.status]);
+  const handleSave = async () => {
+    const uid = await getData('EZUid');
+    mutationHandleSaved.mutate({userId: uid, parkingLotId: parkingId});
   };
   return (
     <EZContainer>
+      {mutationHandleSaved.isLoading && <EZLoading />}
       {parkingLotInfo && (
         <>
           <EZSlider data={parkingLotInfo.images} />
@@ -89,7 +81,7 @@ const SpaceDetail = ({navigation, route}) => {
                 size={FONTSIZE.iconMedium}
                 color={COLOR}
               />
-              <EZText>{price}</EZText>
+              <EZText>~{handleCurrenCy(parkingLotInfo.avgPrice)}</EZText>
             </View>
             <EZText bold styleEZText={{marginTop: 10}}>
               Description
@@ -107,11 +99,11 @@ const SpaceDetail = ({navigation, route}) => {
                 }
               />
               <EZButton
-                title="Save"
+                title={isSaved ? 'Saved' : 'Save'}
                 type="secondary"
                 w="40%"
                 handlePress={handleSave}
-                iconFontAwesome="bookmark-o"
+                iconFontAwesome={isSaved ? 'bookmark' : 'bookmark-o'}
               />
             </View>
             <ParkingLotComment idParkingLot={parkingId} />

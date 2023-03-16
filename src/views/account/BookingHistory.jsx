@@ -1,4 +1,4 @@
-import {FlatList, StyleSheet, Text, View} from 'react-native';
+import {FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
 import React, {useEffect} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
@@ -12,13 +12,12 @@ import {SPACING} from '../../assets/styles/styles';
 const BookingHistory = () => {
   useHideTabBar();
   const mutationBookingHistory = useGetBookingHistory();
-
+  const getHistory = async () => {
+    const uid = await getData('EZUid');
+    mutationBookingHistory.mutate(uid);
+  };
   useEffect(() => {
-    const mutating = async () => {
-      const uid = await getData('EZUid');
-      mutationBookingHistory.mutate(uid);
-    };
-    mutating();
+    getHistory();
   }, []);
   return (
     <EZContainer>
@@ -30,6 +29,15 @@ const BookingHistory = () => {
           keyExtractor={(item, index) => index}
           contentContainerStyle={styles.container}
           initialNumToRender={5}
+          showsVerticalScrollIndicator={false}
+          refreshControl={
+            <RefreshControl
+              refreshing={false}
+              onRefresh={() => {
+                getHistory();
+              }}
+            />
+          }
         />
       )}
     </EZContainer>
@@ -41,7 +49,7 @@ export default BookingHistory;
 const styles = StyleSheet.create({
   container: {
     width: '100%',
-    paddingHorizontal: SPACING.pxComponent,
     paddingVertical: 15,
+    paddingHorizontal: 6,
   },
 });

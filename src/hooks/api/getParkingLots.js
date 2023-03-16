@@ -21,14 +21,6 @@ export const useGetParkingLotInfo = () => {
   });
 };
 
-export const useGetParkingPrice = () => {
-  return useMutation({
-    mutationFn: id => {
-      return httpRequest.getHttpRequest(`parking-lot/${id}/info/price`);
-    },
-  });
-};
-
 export const useGetParkingLotComment = () => {
   return useMutation({
     mutationFn: id => {
@@ -56,6 +48,23 @@ export const useGetSlots = () => {
           end_datetime: params.end_datetime,
         },
       });
+    },
+  });
+};
+
+// Saved parking lot
+export const useHandleSavedParkingLot = () => {
+  return useMutation({
+    mutationFn: params => {
+      return httpRequest.postHttpRequest('user/wishlist/add', params);
+    },
+  });
+};
+
+export const useGetSavedParkingLot = () => {
+  return useMutation({
+    mutationFn: uid => {
+      return httpRequest.getHttpRequest(`user/${uid}/wishlist`);
     },
   });
 };

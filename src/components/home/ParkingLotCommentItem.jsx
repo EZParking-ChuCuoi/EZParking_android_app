@@ -10,7 +10,7 @@ import {
 } from '../../assets/styles/styles';
 import {AVATAR} from '../../utils/defaultImage';
 import Icon from 'react-native-vector-icons/FontAwesome';
-import {handleDate} from '../../shared/handleDate';
+import {formatRelativeTime, handleDate} from '../../shared/handleDate';
 
 const ParkingLotCommentItem = ({item}) => {
   const {COLOR} = colorDefault();
@@ -42,7 +42,7 @@ const ParkingLotCommentItem = ({item}) => {
                 />
               ))}
             </View>
-            <EZText color={COLORS.disable} size="small">{handleDate(item.created_at)}</EZText>
+            <EZText color={COLORS.disable} size="small">{formatRelativeTime(item.created_at)}</EZText>
           </View>
           <EZText>{item.content}</EZText>
         </View>

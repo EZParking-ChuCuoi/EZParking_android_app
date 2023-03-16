@@ -11,6 +11,7 @@ import EZRBSheet from '../../core/EZRBSheet';
 import BookingHistoryInfo from './BookingHistoryInfo';
 import BookingHistoryFeedback from './BookingHistoryFeedback';
 import {handleCurrenCy} from '../../../shared/handleCurrenCy';
+import { formatRelativeTime } from '../../../shared/handleDate';
 
 const BookingHistoryItem = ({item}) => {
   const {BG2ND} = bgSecondaryDefault();
@@ -30,7 +31,7 @@ const BookingHistoryItem = ({item}) => {
             paddingHorizontal: 2,
             borderRadius: 2,
           }}>
-          {item.bookDate} - {item.returnDate}
+          {formatRelativeTime(item.bookDate)}
         </EZText>
         <EZText color={COLORS.secondary}>
           {handleCurrenCy(item.total_payment)}
@@ -71,9 +72,9 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 10,
+    borderRadius: 15,
     paddingVertical: 5,
-    paddingHorizontal: 8,
+    paddingHorizontal: 10,
     shadowOffset: {
       width: 2,
       height: 3,
@@ -90,7 +91,7 @@ const styles = StyleSheet.create({
     alignItems: 'flex-start',
   },
   contentRight: {
-    width: '16%',
+    width: '20%',
     justifyContent: 'center',
     alignItems: 'flex-end',
     gap: 10,

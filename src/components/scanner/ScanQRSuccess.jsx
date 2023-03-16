@@ -12,7 +12,7 @@ import {handleCurrenCy} from '../../shared/handleCurrenCy';
 import {EZButtonText} from '../core/EZButton';
 import {useNavigation} from '@react-navigation/native';
 
-const ScanQRSuccess = ({data}) => {
+const ScanQRSuccess = ({data, refInfo}) => {
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const navigation = useNavigation();
@@ -25,10 +25,16 @@ const ScanQRSuccess = ({data}) => {
         style={styles.imageTicket}
         speed={1}
       />
-      <EZText color={COLORS.primary} bold>
+      <EZText size="quiteLarge" color={COLORS.primary} bold>
         Scan ticket success!
       </EZText>
       <View style={styles.content}>
+        <View style={styles.flexRow}>
+          <EZText bold color={COLORS.disable}>
+            Client name
+          </EZText>
+          <EZText bold>{data.bookings[0].fullName}</EZText>
+        </View>
         <View style={styles.flexRow}>
           <EZText bold color={COLORS.disable}>
             Parking name
@@ -39,39 +45,46 @@ const ScanQRSuccess = ({data}) => {
           <EZText bold color={COLORS.disable}>
             Address
           </EZText>
-          <EZText>{data.totalPayment}</EZText>
+          <EZText>{data.bookings[0].address}</EZText>
         </View>
-        {data.bookings.map(item => {
-          return (
-            <View style={styles.slotItem} key={item.booking_id}>
-              <View style={styles.flexRow}>
-                <EZText bold color={COLORS.disable}>
-                  Vehicle
-                </EZText>
-                <EZText>
-                  {item.carType === '4-16SLOT'
-                    ? '4-16 seats vehicle - '
-                    : '16-34 seats vehicle - '}
-                </EZText>
-                <EZText
-                  styleEZText={styles.license}
-                  transform="uppercase">{`${item.licensePlate.slice(
-                  0,
-                  3,
-                )}-${item.licensePlate.slice(3, 6)}.${item.licensePlate.slice(
-                  6,
-                  8,
-                )}`}</EZText>
+        <EZText color={COLORS.primary} bold>
+          {data.bookings.length} slots booked
+        </EZText>
+        <View style={styles.slots}>
+          {data.bookings.map(item => {
+            return (
+              <View style={styles.slotItem} key={item.booking_id}>
+                <View style={styles.flexRow}>
+                  <EZText bold color={COLORS.disable}>
+                    Vehicle
+                  </EZText>
+                  <EZText>
+                    <EZText>
+                      {item.carType === '4-16SLOT'
+                        ? '4-16 seats vehicle - '
+                        : '16-34 seats vehicle - '}
+                    </EZText>
+                    <EZText
+                      styleEZText={styles.license}
+                      transform="uppercase">{`${item.licensePlate.slice(
+                      0,
+                      3,
+                    )}-${item.licensePlate.slice(
+                      3,
+                      6,
+                    )}.${item.licensePlate.slice(6, 8)}`}</EZText>
+                  </EZText>
+                </View>
+                <View style={styles.flexRow}>
+                  <EZText bold color={COLORS.disable}>
+                    Slot name
+                  </EZText>
+                  <EZText>{`${item.nameBlock}/${item.slotName}`}</EZText>
+                </View>
               </View>
-              <View style={styles.flexRow}>
-                <EZText bold color={COLORS.disable}>
-                  Slot name
-                </EZText>
-                <EZText>{`${item.nameBlock}/${item.slotName}`}</EZText>
-              </View>
-            </View>
-          );
-        })}
+            );
+          })}
+        </View>
         <View style={styles.flexRow}>
           <EZText bold color={COLORS.disable}>
             Booking date
@@ -89,9 +102,10 @@ const ScanQRSuccess = ({data}) => {
         text="Done"
         styleEZButtonText={styles.btnDone}
         color={COLORS.white}
-        handlePress={() =>
-          navigation.navigate('bottomTab', {screen: 'homeStack'})
-        }
+        handlePress={() => {
+          refInfo.current.close();
+          navigation.navigate('bottomTab', {screen: 'homeStack'});
+        }}
       />
     </>
   );
@@ -117,16 +131,19 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
   },
-  slotItem: {
+  slots: {
+    alignItems: 'flex-end',
     width: '100%',
+  },
+  slotItem: {
+    width: '95%',
     paddingVertical: 5,
     borderBottomWidth: 1,
-    borderBottomColor: COLORS.borderBrighter,
+    borderBottomColor: COLORS.borderInput,
     borderBottomRightRadius: 10,
     borderBottomLeftRadius: 10,
   },
   license: {
-    padding: 5,
     backgroundColor: COLORS.circleOverlay,
     borderRadius: 5,
   },
