@@ -9,6 +9,7 @@ import {
 } from 'react-native';
 import React from 'react';
 import EZText from './EZText';
+import { SPACING } from '../../assets/styles/styles';
 
 const EZSliderItem = ({item, heightImage = 250, local = false}) => {
   const translateYImage = new Animated.Value(-8);
@@ -42,7 +43,7 @@ export default EZSliderItem;
 
 const styles = StyleSheet.create({
   container: {
-    width: Dimensions.get('screen').width - 20,
+    width: Dimensions.get('screen').width - SPACING.pxComponent*2,
     borderRadius: 10,
     overflow: 'hidden',
   },

@@ -32,14 +32,17 @@ import BookingInfoTop from '../../components/home/BookingInfoTop';
 import DatePicker from 'react-native-date-picker';
 import {useGetSlots} from '../../hooks/api/getParkingLots';
 import EZLoading from '../../components/core/EZLoading';
-import {EZButton} from '../../components/core/EZButton';
+import {EZButton, EZButtonText} from '../../components/core/EZButton';
 import moment, {duration} from 'moment';
 import EZSliderPagination from '../../components/core/EZSliderPagination';
+import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 
 const BookingParkingLot = ({navigation, route}) => {
   const {info} = route.params;
   const [idSlotArr, setIdSlotArr] = useState([]);
   const mutationGetSlots = useGetSlots();
+  const {BG2ND} = bgSecondaryDefault();
+  const refErr = useRef();
   const [params, setParams] = useState({
     duration: '',
     dateStart: '',
@@ -51,6 +54,9 @@ const BookingParkingLot = ({navigation, route}) => {
     end: false,
   });
   const [index, setIndex] = useState(0);
+  const [errMess, setErrMess] = useState({
+    date: '',
+  });
   const scrollX = useRef(new Animated.Value(0)).current;
   const handleScroll = e => {
     Animated.event(
@@ -77,14 +83,21 @@ const BookingParkingLot = ({navigation, route}) => {
     if (
       params.duration !== '' &&
       params.dateStart !== '' &&
-      params.dateReturn !== '' &&
-      idSlotArr.length > 0
+      params.dateReturn !== ''
     ) {
-      navigation.navigate('preview', {
-        dateStart: dateFormatMoment(params.dateStart),
-        dateReturn: dateFormatMoment(params.dateReturn),
-        idSlotArr,
-      });
+      if (idSlotArr.length < 1) {
+        setErrMess({
+          ...errMess,
+          ['slot']: 'Choose at least 1 slot to continue!',
+        });
+        refErr.current.open();
+      } else {
+        navigation.navigate('preview', {
+          dateStart: dateFormatMoment(params.dateStart),
+          dateReturn: dateFormatMoment(params.dateReturn),
+          idSlotArr,
+        });
+      }
     }
   };
   useEffect(() => {
@@ -98,11 +111,34 @@ const BookingParkingLot = ({navigation, route}) => {
       params.dateStart !== '' &&
       params.dateReturn !== ''
     ) {
-      mutationGetSlots.mutate({
-        start_datetime: dateFormatMoment(params.dateStart),
-        end_datetime: dateFormatMoment(params.dateReturn),
-        id: info.id,
-      });
+      if (params.dateReturn < params.dateStart) {
+        setErrMess({
+          ...errMess,
+          ['date']: 'The return time cannot be earlier than the booking time!',
+        });
+        refErr.current.open();
+        mutationGetSlots.reset();
+      } else if (
+        moment(params.dateStart).month() == moment(params.dateReturn).month() &&
+        moment(params.dateStart).date() == moment(params.dateReturn).date() &&
+        moment(params.dateReturn - params.dateStart).minutes() < 59
+      ) {
+        setErrMess({
+          ...errMess,
+          ['date']: 'Duration must be greater than 1 hour!',
+        });
+        refErr.current.open();
+        mutationGetSlots.reset();
+      } else {
+        setErrMess({
+          date: '',
+        });
+        mutationGetSlots.mutate({
+          start_datetime: dateFormatMoment(params.dateStart),
+          end_datetime: dateFormatMoment(params.dateReturn),
+          id: info.id,
+        });
+      }
     }
   }, [params.dateStart, params.dateReturn]);
   return (
@@ -159,7 +195,7 @@ const BookingParkingLot = ({navigation, route}) => {
                         : handleDate(params.dateStart).slice(7)
                       : ''
                   }
-                  placeholder="Date start"
+                  placeholder="Start"
                   iconName="chevron-down"
                   handlePressIcon={() => {
                     setShowDateTimePicker({
@@ -172,7 +208,7 @@ const BookingParkingLot = ({navigation, route}) => {
               </TouchableOpacity>
               <DatePicker
                 modal
-                title="Choose booking start"
+                title="Choose booking starting"
                 open={showDateTimePicker.start}
                 mode={
                   params.duration === 'daily'
@@ -213,7 +249,7 @@ const BookingParkingLot = ({navigation, route}) => {
                         : handleDate(params.dateReturn).slice(7)
                       : ''
                   }
-                  placeholder="Date return"
+                  placeholder="End"
                   iconName="chevron-down"
                   handlePressIcon={() => {
                     setShowDateTimePicker({
@@ -226,7 +262,7 @@ const BookingParkingLot = ({navigation, route}) => {
               </TouchableOpacity>
               <DatePicker
                 modal
-                title="Choose booking return"
+                title="Choose booking ending"
                 open={showDateTimePicker.end}
                 date={new Date()}
                 mode={
@@ -259,12 +295,18 @@ const BookingParkingLot = ({navigation, route}) => {
           </View>
         </View>
         <View style={{flexDirection: 'row', justifyContent: 'space-between'}}>
-          <EZText bold>Choose a parking slot</EZText>
-          <TouchableOpacity onPress={handleNextBtn}>
-            <EZText styleEZText={{padding: 6}} bold color={COLORS.primary}>
-              Next
-            </EZText>
-          </TouchableOpacity>
+          <EZText bold>Choose parking slots</EZText>
+          <EZButtonText
+            text="Next step"
+            color={COLORS.primary}
+            handlePress={handleNextBtn}
+            styleEZButtonText={{
+              paddingHorizontal: 15,
+              paddingVertical: 10,
+              borderRadius: 8,
+              backgroundColor: BG2ND,
+            }}
+          />
         </View>
         {mutationGetSlots.isSuccess && (
           <EZSliderPagination
@@ -293,6 +335,14 @@ const BookingParkingLot = ({navigation, route}) => {
           viewabilityConfig={handleviewabilityConfig}
         />
       </ScrollView>
+      <EZRBSheetModal refRBSheet={refErr} height={200}>
+        <EZText styleEZText={{marginBottom: 10}} color={COLORS.redLight}>
+          {errMess?.date}
+        </EZText>
+        <EZText styleEZText={{marginBottom: 10}} color={COLORS.redLight}>
+          {errMess?.slot}
+        </EZText>
+      </EZRBSheetModal>
     </EZContainer>
   );
 };

@@ -1,4 +1,11 @@
-import {Image, ScrollView, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect, useState} from 'react';
 import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
@@ -28,6 +35,7 @@ const SpaceDetail = ({navigation, route}) => {
   const mutationParkingLotInfo = useGetParkingLotInfo();
   const mutationHandleSaved = useHandleSavedParkingLot();
   const {parkingId} = route.params;
+  const WIDTH = Dimensions.get('screen').width;
   const [parkingLotInfo, setParkingLotInfo] = useState(null);
   const [isSaved, setIsSaved] = useState(false);
   const getInfo = async () => {
@@ -37,7 +45,7 @@ const SpaceDetail = ({navigation, route}) => {
   useEffect(() => {
     getInfo();
   }, []);
-  
+
   useEffect(() => {
     if (mutationParkingLotInfo.isSuccess) {
       navigation.setOptions({
@@ -62,7 +70,17 @@ const SpaceDetail = ({navigation, route}) => {
       {mutationHandleSaved.isLoading && <EZLoading />}
       {parkingLotInfo && (
         <>
-          <EZSlider data={parkingLotInfo.images} />
+          <View
+            style={{
+              width:
+                parkingLotInfo.images.length == 1
+                  ? WIDTH - SPACING.pxComponent * 2
+                  : '100%',
+              overflow: 'visible',
+              marginHorizontal: SPACING.pxComponent,
+            }}>
+            <EZSlider data={parkingLotInfo.images} />
+          </View>
           <View style={styles.lotContent}>
             <EZText bold size="quiteLarge">
               {parkingLotInfo.nameParkingLot}
@@ -125,6 +143,8 @@ const styles = StyleSheet.create({
   lotContent: {
     paddingHorizontal: SPACING.pxComponent,
     gap: 6,
+    width: '100%',
+    marginTop: 10,
   },
   flexRow: {
     flexDirection: 'row',

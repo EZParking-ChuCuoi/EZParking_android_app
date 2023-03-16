@@ -1,9 +1,18 @@
-import {Image, Pressable, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Dimensions,
+  Image,
+  Pressable,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import React from 'react';
 import {
   bgSecondaryDefault,
   colorDefault,
   COLORS,
+  SPACING,
 } from '../../assets/styles/styles';
 import EZText from '../core/EZText';
 import {formatTimeApi} from '../../shared/handleDate';
@@ -13,12 +22,20 @@ import {openGoogleMapsApp} from '../../shared/map';
 const BookingInfoTop = ({info}) => {
   const {BG2ND} = bgSecondaryDefault();
   const {COLOR} = colorDefault();
+  const WIDTH = Dimensions.get('screen').width;
   const handleDirection = () => {
     openGoogleMapsApp(info.address_latitude, info.address_longitude);
   };
   return (
-    <View>
-      <EZSlider data={info.images} />
+    <View style={styles.container}>
+      <View
+        style={{
+          width:
+            info.images.length == 1 ? WIDTH-SPACING.pxComponent*2 : '100%',
+          overflow: 'visible'
+        }}>
+        <EZSlider data={info.images} />
+      </View>
       <View style={[styles.plInfo]}>
         <View
           style={[
@@ -86,5 +103,9 @@ const styles = StyleSheet.create({
     shadowRadius: 3.84,
 
     elevation: 5,
+  },
+  container: {
+    width: '100%',
+    alignItems: 'center',
   },
 });
