@@ -80,13 +80,15 @@ export const useEditProfile = () => {
       let formData = new FormData();
       formData.append('fullName', params.fullName);
       formData.append('_method', 'PUT');
-      formData.append('avatar', {
-        uri: params.avatar.path,
-        name: params.avatar.path.substring(
-          params.avatar.path.lastIndexOf('/') + 1,
-        ),
-        type: params.avatar.mime,
-      });
+      if (params.avatar !== null) {
+        formData.append('avatar', {
+          uri: params.avatar.path,
+          name: params.avatar.path.substring(
+            params.avatar.path.lastIndexOf('/') + 1,
+          ),
+          type: params.avatar.mime,
+        });
+      }
       return httpRequest.postHttpRequest(
         `user/update/${params.userId}`,
         formData,

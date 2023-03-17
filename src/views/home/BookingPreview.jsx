@@ -45,7 +45,16 @@ const BookingPreview = ({navigation, route}) => {
     [...Array(licensePlate.length)].forEach((val, index) => {
       if (licensePlate[index] !== undefined) {
         if (licensePlate[index].length === 8) {
+          if (licensePlate[index] === licensePlate[index - 1]) {
+            check = false;
+            setErrMessage('License plates must be unique!');
+            return;
+          }
           check = true;
+        } else {
+          check = false;
+          setErrMessage('License plates must be 8 characters!');
+          return;
         }
       } else {
         check = false;
@@ -99,7 +108,10 @@ const BookingPreview = ({navigation, route}) => {
                 styleEZInput={{width: '30%'}}
                 defaultValue={licensePlate[index]}
                 onChangeText={license => handleChange(license, index)}
-                styleEZInputField={{textTransform: 'uppercase', paddingRight: 10}}
+                styleEZInputField={{
+                  textTransform: 'uppercase',
+                  paddingRight: 10,
+                }}
               />
               <EZText size="small">
                 {item.carType === '4-16SLOT' ? '4-16 seats' : '16-34 seats'}

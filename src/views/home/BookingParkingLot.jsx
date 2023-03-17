@@ -337,12 +337,15 @@ const BookingParkingLot = ({navigation, route}) => {
         />
       </ScrollView>
       <EZRBSheetModal refRBSheet={refErr} height={200}>
-        <EZText styleEZText={{marginBottom: 10}} color={COLORS.redLight}>
-          {errMess?.date}
+        <EZText
+          styleEZText={{marginBottom: 10}}
+          bold
+          size="quiteLarge"
+          color={COLORS.redLight}>
+          Warning
         </EZText>
-        <EZText styleEZText={{marginBottom: 10}} color={COLORS.redLight}>
-          {errMess?.slot}
-        </EZText>
+        <EZText styleEZText={{marginBottom: 10}}>{errMess?.date}</EZText>
+        <EZText styleEZText={{marginBottom: 10}}>{errMess?.slot}</EZText>
       </EZRBSheetModal>
     </EZContainer>
   );

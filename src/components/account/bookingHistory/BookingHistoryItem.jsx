@@ -11,7 +11,7 @@ import EZRBSheet from '../../core/EZRBSheet';
 import BookingHistoryInfo from './BookingHistoryInfo';
 import BookingHistoryFeedback from './BookingHistoryFeedback';
 import {handleCurrenCy} from '../../../shared/handleCurrenCy';
-import { formatRelativeTime } from '../../../shared/handleDate';
+import {formatRelativeTime} from '../../../shared/handleDate';
 
 const BookingHistoryItem = ({item}) => {
   const {BG2ND} = bgSecondaryDefault();
@@ -24,14 +24,26 @@ const BookingHistoryItem = ({item}) => {
       <View style={styles.contentLeft}>
         <EZText bold>{item.parking_lot_name}</EZText>
         <EZText>{item.address}</EZText>
-        <EZText
-          size="small"
-          styleEZText={{
-            backgroundColor: COLORS.circleOverlay,
-            paddingHorizontal: 2,
-            borderRadius: 2,
-          }}>
-          {formatRelativeTime(item.created_at)} Start {formatRelativeTime(item.bookDate)}
+        <EZText>
+          <EZText
+            size="small"
+            styleEZText={{
+              backgroundColor: COLORS.circleOverlay,
+              paddingHorizontal: 2,
+              borderRadius: 2,
+            }}>
+            {formatRelativeTime(item.created_at)}
+          </EZText>
+          <EZText
+            size="small"
+            styleEZText={{
+              backgroundColor: COLORS.circleOverlay,
+              paddingHorizontal: 2,
+              borderRadius: 2,
+              marginLeft: 20,
+            }}> | Start{' '}
+            {formatRelativeTime(item.bookDate)}
+          </EZText>
         </EZText>
         <EZText color={COLORS.secondary}>
           {handleCurrenCy(item.total_payment)}

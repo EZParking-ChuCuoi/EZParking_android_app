@@ -56,7 +56,6 @@ const Account = ({navigation, route}) => {
     const uid = await getData('EZUid');
     mutationUserInfo.mutate(uid);
   };
-
   return (
     <>
       {mutationUserInfo.isLoading ? (

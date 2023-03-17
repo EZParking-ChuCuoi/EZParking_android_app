@@ -90,7 +90,7 @@ const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
         paddingVertical: 20,
       }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {new Date(mutationBookingDetails.data?.data?.bookings[0]?.bookDate) <
+        {new Date(mutationBookingDetails.data?.data?.bookings[0]?.bookDate) >=
           new Date() && (
           <EZButtonText
             text="Regenerate QR code"
