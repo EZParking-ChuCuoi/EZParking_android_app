@@ -1,7 +1,7 @@
 import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {LineChart} from 'react-native-chart-kit';
-import {COLORS} from '../../../assets/styles/styles';
+import {COLORS, SPACING} from '../../../assets/styles/styles';
 import EZText from '../../core/EZText';
 import {
   handleCurrenCy,
@@ -9,6 +9,7 @@ import {
 } from '../../../shared/handleCurrenCy';
 
 const ChartLine = ({source}) => {
+  const WIDTH = Dimensions.get('screen').width;
   const data = {
     labels: source.periodLabels,
     datasets: [
@@ -30,6 +31,11 @@ const ChartLine = ({source}) => {
     ],
     legend: ['Total amount'],
   };
+
+  const widthChart =
+    source.periodLabels.length > 5
+      ? source.periodLabels.length * (WIDTH / 5)
+      : WIDTH - SPACING.pxComponent * 2;
   return (
     <ScrollView
       horizontal
@@ -37,7 +43,7 @@ const ChartLine = ({source}) => {
       contentOffset={{x: 30000, y: 0}}>
       <LineChart
         data={data}
-        width={1000}
+        width={widthChart}
         verticalLabelRotation={30}
         horizontalLabelRotation={50}
         renderDotContent={({x, y, indexData, index}) => (
@@ -74,7 +80,6 @@ const ChartLine = ({source}) => {
             strokeWidth: '0',
             stroke: '#fff',
             fill: COLORS.secondary,
-
           },
         }}
         bezier

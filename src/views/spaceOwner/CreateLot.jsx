@@ -1,6 +1,5 @@
 import {
   Dimensions,
-  Pressable,
   ScrollView,
   StyleSheet,
   Text,
@@ -15,12 +14,19 @@ import {
   EZButtonBack,
   EZButtonText,
 } from '../../components/core/EZButton';
-import {COLORS, FONTSIZE, SPACING} from '../../assets/styles/styles';
+import {
+  bgSecondaryDefault,
+  COLORS,
+  FONTSIZE,
+  SPACING,
+} from '../../assets/styles/styles';
 import EZInput from '../../components/core/EZInput';
 import EZRBSheet from '../../components/core/EZRBSheet';
+import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 import {getData, getDataObj} from '../../shared/asyncStorages';
 import EZMapView from '../../components/core/EZMapView';
 import Icon from 'react-native-vector-icons/Feather';
+import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import ImageCropPicker from 'react-native-image-crop-picker';
@@ -35,6 +41,7 @@ const CreateLot = () => {
   const refInput = useRef();
   const refRBSheet = useRef();
   const mutationCreate = useCreateParkingLot();
+  const {BG2ND} = bgSecondaryDefault();
   const navigation = useNavigation();
   const [params, setParams] = useState({
     uid: '',
@@ -45,6 +52,15 @@ const CreateLot = () => {
     open: null,
     close: null,
     images: [],
+    desc: '',
+  });
+  const [errMess, setErrMess] = useState({
+    name: '',
+    address: '',
+    coordinate: '',
+    open: null,
+    close: null,
+    images: '',
     desc: '',
   });
   const [showDateTimePicker, setShowDateTimePicker] = useState({
@@ -86,10 +102,11 @@ const CreateLot = () => {
     });
   };
   const handleClose = () => {
-    setParams({
-      ...params,
-      ['address']: refInput.current?.getAddressText(),
-    });
+    //todo Consider to set address param
+    // setParams({
+    //   ...params,
+    //   ['address']: refInput.current?.getAddressText(),
+    // });
     refRBSheet.current.close();
     if (coordinateDrag !== undefined) {
       setParams({
@@ -125,9 +142,59 @@ const CreateLot = () => {
       setParams({...params, ['images']: img});
     });
   };
+  const handleValidate = () => {
+    let check = true;
+    let errorMessage = {
+      name: '',
+      address: '',
+      coordinate: '',
+      open: null,
+      close: null,
+      images: '',
+      desc: '',
+    };
+    if (params.address === '') {
+      errorMessage.address = 'Please enter parking lot address!';
+      check = false;
+    }
+    if (params.name === '') {
+      errorMessage.name = 'Please enter parking lot name!';
+      check = false;
+    }
+    if (params.desc === '') {
+      errorMessage.desc = 'Please enter parking lot desc!';
+      check = false;
+    }
+    if (params.lat === '' || params.lng === '') {
+      errorMessage.coordinate = 'Please pick your location in map!';
+      check = false;
+    }
+    if (params.open === null) {
+      errorMessage.open = 'Please choose open time!';
+      check = false;
+    }
+    if (params.close === null) {
+      errorMessage.close = 'Please choose close time!';
+      check = false;
+    }
+    if (params.close < params.open) {
+      errorMessage.close = 'Close time must be after open time!';
+      check = false;
+    }
+    if (params.images.length == 0) {
+      errorMessage.images = 'Choose at least 1 image of your parking lot!';
+      check = false;
+    }
+    setErrMess(errorMessage);
+    return check;
+  };
   const handleCreate = () => {
+    if (!handleValidate()) {
+      return;
+    }
     mutationCreate.mutate(params);
   };
+
   return (
     <EZContainer styleEZContainer={styles.container}>
       {mutationCreate.isLoading && <EZLoading text=" " />}
@@ -181,6 +248,7 @@ const CreateLot = () => {
         keyboardShouldPersistTaps="handled">
         <EZInput
           label="Parking lot name"
+          errMess={errMess.name}
           styleEZInput={{marginBottom: SPACING.mbInputItem}}
           placeholder="Name"
           maxLength={50}
@@ -189,27 +257,50 @@ const CreateLot = () => {
         />
         <EZInput
           label="Description"
+          errMess={errMess.desc}
           styleEZInput={{marginBottom: SPACING.mbInputItem}}
           lines={5}
           placeholder="Description"
           defaultValue={params.desc}
           onChangeText={desc => setParams({...params, ['desc']: desc})}
         />
-        <Pressable
+        <EZInput
+          label="Address"
+          errMess={errMess.address}
+          styleEZInput={{marginBottom: SPACING.mbInputItem}}
+          placeholder="Address"
+          lines={2}
+          value={params.address}
+          onChangeText={address => setParams({...params, ['address']: address})}
+        />
+        <TouchableOpacity
           onPress={() => {
             refRBSheet.current.open();
             refInput.current?.setAddressText(params.address);
-          }}>
-          <EZInput
-            label="Address"
-            styleEZInput={{marginBottom: SPACING.mbInputItem}}
-            placeholder="Address"
-            lines={2}
-            value={params.address}
-            editable={false}
+          }}
+          style={[styles.btnPick, {backgroundColor: BG2ND}]}>
+          <IconMaterialIcons
+            name="my-location"
+            size={FONTSIZE.iconLarge}
+            color={
+              params.lat !== '' && params.lng !== ''
+                ? COLORS.primary
+                : COLORS.disable
+            }
           />
-        </Pressable>
-        <Pressable
+          <EZText
+            color={params.lat !== '' && params.lng !== '' && COLORS.primary}>
+            {params.lat !== '' && params.lng !== ''
+              ? 'Picked location success'
+              : 'Pick specific location'}
+          </EZText>
+        </TouchableOpacity>
+        {errMess.coordinate && (
+          <EZText size="small" color={COLORS.redLight}>
+            {errMess.coordinate}
+          </EZText>
+        )}
+        <TouchableOpacity
           onPress={() => {
             setShowDateTimePicker({
               ...showDateTimePicker,
@@ -220,11 +311,12 @@ const CreateLot = () => {
             label="Open time"
             styleEZInput={{marginBottom: SPACING.mbInputItem}}
             placeholder="Open time"
+            errMess={errMess.open}
             value={params.open}
             editable={false}
           />
-        </Pressable>
-        <Pressable
+        </TouchableOpacity>
+        <TouchableOpacity
           onPress={() => {
             setShowDateTimePicker({
               ...showDateTimePicker,
@@ -235,14 +327,17 @@ const CreateLot = () => {
             label="Close time"
             styleEZInput={{marginBottom: SPACING.mbInputItem}}
             placeholder="Close time"
+            errMess={errMess.close}
             value={params.close}
             editable={false}
           />
-        </Pressable>
+        </TouchableOpacity>
         {params.images.length > 0 ? (
           <EZSlider data={params.images} local />
         ) : (
-          <Pressable onPress={handlePickImage} style={styles.uploadImage}>
+          <TouchableOpacity
+            onPress={handlePickImage}
+            style={styles.uploadImage}>
             <Lottie
               source={require('../../assets/images/upload.json')}
               autoPlay
@@ -250,7 +345,12 @@ const CreateLot = () => {
               style={{position: 'relative', width: 100, height: 100}}
             />
             <EZText>Upload images </EZText>
-          </Pressable>
+          </TouchableOpacity>
+        )}
+        {errMess.images && (
+          <EZText size="small" color={COLORS.redLight}>
+            {errMess.images}
+          </EZText>
         )}
         <EZButton
           styleEZButton={{marginVertical: 20}}
@@ -335,5 +435,13 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     borderColor: COLORS.borderInput,
     borderStyle: 'dashed',
+  },
+  btnPick: {
+    paddingHorizontal: 15,
+    paddingVertical: 10,
+    borderRadius: 7,
+    flexDirection: 'row',
+    gap: 10,
+    marginBottom: 10,
   },
 });

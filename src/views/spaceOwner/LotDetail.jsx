@@ -44,6 +44,14 @@ const LotDetail = ({navigation, route}) => {
     price: '',
     numberOfSlot: '',
   });
+  const [errMess, setErrMess] = useState({
+    parkingLotId: '',
+    nameBlock: '',
+    carType: '',
+    desc: '',
+    price: '',
+    numberOfSlot: '',
+  });
   useEffect(() => {
     navigation.setOptions({
       title: nameParkingLot,

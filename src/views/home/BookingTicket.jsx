@@ -38,7 +38,6 @@ const BookingTicket = ({navigation, route}) => {
   const handleCapture = () => {
     refViewShot.current.capture().then(
       uri => {
-        console.log('uri', uri);
         if (hasStorePermission()) {
           CameraRoll.save(uri, {type: 'photo', album: 'EZParking'});
           LocalNotification(
