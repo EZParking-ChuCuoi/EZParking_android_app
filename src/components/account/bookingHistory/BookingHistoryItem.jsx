@@ -31,7 +31,7 @@ const BookingHistoryItem = ({item}) => {
             paddingHorizontal: 2,
             borderRadius: 2,
           }}>
-          {formatRelativeTime(item.bookDate)}
+          {formatRelativeTime(item.created_at)} Start {formatRelativeTime(item.bookDate)}
         </EZText>
         <EZText color={COLORS.secondary}>
           {handleCurrenCy(item.total_payment)}

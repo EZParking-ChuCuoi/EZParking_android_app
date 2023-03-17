@@ -95,7 +95,7 @@ const BookingPreview = ({navigation, route}) => {
           mutationBookingPreview?.data?.slots?.map((item, index) => (
             <View style={styles.row} key={index}>
               <EZInput
-                placeholder="License plate"
+                placeholder="Car's plate"
                 styleEZInput={{width: '30%'}}
                 defaultValue={licensePlate[index]}
                 onChangeText={license => handleChange(license, index)}

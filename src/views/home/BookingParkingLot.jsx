@@ -121,6 +121,7 @@ const BookingParkingLot = ({navigation, route}) => {
       } else if (
         moment(params.dateStart).month() == moment(params.dateReturn).month() &&
         moment(params.dateStart).date() == moment(params.dateReturn).date() &&
+        moment(params.dateStart).hour() == moment(params.dateReturn).hour() &&
         moment(params.dateReturn - params.dateStart).minutes() < 59
       ) {
         setErrMess({
