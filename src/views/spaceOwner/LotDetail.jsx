@@ -63,9 +63,11 @@ const LotDetail = ({navigation, route}) => {
       refRBSheet.current.close();
       handleResetForm();
       mutationGetBlock.mutate(idParkingLot);
+    }else if(mutationCreateBlock.isError && mutationCreateBlock.error?.response?.status===404){
+      setErrMess({...errMess, ['nameBlock']: 'Block name already exist!'})
     }
   }, [mutationCreateBlock.status]);
-  console.log(mutationCreateBlock.error?.response?.data)
+  
 
   const handleResetForm = () => {
     setParams({
@@ -97,26 +99,26 @@ const LotDetail = ({navigation, route}) => {
     if (params.desc === '') {
       check = false;
       errMessages.desc = 'Required input!';
-    } else if (params.desc.split(' ').filter(i => i).length < 8) {
-      check = false;
-      errMessages.desc = 'Description must be more than 8 words!';
     }
     if (params.price === '') {
       check = false;
       errMessages.price = 'Required input!';
-    } else if (25000 < parseInt(params.price) || parseInt(params.price) < 15000) {
+    } else if (
+      25000 < parseInt(params.price) ||
+      parseInt(params.price) < 15000
+    ) {
       check = false;
       errMessages.price = 'Price per hour must from 15.000VND to 25.000VND!';
     }
     if (params.numberOfSlot === '') {
       check = false;
       errMessages.numberOfSlot = 'Required input!';
-    } else if (params.numberOfSlot < 1) {
+    } else if (parseInt(params.numberOfSlot) < 1) {
       check = false;
       errMessages.numberOfSlot = 'Invalid number!';
-    } else if (params.numberOfSlot < 1) {
+    } else if (parseInt(params.numberOfSlot) > 50) {
       check = false;
-      errMessages.numberOfSlot = 'Invalid number!';
+      errMessages.numberOfSlot = 'Max number slot you can create is 50!';
     }
     setErrMess(errMessages);
     return check;

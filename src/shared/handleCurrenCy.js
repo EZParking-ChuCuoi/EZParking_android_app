@@ -1,3 +1,7 @@
 export const handleCurrenCy = currency => {
-  return currency.toLocaleString('it-IT', {style: 'currency', currency: 'VND'});
+  const VND = new Intl.NumberFormat('vi-VN', {
+    style: 'currency',
+    currency: 'VND',
+  });
+  return VND.format(currency);
 };

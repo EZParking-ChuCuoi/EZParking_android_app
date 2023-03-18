@@ -10,7 +10,12 @@ import {
 import React, {useEffect, useRef, useState} from 'react';
 import EZContainer from '../../core/EZContainer';
 import EZText from '../../core/EZText';
-import {EZButton, EZButtonBack, EZButtonText} from '../../core/EZButton';
+import {
+  EZButton,
+  EZButtonBack,
+  EZButtonIcon,
+  EZButtonText,
+} from '../../core/EZButton';
 import {
   bgSecondaryDefault,
   colorDefault,
@@ -32,6 +37,7 @@ import Lottie from 'lottie-react-native';
 import {
   useCreateParkingLot,
   useEditParkingLot,
+  useGetParkingLotInfoEdit,
 } from '../../../hooks/api/useSpaceOwnerAction';
 import EZLoading from '../../core/EZLoading';
 import {useNavigation, useRoute} from '@react-navigation/native';
@@ -49,10 +55,9 @@ const EditParkingLot = ({
   const refInput = useRef();
   const refRBSheet = useRef();
   const mutationEdit = useEditParkingLot();
-  const mutationGetInfo = useGetParkingLotInfo();
+  const mutationGetInfo = useGetParkingLotInfoEdit();
   const {BG2ND} = bgSecondaryDefault();
   const {COLOR} = colorDefault();
-  const navigation = useNavigation();
   const [params, setParams] = useState({
     idParkingLot: idParking,
     name: '',
@@ -71,7 +76,7 @@ const EditParkingLot = ({
     coordinate: '',
     open: null,
     close: null,
-    imagesUpdate: '',
+    images: '',
     desc: '',
   });
   const [showDateTimePicker, setShowDateTimePicker] = useState({
@@ -86,32 +91,28 @@ const EditParkingLot = ({
       const uid = await getData('EZUid');
       console.log(uid, idParking, nameParkingLot);
       setCoordinate(coor);
-      mutationGetInfo.mutate({
-        parkingId: idParking,
-        uid: uid,
-      });
+      mutationGetInfo.mutate(idParking);
     };
     getCoor();
   }, []);
+  console.log(params)
   useEffect(() => {
     if (mutationGetInfo.isSuccess) {
-      console.log('CCC', mutationGetInfo.data[0]?.openTime.slice(0,5));
       setParams({
         ...params,
-        ['name']: mutationGetInfo.data[0]?.nameParkingLot,
-        ['address']: mutationGetInfo.data[0]?.address,
-        ['lat']: mutationGetInfo.data[0]?.address_latitude,
-        ['lng']: mutationGetInfo.data[0]?.address_longitude,
-        ['open']: mutationGetInfo.data[0]?.openTime.slice(0,5),
-        ['close']: mutationGetInfo.data[0]?.endTime.slice(0,5),
-        ['images']: mutationGetInfo.data[0]?.images,
-        ['desc']: mutationGetInfo.data[0]?.desc,
+        ['name']: mutationGetInfo.data?.nameParkingLot,
+        ['address']: mutationGetInfo.data?.address,
+        ['lat']: mutationGetInfo.data?.address_latitude,
+        ['lng']: mutationGetInfo.data?.address_longitude,
+        ['open']: mutationGetInfo.data?.openTime.slice(0, 5),
+        ['close']: mutationGetInfo.data?.endTime.slice(0, 5),
+        ['images']: mutationGetInfo.data?.images,
+        ['desc']: mutationGetInfo.data?.desc,
       });
     } else {
       console.log(mutationGetInfo.error?.response?.data);
     }
   }, [mutationGetInfo.status]);
-  console.log(params);
   useEffect(() => {
     if (mutationEdit.isSuccess) {
       setParams({
@@ -189,7 +190,7 @@ const EditParkingLot = ({
       coordinate: '',
       open: null,
       close: null,
-      imagesUpdate: '',
+      images: '',
       desc: '',
     };
     if (params.address === '') {
@@ -220,6 +221,14 @@ const EditParkingLot = ({
       errorMessage.close = 'Close time must be after open time!';
       check = false;
     }
+    if (params.images.length + params.imagesUpdate.length < 1) {
+      errorMessage.images = 'Please choose image!';
+      check = false;
+    }
+    if (params.images.length + params.imagesUpdate.length > 4) {
+      errorMessage.images = 'Only allowed to use up to 4 images!';
+      check = false;
+    }
     setErrMess(errorMessage);
     return check;
   };
@@ -229,7 +238,20 @@ const EditParkingLot = ({
     }
     mutationEdit.mutate(params);
   };
-
+  const handlePressImage = (item, type) => {
+    if (type === 'remote') {
+      setParams(prev => ({
+        ...params,
+        ['images']: prev.images.filter(img => img !== item),
+      }));
+    }
+    if (type === 'local') {
+      setParams(prev => ({
+        ...params,
+        ['imagesUpdate']: prev.imagesUpdate.filter(img => img !== item),
+      }));
+    }
+  };
   return (
     <EZContainer styleEZContainer={styles.container}>
       {mutationEdit.isLoading && <EZLoading text=" " />}
@@ -380,37 +402,64 @@ const EditParkingLot = ({
             editable={false}
           />
         </TouchableOpacity>
-        {params.images.length > 0 && (
-          <ScrollView contentContainerStyle={styles.imgList} collapsable>
-            {params.images.map((item, index) => {
+        <ScrollView contentContainerStyle={styles.imgList}>
+          {params.images.length > 0 &&
+            params.images.map((item, index) => {
               return (
-                <Image
-                  key={index}
-                  source={{uri: item}}
-                  style={[styles.imgItem]}
-                />
+                <View style={styles.imgItemGroup} key={index}>
+                  <Image source={{uri: item}} style={[styles.imgItem]} />
+                  <EZButtonIcon
+                    iconName="trash-2"
+                    color={COLORS.redLight}
+                    size={FONTSIZE.iconLarge}
+                    handlePress={() => handlePressImage(item, 'remote')}
+                    styleEZButtonIcon={{
+                      position: 'absolute',
+                      bottom: 6,
+                      right: 6,
+                    }}
+                  />
+                </View>
               );
             })}
-          </ScrollView>
-        )}
-        {params.imagesUpdate.length > 0 ? (
-          <EZSlider data={params.imagesUpdate} local />
-        ) : (
+          {params.imagesUpdate.length > 0 &&
+            params.imagesUpdate.map((item, index) => {
+              return (
+                <View style={styles.imgItemGroup} key={index}>
+                  <Image source={{uri: item.path}} style={[styles.imgItem]} />
+                  <EZButtonIcon
+                    iconName="trash-2"
+                    color={COLORS.redLight}
+                    size={FONTSIZE.iconLarge}
+                    handlePress={() => handlePressImage(item, 'local')}
+                    styleEZButtonIcon={{
+                      position: 'absolute',
+                      bottom: 6,
+                      right: 6,
+                    }}
+                  />
+                </View>
+              );
+            })}
           <TouchableOpacity
             onPress={handlePickImage}
-            style={styles.uploadImage}>
+            style={[styles.imgPick, {backgroundColor: BG2ND}]}>
             <Lottie
               source={require('../../../assets/images/upload.json')}
               autoPlay
               loop
-              style={{position: 'relative', width: 100, height: 100}}
+              style={{
+                position: 'relative',
+                width: '100%',
+                height: 100,
+              }}
             />
             <EZText>Upload images </EZText>
           </TouchableOpacity>
-        )}
-        {errMess.imagesUpdate && (
+        </ScrollView>
+        {errMess.images && (
           <EZText size="small" color={COLORS.redLight}>
-            {errMess.imagesUpdate}
+            {errMess.images}
           </EZText>
         )}
         <EZButton
@@ -496,13 +545,8 @@ const styles = StyleSheet.create({
   },
   uploadImage: {
     width: '100%',
-    height: 200,
     justifyContent: 'center',
     alignItems: 'center',
-    borderRadius: 20,
-    borderWidth: 1,
-    borderColor: COLORS.borderInput,
-    borderStyle: 'dashed',
   },
   btnPick: {
     paddingHorizontal: 15,
@@ -513,18 +557,40 @@ const styles = StyleSheet.create({
     marginBottom: 10,
   },
   imgList: {
-    width: '100%',
+    width: Dimensions.get('screen').width - SPACING.pxComponent * 2,
     justifyContent: 'flex-start',
     alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    marginBottom: 15,
+    marginVertical: 15,
     gap: (Dimensions.get('screen').width - SPACING.pxComponent * 2) * 0.02,
   },
   imgItem: {
-    width: '48%',
+    width: '100%',
     height: 200,
     borderRadius: 10,
     resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+  },
+  imgPick: {
+    width: '49%',
+    height: 200,
+    borderRadius: 10,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+  },
+  imgItemGroup: {
+    width: '49%',
+    height: 200,
+    borderRadius: 10,
+    resizeMode: 'cover',
+    justifyContent: 'center',
+    alignItems: 'center',
+    position: 'relative',
   },
 });

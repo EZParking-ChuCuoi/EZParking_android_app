@@ -13,23 +13,13 @@ const ChartLine = ({source}) => {
   const data = {
     labels: source.periodLabels,
     datasets: [
-      // {
-      //   data: source.bookingCounts,
-      //   color: (opacity = 1) => `rgba(134, 69, 244, ${opacity})`,
-      //   strokeWidth: 1,
-      // },
-      // {
-      //   data: source.uniqueUsers,
-      //   color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
-      //   strokeWidth: 2,
-      // },
       {
         data: source.salesTotals,
         color: (opacity = 1) => COLORS.secondary,
         strokeWidth: 5,
       },
     ],
-    legend: ['Total amount'],
+    legend: [],
   };
 
   const widthChart =
@@ -45,6 +35,8 @@ const ChartLine = ({source}) => {
         data={data}
         width={widthChart}
         verticalLabelRotation={30}
+        withHorizontalLabels={false}
+        withInnerLines={false}
         horizontalLabelRotation={50}
         renderDotContent={({x, y, indexData, index}) => (
           <View
@@ -54,16 +46,13 @@ const ChartLine = ({source}) => {
               left: x - 15,
             }}
             key={index}>
-            <EZText size="small" color={COLORS.white} bold>{handleCurrenCy(indexData)}</EZText>
+            <EZText size="small" color={COLORS.white}>
+              {handleCurrenCy(indexData)}
+            </EZText>
           </View>
         )}
-        // withHorizontalLines={false}
         withVerticalLines={false}
-        // withHorizontalLabels={false}
-        // withInnerLines={false}
-        // withOuterLines={false}
-        height={400}
-        yAxisLabel="(VND) "
+        height={350}
         chartConfig={{
           backgroundColor: COLORS.tertiary,
           backgroundGradientFrom: COLORS.primary,
@@ -73,7 +62,6 @@ const ChartLine = ({source}) => {
           labelColor: (opacity = 1) => COLORS.yellow,
           style: {
             borderRadius: 16,
-            marginHorizontal: 10,
           },
           propsForDots: {
             r: '6',
@@ -81,6 +69,7 @@ const ChartLine = ({source}) => {
             stroke: '#fff',
             fill: COLORS.secondary,
           },
+          formatYLabel: ylable => handleCurrenCy(parseInt(ylable)),
         }}
         bezier
       />

@@ -3,7 +3,7 @@ import React from 'react';
 import {COLORS} from '../../assets/styles/styles';
 
 const {width} = Dimensions.get('screen');
-const EZSliderPagination = ({data, scrollX, index, top}) => {
+const EZSliderPagination = ({data, scrollX, top}) => {
   return (
     <View style={top ? styles.containerForTop : styles.container}>
       {data.map((_, idx) => {

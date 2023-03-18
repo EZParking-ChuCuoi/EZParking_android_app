@@ -76,9 +76,6 @@ const BlockItem = props => {
     if (params.desc === '') {
       check = false;
       errMessages.desc = 'Required input!';
-    } else if (params.desc.split(' ').filter(i => i).length < 8) {
-      check = false;
-      errMessages.desc = 'Description must be more than 8 words!';
     }
     if (params.price === '') {
       check = false;
@@ -169,7 +166,7 @@ const BlockItem = props => {
             style={styles.btn}
           />
         )}
-        <EZText lines={2} bold>
+        <EZText lines={2} styleEZText={{maxWidth: '45%', overflow: 'hidden'}} bold>
           {props.text}
         </EZText>
         {props.children}
@@ -198,7 +195,7 @@ const BlockItem = props => {
             </View>
             <View style={styles.leftBottom}>
               <EZText>
-                <EZText size="large" color={COLORS.secondary}>
+                <EZText size="large" bold color={COLORS.secondary}>
                   {props.item.slots_count}
                 </EZText>{' '}
                 slots

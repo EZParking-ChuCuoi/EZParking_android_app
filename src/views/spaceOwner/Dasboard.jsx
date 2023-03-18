@@ -30,7 +30,6 @@ import {Link} from '@react-navigation/native';
 import DashboardItem from '../../components/spaceOwner/dashboard/DashboardItem';
 import {
   useDeleteParkingLot,
-  useGetManagingRevenueParkingLot,
   useGetPeriodManagingRevenueParkingLot,
   useGetUsersParkingLot,
 } from '../../hooks/api/useSpaceOwnerAction';
@@ -40,8 +39,6 @@ import EZLoading from '../../components/core/EZLoading';
 import ChartBar from '../../components/spaceOwner/dashboard/ChartBar';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import {PERIOD_REVENUE} from '../../utils/defaultDataSelection';
-import EZRBSheetModal from '../../components/core/EZRBSheetModal';
-import EditParkingLot from '../../components/spaceOwner/dashboard/EditParkingLot';
 
 const Dasboard = ({navigation}) => {
   const {COLOR} = colorDefault();
@@ -50,7 +47,6 @@ const Dasboard = ({navigation}) => {
   const refRBSheetPeriod = useRef();
   const mutationParkingLot = useGetUsersParkingLot();
   const mutationPeriodRevenue = useGetPeriodManagingRevenueParkingLot();
-  const mutationDelete = useDeleteParkingLot();
   const [periodRevenue, setPeriodRevenue] = useState(PERIOD_REVENUE[0].value);
   const getLots = async () => {
     const uid = await getData('EZUid');
@@ -68,15 +64,8 @@ const Dasboard = ({navigation}) => {
     };
     getRevenue();
   }, [periodRevenue, mutationParkingLot.status]);
-
-  const handleDelete = idParking => {
-    mutationDelete.mutate(idParking);
-    getLots();
-  };
-
   return (
     <EZContainer bgEZStatusBar={COLORS.tertiary}>
-      {mutationDelete.isLoading && <EZLoading text=" " />}
       {mutationParkingLot.isLoading && <EZLoading text=" " />}
       <TouchableOpacity
         style={[styles.btnBack, {backgroundColor: BG2ND, shadowColor: COLOR}]}
@@ -114,7 +103,13 @@ const Dasboard = ({navigation}) => {
             <DashboardItem isCreate />
             {mutationParkingLot.isSuccess &&
               mutationParkingLot.data?.data?.map(item => {
-                return <DashboardItem item={item} key={item.idParking} onRefresh={getLots} />;
+                return (
+                  <DashboardItem
+                    item={item}
+                    key={item.idParking}
+                    onRefresh={getLots}
+                  />
+                );
               })}
           </ScrollView>
           <View style={styles.titleRevenue}>
@@ -125,9 +120,7 @@ const Dasboard = ({navigation}) => {
               styleEZText={{
                 marginTop: 20,
                 width: '50%',
-              }}>
-              Manage revenue
-            </EZText>
+              }}></EZText>
             <TouchableOpacity
               style={[styles.btnPeriod, {backgroundColor: BG2ND}]}
               onPress={() => refRBSheetPeriod.current.open()}>
@@ -142,14 +135,38 @@ const Dasboard = ({navigation}) => {
             </TouchableOpacity>
           </View>
           {mutationPeriodRevenue.isSuccess && (
-            <View style={styles.chartLine}>
-              <ChartLine source={mutationPeriodRevenue?.data?.data} />
-            </View>
+            <>
+              <EZText
+                transform="uppercase"
+                bold
+                color={COLORS.secondary}
+                styleEZText={{
+                  marginTop: 20,
+                }}>
+                Revenue all of your parking lots
+              </EZText>
+              <View style={styles.chartLine}>
+                <ChartLine source={mutationPeriodRevenue?.data?.data} />
+              </View>
+            </>
           )}
           {mutationPeriodRevenue.isLoading && <EZLoading text=" " />}
-          {/* {mutationParkingLot.isSuccess && (
-            <ChartBar source={mutationParkingLot.data.data} label={'booked'} />
-          )} */}
+          {mutationParkingLot.isSuccess && (
+            <>
+              <EZText
+                transform="uppercase"
+                bold
+                color={COLORS.secondary}
+                styleEZText={{
+                  marginTop: 20,
+                }}>
+                Revenue specific parking lot
+              </EZText>
+              <View style={styles.chartLine}>
+                <ChartBar source={mutationParkingLot.data.data} />
+              </View>
+            </>
+          )}
         </View>
       </ScrollView>
       <EZRBSheet refRBSheet={refRBSheetPeriod} height={300}>

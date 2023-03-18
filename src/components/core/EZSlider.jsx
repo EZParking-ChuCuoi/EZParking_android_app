@@ -3,10 +3,11 @@ import React, {useRef, useState} from 'react';
 import EZSliderItem from './EZSliderItem';
 import EZSliderPagination from './EZSliderPagination';
 
-const EZSlider = ({data, local=false}) => {
+const EZSlider = ({data, local = false}) => {
   const [index, setIndex] = useState(0);
   const scrollX = useRef(new Animated.Value(0)).current;
-  const handleScroll = e => {
+
+  const handleOnScroll = event => {
     Animated.event(
       [
         {
@@ -17,13 +18,18 @@ const EZSlider = ({data, local=false}) => {
           },
         },
       ],
-      {useNativeDriver: false},
-    )(e);
+      {
+        useNativeDriver: false,
+      },
+    )(event);
   };
-  const handleViewableItemsChanged = useRef(({viewableItems}) => {
-    setIndex(viewableItems[0].index);
+
+  // todo: fix load index here
+  const handleOnViewableItemsChanged = useRef(({viewableItems}) => {
+    setIndex(viewableItems[0].index ?? 0);
   }).current;
-  const handleviewabilityConfig = useRef({
+
+  const viewabilityConfig = useRef({
     itemVisiblePercentThreshold: 50,
   }).current;
   return (
@@ -36,10 +42,10 @@ const EZSlider = ({data, local=false}) => {
         horizontal
         snapToAlignment="center"
         showsHorizontalScrollIndicator={false}
-        onScroll={handleScroll}
-        onViewableItemsChanged={handleViewableItemsChanged}
+        onScroll={handleOnScroll}
+        onViewableItemsChanged={handleOnViewableItemsChanged}
+        viewabilityConfig={viewabilityConfig}
         contentContainerStyle={{gap: 10}}
-        viewabilityConfig={handleviewabilityConfig}
       />
       <EZSliderPagination data={data} scrollX={scrollX} index={index} />
     </View>

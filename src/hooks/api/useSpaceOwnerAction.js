@@ -10,6 +10,14 @@ export const useGetUsersParkingLot = () => {
   });
 };
 
+export const useGetParkingLotInfoEdit = () => {
+  return useMutation({
+    mutationFn: id => {
+      return httpRequest.getHttpRequest(`parking-lot/${id}`);
+    },
+  });
+};
+
 export const useGetPeriodManagingRevenueParkingLot = () => {
   return useMutation({
     mutationFn: params => {
@@ -67,6 +75,11 @@ export const useEditParkingLot = () => {
       formData.append('openTime', params.open);
       formData.append('endTime', params.close);
       formData.append('_method', 'PUT');
+      if (params.images.length !== 0) {
+        params.images.forEach(img => {
+          formData.append('imageUpdates[]', img);
+        });
+      }
       if (params.imagesUpdate.length !== 0) {
         params.imagesUpdate.forEach(img => {
           formData.append('images[]', {

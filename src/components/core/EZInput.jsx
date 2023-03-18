@@ -20,7 +20,7 @@ const EZInput = props => {
   return (
     <View style={[styles.groupInput, {...props.styleEZInput}]}>
       {props.label && (
-        <EZText styleEZText={{marginBottom: 5, fontWeight: '500'}}>
+        <EZText bold styleEZText={{marginBottom: 5, fontWeight: '500'}}>
           {props.label}
         </EZText>
       )}

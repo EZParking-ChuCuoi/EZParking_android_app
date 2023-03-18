@@ -6,7 +6,7 @@ import {
   useColorScheme,
   View,
 } from 'react-native';
-import React, {useRef} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import EZText from '../../core/EZText';
 import Icon from 'react-native-vector-icons/Feather';
 import {
@@ -22,16 +22,33 @@ import EZRBSheetModal from '../../core/EZRBSheetModal';
 import {EZButton} from '../../core/EZButton';
 import EZRBSheet from '../../core/EZRBSheet';
 import EditParkingLot from './EditParkingLot';
+import {useDeleteParkingLot} from '../../../hooks/api/useSpaceOwnerAction';
 
 const DashboardItem = props => {
   const {isCreate, item, onRefresh} = props;
-  console.log(item);
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const navigation = useNavigation();
+  const mutationDelete = useDeleteParkingLot();
   const refPopup = useRef();
   const refEdit = useRef();
   const isDarkMode = useColorScheme() === 'dark';
+  const [errMessDelete, setErrMessDel] = useState('');
+  const handleDelete = idParking => {
+    mutationDelete.mutate(idParking);
+  };
+  useEffect(() => {
+    if (mutationDelete.isSuccess) {
+      onRefresh();
+    } else if (mutationDelete.isError) {
+      let message = '';
+      if (mutationDelete.error?.response?.status === 409) {
+        message = "Can't delete the parking lot that is already in use!";
+      }
+      setErrMessDel(message);
+    }
+  }, [mutationDelete.status]);
+
   return (
     <TouchableOpacity
       style={[
@@ -55,9 +72,7 @@ const DashboardItem = props => {
         )
       }>
       <LinearGradient
-        start={{x: 0.0, y: 0.25}}
-        end={{x: 0.5, y: 1.0}}
-        locations={[0.3, 0.6, 0.9]}
+      
         colors={
           isCreate
             ? COLORS.linearBGPrimary
@@ -103,6 +118,7 @@ const DashboardItem = props => {
                 handlePress={() => refEdit.current.open()}
               />
             </View>
+            {errMessDelete && <EZText color={COLORS.redLight}>{errMessDelete}</EZText>}
           </EZRBSheetModal>
           <EZRBSheet
             refRBSheet={refEdit}

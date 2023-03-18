@@ -1,50 +1,74 @@
-import {Dimensions, StyleSheet, Text, View} from 'react-native';
+import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {BarChart} from 'react-native-chart-kit';
+import {handleCurrenCy} from '../../../shared/handleCurrenCy';
+import {COLORS, FONTSIZE} from '../../../assets/styles/styles';
+import moment from 'moment';
+import EZText from '../../core/EZText';
+import {LocalNotification} from '../../../shared/LocalPushController';
 
-const ChartBar = () => {
+const ChartBar = ({source}) => {
+  const WIDTH = Dimensions.get('screen').width;
   const data = {
-    labels: ['January', 'February', 'March', 'April', 'May', 'June'],
+    labels: source.map(item => {
+      return item.nameParkingLot;
+    }),
     datasets: [
       {
-        data: [1, 2, 3, 4, 7, 9, 11],
-        color: (opacity = 1) => `rgba(134, 255, 244, ${opacity})`,
-      },
-      {
-        data: [1, 2, 3, 4, 7, 9, 11],
-        color: (opacity = 1) => `rgba(134, 65, 244, ${opacity})`,
+        data: source.map(item => {
+          return item.totalRevenue;
+        }),
+        colors: source.map(() => {
+          return (opacity = 1) => COLORS.secondary;
+        }),
       },
     ],
+    legend: [],
   };
+  const widthChart =
+    data.labels.length > 5
+      ? data.labels.length * (WIDTH / 5)
+      : WIDTH - SPACING.pxComponent * 2;
   return (
-    <BarChart
-      data={data}
-      width={Dimensions.get('screen').width - 20}
-      yAxisLabel=""
-      yAxisSuffix=""
-      yAxisInterval={9}
-      height={400}
-      chartConfig={{
-        backgroundColor: '#fff',
-        decimalPlaces: 0, // optional, defaults to 2dp
-        color: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        labelColor: (opacity = 1) => `rgba(255, 255, 255, ${opacity})`,
-        style: {
-          borderRadius: 16,
-        },
-        propsForDots: {
-          r: '6',
-          strokeWidth: '2',
-          stroke: '#aaa',
-        },
-      }}
-      bezier
-      style={{
-        marginVertical: 8,
-        borderRadius: 16,
-        paddingHorizontal: 10,
-      }}
-    />
+    <ScrollView
+      horizontal
+      showsHorizontalScrollIndicator={false}
+      contentOffset={{x: 10, y: 0}}>
+      <BarChart
+        data={data}
+        width={widthChart}
+        yAxisLabel=""
+        yAxisSuffix=""
+        yAxisInterval={20}
+        verticalLabelRotation={30}
+        showsHorizontalScrollIndicator={true}
+        withHorizontalLabels={false}
+        withInnerLines={false}
+        showValuesOnTopOfBars={true}
+        showBarTops={false}
+        withCustomBarColorFromData={true}
+        flatColor={true}
+        height={400}
+        chartConfig={{
+          backgroundColor: 'transparent',
+          backgroundGradientFrom: COLORS.primary,
+          backgroundGradientTo: COLORS.strokeColor,
+          formatTopBarValue: value => handleCurrenCy(value),
+          color: (opacity = 1) => COLORS.white,
+          labelColor: () => COLORS.yellow,
+          style: {
+            borderRadius: 16,
+          },
+          linejoinType: 'miter',
+          barPercentage: 0.7,
+          barRadius: 10,
+          scrollableDotRadius: 10,
+          formatYLabel: ylable => handleCurrenCy(parseInt(ylable)),
+        }}
+        bezier
+        
+      />
+    </ScrollView>
   );
 };
 
