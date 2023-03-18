@@ -19,19 +19,21 @@ const FormSlot = ({blockId, refForm, refresh, slotItem}) => {
   });
   const mutationCreate = useCreateSlot();
   const mutationEdit = useEditSlot();
+  const [errMess, setErrMess] = useState('');
   useEffect(() => {
     if (mutationEdit.isSuccess) {
       refForm.current.close();
       setParams({});
       refresh();
-    }
-    if (mutationEdit.isError) {
-      console.log(mutationEdit?.error?.response?.data);
+    } else if (mutationEdit?.error?.response?.status === 400) {
+      setErrMess('The slot nam has already taken inthis block!');
     }
   }, [mutationEdit.status]);
   const handleCreate = () => {
     if (params.slotName !== '') {
       mutationCreate.mutate(params);
+    } else {
+      setErrMess('Please enter slot name!');
     }
   };
   const handleEdit = () => {
@@ -40,13 +42,17 @@ const FormSlot = ({blockId, refForm, refresh, slotItem}) => {
         idSlot: slotItem.id,
         slotName: params.slotName,
       });
+    } else {
+      setErrMess('Please enter slot name!');
     }
   };
   useEffect(() => {
-    if (mutationCreate.isError) {
-      console.log(mutationCreate?.error?.response?.data);
-    }
-    if (mutationCreate.isSuccess) {
+    if (
+      mutationCreate.isError &&
+      mutationCreate?.error?.response?.status === 400
+    ) {
+      setErrMess('The slot nam has already taken inthis block!');
+    } else if (mutationCreate.isSuccess) {
       console.log(mutationCreate?.data);
       refForm.current.close();
       refresh();
@@ -61,12 +67,14 @@ const FormSlot = ({blockId, refForm, refresh, slotItem}) => {
         alignItems: 'center',
       }}>
       {mutationEdit.isLoading && <EZLoading />}
+      {mutationCreate.isLoading && <EZLoading />}
       <EZText size="quiteLarge">
         {slotItem ? `Edit slot "${slotItem.slotName}"` : 'Create slot'}
       </EZText>
       <EZInput
         placeholder="Ex: D8"
         label="Slot name"
+        errMess={errMess}
         onChangeText={newText => setParams({...params, ['slotName']: newText})}
         defaultValue={params.slotName}
         styleEZInput={{marginBottom: SPACING.mbInputItem}}

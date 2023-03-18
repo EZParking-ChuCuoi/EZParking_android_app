@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   ScrollView,
   StyleSheet,
   Text,
@@ -110,7 +111,9 @@ const BlockDetail = ({navigation, route}) => {
           slotItem={slotItem}
         />
       </EZRBSheet>
-      <ScrollView contentContainerStyle={styles.slotContainer}>
+      <ScrollView
+        contentContainerStyle={styles.slotContainer}
+        showsVerticalScrollIndicator={false}>
         {mutationGetSlot.isLoading && <EZLoading />}
         {mutationGetSlot.isSuccess &&
           mutationGetSlot.data.map(slot => {
@@ -152,7 +155,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     flexDirection: 'row',
     flexWrap: 'wrap',
-    gap: 15,
+    gap: (Dimensions.get('screen').width-SPACING.pxComponent*2) * 0.013,
     padding: 10,
   },
   slotItem: {
@@ -164,7 +167,7 @@ const styles = StyleSheet.create({
     shadowRadius: 4.65,
 
     elevation: 3,
-    width: '30%',
+    width: '32%',
     height: 110,
     borderRadius: 10,
     overflow: 'hidden',

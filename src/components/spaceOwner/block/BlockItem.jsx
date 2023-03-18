@@ -125,14 +125,19 @@ const BlockItem = props => {
       });
     }
     if (mutationEditBlock.isSuccess) {
+      console.log('MMMMMMM', mutationEditBlock.data);
       refRBSheet.current.close();
       props.handleRefresh();
       handleResetForm();
+    } else if (mutationEditBlock.isError) {
+      console.log('CCCCC', mutationEditBlock.error?.response?.data);
     }
   }, [mutationGetBlockInfo.status, mutationEditBlock.status]);
   useEffect(() => {
     if (mutationDeleteBlock.isSuccess) {
       props.handleRefresh();
+    } else if (mutationDeleteBlock.error?.response?.status === 409) {
+      setErrMess({...errMess, ['popup']: 'Can not delete block is in use!'});
     }
   }, [mutationDeleteBlock.status]);
   return (
@@ -166,7 +171,10 @@ const BlockItem = props => {
             style={styles.btn}
           />
         )}
-        <EZText lines={2} styleEZText={{maxWidth: '45%', overflow: 'hidden'}} bold>
+        <EZText
+          lines={2}
+          styleEZText={{maxWidth: '45%', overflow: 'hidden'}}
+          bold>
           {props.text}
         </EZText>
         {props.children}
@@ -229,6 +237,7 @@ const BlockItem = props => {
                 <EZText>
                   Delete <EZText bold>{props.item.nameBlock}</EZText>?
                 </EZText>
+                <EZText size="small" color={COLORS.redLight} bold>{errMess?.popup}</EZText>
                 <EZButton
                   title="Yes"
                   styleEZButton={{marginTop: 10}}
