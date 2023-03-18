@@ -30,5 +30,6 @@ const styles = StyleSheet.create({
   lottie: {
     width: 200,
     height: 200,
+    zIndex: 9999,
   },
 });

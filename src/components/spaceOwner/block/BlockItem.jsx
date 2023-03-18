@@ -39,6 +39,12 @@ const BlockItem = props => {
   const mutationGetBlockInfo = useGetBlockInfo();
   const mutationEditBlock = useEditBlockInfo();
   const mutationDeleteBlock = useDeleteBlock();
+  const [errMess, setErrMess] = useState({
+    nameBlock: '',
+    price: '',
+    desc: '',
+    carType: '',
+  });
   const [params, setParams] = useState({
     nameBlock: '',
     price: '',
@@ -51,7 +57,46 @@ const BlockItem = props => {
   } else {
     bg = isDarkMode ? COLORS.linearBGDark : COLORS.linearBGLight;
   }
+  const validate = () => {
+    let check = true;
+    let errMessages = {
+      nameBlock: '',
+      carType: '',
+      desc: '',
+      price: '',
+    };
+    if (params.nameBlock === '') {
+      check = false;
+      errMessages.nameBlock = 'Required input!';
+    }
+    if (params.carType === '') {
+      check = false;
+      errMessages.carType = 'Required input!';
+    }
+    if (params.desc === '') {
+      check = false;
+      errMessages.desc = 'Required input!';
+    } else if (params.desc.split(' ').filter(i => i).length < 8) {
+      check = false;
+      errMessages.desc = 'Description must be more than 8 words!';
+    }
+    if (params.price === '') {
+      check = false;
+      errMessages.price = 'Required input!';
+    } else if (
+      25000 < parseInt(params.price) ||
+      parseInt(params.price) < 15000
+    ) {
+      check = false;
+      errMessages.price = 'Price per hour must from 15.000VND to 25.000VND!';
+    }
+    setErrMess(errMessages);
+    return check;
+  };
   const handleUpdate = () => {
+    if (!validate()) {
+      return;
+    }
     mutationEditBlock.mutate({
       idBlock: props.item.id,
       data: params,
@@ -121,6 +166,7 @@ const BlockItem = props => {
             name={props.iconName}
             size={FONTSIZE.iconLarge}
             color={props.createBtn ? COLORS.secondary : COLORS.primary}
+            style={styles.btn}
           />
         )}
         <EZText lines={2} bold>
@@ -131,10 +177,32 @@ const BlockItem = props => {
           <>
             <View style={styles.left}>
               {props.item.carType === '4-16SLOT' ? (
-                <EZText>4 - 16 seats</EZText>
+                <EZText
+                  styleEZText={{
+                    backgroundColor: COLORS.tertiary,
+                    paddingHorizontal: 2,
+                    borderRadius: 2,
+                  }}>
+                  4 - 16 seats
+                </EZText>
               ) : (
-                <EZText>16 - 34 seats</EZText>
+                <EZText
+                  styleEZText={{
+                    backgroundColor: COLORS.tertiary,
+                    paddingHorizontal: 2,
+                    borderRadius: 2,
+                  }}>
+                  16 - 34 seats
+                </EZText>
               )}
+            </View>
+            <View style={styles.leftBottom}>
+              <EZText>
+                <EZText size="large" color={COLORS.secondary}>
+                  {props.item.slots_count}
+                </EZText>{' '}
+                slots
+              </EZText>
             </View>
             <View style={styles.btnGroup}>
               <EZButton
@@ -181,6 +249,7 @@ const BlockItem = props => {
         params={params}
         setParams={setParams}
         handleSubmit={handleUpdate}
+        errMess={errMess}
         editForm
         mutation={mutationGetBlockInfo}
       />
@@ -220,5 +289,15 @@ const styles = StyleSheet.create({
     position: 'absolute',
     left: 20,
     top: 10,
+  },
+  leftBottom: {
+    position: 'absolute',
+    left: 20,
+    bottom: 10,
+  },
+  btn: {
+    padding: 7,
+    backgroundColor: COLORS.bgLight,
+    borderRadius: 4,
   },
 });

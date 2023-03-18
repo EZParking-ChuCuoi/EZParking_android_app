@@ -45,7 +45,6 @@ const LotDetail = ({navigation, route}) => {
     numberOfSlot: '',
   });
   const [errMess, setErrMess] = useState({
-    parkingLotId: '',
     nameBlock: '',
     carType: '',
     desc: '',
@@ -62,9 +61,11 @@ const LotDetail = ({navigation, route}) => {
   useEffect(() => {
     if (mutationCreateBlock.isSuccess) {
       refRBSheet.current.close();
+      handleResetForm();
       mutationGetBlock.mutate(idParkingLot);
     }
   }, [mutationCreateBlock.status]);
+  console.log(mutationCreateBlock.error?.response?.data)
 
   const handleResetForm = () => {
     setParams({
@@ -76,9 +77,55 @@ const LotDetail = ({navigation, route}) => {
       numberOfSlot: '',
     });
   };
+  const validate = () => {
+    let check = true;
+    let errMessages = {
+      nameBlock: '',
+      carType: '',
+      desc: '',
+      price: '',
+      numberOfSlot: '',
+    };
+    if (params.nameBlock === '') {
+      check = false;
+      errMessages.nameBlock = 'Required input!';
+    }
+    if (params.carType === '') {
+      check = false;
+      errMessages.carType = 'Required input!';
+    }
+    if (params.desc === '') {
+      check = false;
+      errMessages.desc = 'Required input!';
+    } else if (params.desc.split(' ').filter(i => i).length < 8) {
+      check = false;
+      errMessages.desc = 'Description must be more than 8 words!';
+    }
+    if (params.price === '') {
+      check = false;
+      errMessages.price = 'Required input!';
+    } else if (25000 < parseInt(params.price) || parseInt(params.price) < 15000) {
+      check = false;
+      errMessages.price = 'Price per hour must from 15.000VND to 25.000VND!';
+    }
+    if (params.numberOfSlot === '') {
+      check = false;
+      errMessages.numberOfSlot = 'Required input!';
+    } else if (params.numberOfSlot < 1) {
+      check = false;
+      errMessages.numberOfSlot = 'Invalid number!';
+    } else if (params.numberOfSlot < 1) {
+      check = false;
+      errMessages.numberOfSlot = 'Invalid number!';
+    }
+    setErrMess(errMessages);
+    return check;
+  };
   const handleCreate = () => {
+    if (!validate()) {
+      return;
+    }
     mutationCreateBlock.mutate(params);
-    handleResetForm();
   };
   return (
     <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
@@ -88,6 +135,7 @@ const LotDetail = ({navigation, route}) => {
         <FormBlock
           refRBSheet={refRBSheet}
           params={params}
+          errMess={errMess}
           setParams={setParams}
           handleSubmit={handleCreate}
         />
@@ -99,7 +147,7 @@ const LotDetail = ({navigation, route}) => {
             iconName="plus"
           />
           {mutationGetBlock.isSuccess &&
-            mutationGetBlock.data?.block?.map(item => {
+            mutationGetBlock.data?.blocks?.map(item => {
               return (
                 <BlockItem
                   navigateTo={{

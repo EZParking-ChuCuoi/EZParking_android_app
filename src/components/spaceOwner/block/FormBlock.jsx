@@ -16,6 +16,7 @@ const FormBlock = ({
   handleSubmit,
   editForm = false,
   mutation,
+  errMess,
 }) => {
   const [isDisplay, setIsDisplay] = useState(false);
   return (
@@ -27,6 +28,7 @@ const FormBlock = ({
           style={{paddingHorizontal: SPACING.pxComponent}}>
           <EZInput
             placeholder="Ex: Khu A"
+            errMess={errMess?.nameBlock}
             label="Name block"
             styleEZInput={{marginVertical: SPACING.mbInputItem}}
             defaultValue={params.nameBlock}
@@ -36,6 +38,7 @@ const FormBlock = ({
           />
           <EZInput
             placeholder="Ex: 4-16 seats"
+            errMess={errMess?.carType}
             label="Vehicle type"
             editable={false}
             defaultValue={
@@ -66,6 +69,7 @@ const FormBlock = ({
           })}
           <EZInput
             placeholder="Ex: Block for 4-16 seats vehicle, high security..."
+            errMess={errMess?.desc}
             label="Block description"
             styleEZInput={{marginBottom: SPACING.mbInputItem}}
             lines={5}
@@ -75,6 +79,7 @@ const FormBlock = ({
           {!editForm && (
             <EZInput
               placeholder="Ex: 10"
+              errMess={errMess?.numberOfSlot}
               label="Number of slots"
               styleEZInput={{marginBottom: SPACING.mbInputItem}}
               defaultValue={params.numberOfSlot}
@@ -86,6 +91,7 @@ const FormBlock = ({
           )}
           <EZInput
             placeholder="Ex: 15000"
+            errMess={errMess?.price}
             label="Price per slot"
             styleEZInput={{marginBottom: SPACING.mbInputItem}}
             keyboardType="numeric"

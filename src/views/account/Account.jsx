@@ -11,6 +11,7 @@ import EZContainer from '../../components/core/EZContainer';
 import {EZButton} from '../../components/core/EZButton';
 import EZText from '../../components/core/EZText';
 import {
+  bgSecondaryDefault,
   colorDefault,
   COLORS,
   FONTSIZE,
@@ -37,6 +38,7 @@ const Account = ({navigation, route}) => {
   const {COLOR} = colorDefault();
   const [navigateArr, setNavigateArr] = useState([]);
   const mutationUserInfo = useGetUserInfo();
+  const {BG2ND} = bgSecondaryDefault();
   const refRBSheet = useRef();
   const refEdit = useRef();
   useEffect(() => {
@@ -127,10 +129,11 @@ const Account = ({navigation, route}) => {
           />
           {navigateArr === NAVIGATED_PROFILE_SPACEOWNER && (
             <TouchableOpacity
-              style={styles.btnDashboard}
+              style={[styles.btnDashboard, {backgroundColor: BG2ND, shadowColor: COLOR,}]}
               onPress={() =>
                 navigation.navigate('spaceOwner', {screen: 'dashboard'})
               }>
+              <EZText bold>DASHBOARD</EZText>
               <Lottie
                 source={require('../../assets/images/dashboard.json')}
                 autoPlay
@@ -206,10 +209,18 @@ const styles = StyleSheet.create({
     position: 'absolute',
     bottom: 70,
     right: 10,
-    width: 70,
-    height: 70,
     justifyContent: 'center',
     alignItems: 'center',
+    borderRadius: 8,
+    paddingVertical: 10,
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.25,
+    shadowRadius: 3.84,
+
+    elevation: 5,
   },
   imgDashboard: {
     position: 'relative',

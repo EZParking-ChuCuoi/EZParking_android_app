@@ -18,7 +18,6 @@ import {useGetSavedParkingLot} from '../../hooks/api/getParkingLots';
 import {getData} from '../../shared/asyncStorages';
 import EZLoading from '../../components/core/EZLoading';
 import BookmarkItem from '../../components/bookmark/BookmarkItem';
-import {Pusher} from '@pusher/pusher-websocket-react-native';
 
 const Bookmark = () => {
   const mutationGetSavedParkingLot = useGetSavedParkingLot();

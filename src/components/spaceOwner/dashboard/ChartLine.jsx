@@ -50,11 +50,11 @@ const ChartLine = ({source}) => {
           <View
             style={{
               position: 'absolute',
-              top: y + 50,
+              top: y + 30,
               left: x - 15,
             }}
             key={index}>
-            <EZText size="small">{handleCurrenCy(indexData)}</EZText>
+            <EZText size="small" color={COLORS.white} bold>{handleCurrenCy(indexData)}</EZText>
           </View>
         )}
         // withHorizontalLines={false}
@@ -62,7 +62,7 @@ const ChartLine = ({source}) => {
         // withHorizontalLabels={false}
         // withInnerLines={false}
         // withOuterLines={false}
-        height={500}
+        height={400}
         yAxisLabel="(VND) "
         chartConfig={{
           backgroundColor: COLORS.tertiary,
@@ -83,10 +83,6 @@ const ChartLine = ({source}) => {
           },
         }}
         bezier
-        style={{
-          marginVertical: 20,
-          borderRadius: 16,
-        }}
       />
     </ScrollView>
   );

@@ -10,6 +10,7 @@ import {getDataObj} from '../../shared/asyncStorages';
 import {useGetNearlyParkingLot} from '../../hooks/api/getParkingLots';
 import PopupDataEmpty from '../../components/home/PopupDataEmpty';
 import EZMapView from '../../components/core/EZMapView';
+import EZLoading from '../../components/core/EZLoading';
 
 const SearchSpace = () => {
   useHideTabBar();
@@ -41,7 +42,7 @@ const SearchSpace = () => {
   }, [currenRegion]);
 
   const handleSearch = details => {
-    console.log('handleSearch==>', details)
+    console.log('handleSearch==>', details);
     setCurrenRegion({
       ...currenRegion,
       ['latitude']: details?.geometry?.location.lat,
@@ -55,7 +56,7 @@ const SearchSpace = () => {
         styleEZButtonBack={{top: 60}}
         colorText={COLORS.black}
       />
-
+      {mutationNearlyPark.isLoading && <EZLoading />}
       {mutationNearlyPark.data?.length === 0 && (
         <PopupDataEmpty text="Couldn't find any parking near this location" />
       )}

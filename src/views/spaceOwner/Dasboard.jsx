@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   FlatList,
   RefreshControl,
   ScrollView,
@@ -39,13 +40,14 @@ import EZLoading from '../../components/core/EZLoading';
 import ChartBar from '../../components/spaceOwner/dashboard/ChartBar';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import {PERIOD_REVENUE} from '../../utils/defaultDataSelection';
+import EZRBSheetModal from '../../components/core/EZRBSheetModal';
+import EditParkingLot from '../../components/spaceOwner/dashboard/EditParkingLot';
 
 const Dasboard = ({navigation}) => {
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const {BG} = bgDefault();
   const refRBSheetPeriod = useRef();
-  const refDelete = useRef();
   const mutationParkingLot = useGetUsersParkingLot();
   const mutationPeriodRevenue = useGetPeriodManagingRevenueParkingLot();
   const mutationDelete = useDeleteParkingLot();
@@ -69,7 +71,7 @@ const Dasboard = ({navigation}) => {
 
   const handleDelete = idParking => {
     mutationDelete.mutate(idParking);
-    refDelete.current.close();
+    getLots();
   };
 
   return (
@@ -83,6 +85,7 @@ const Dasboard = ({navigation}) => {
       </TouchableOpacity>
       <ScrollView
         style={{paddingBottom: 50}}
+        showsVerticalScrollIndicator={false}
         refreshControl={
           <RefreshControl
             refreshing={false}
@@ -108,48 +111,10 @@ const Dasboard = ({navigation}) => {
           <ScrollView
             contentContainerStyle={styles.yourLots}
             showsVerticalScrollIndicator={false}>
-            <DashboardItem
-              navigateTo="createLot"
-              text="Create new"
-              iconName="plus"
-            />
+            <DashboardItem isCreate />
             {mutationParkingLot.isSuccess &&
               mutationParkingLot.data?.data?.map(item => {
-                return (
-                  <DashboardItem
-                    navigateTo={{
-                      name: 'lotDetail',
-                      params: {
-                        idParkingLot: item.idParking,
-                        nameParkingLot: item.nameParkingLot,
-                      },
-                    }}
-                    key={item.idParking}
-                    handleLongPress={() => {
-                      refDelete.current.open();
-                    }}
-                    text={item.nameParkingLot}>
-                    <EZRBSheet refRBSheet={refDelete} height={200}>
-                      <EZContainer
-                        styleEZContainer={{
-                          paddingHorizontal: SPACING.pxComponent,
-                          paddingVertical: SPACING.pxComponent + 10,
-                          alignItems: 'center',
-                          justifyContent: 'center',
-                        }}>
-                        <EZText styleEZText={{marginBottom: 20}}>
-                          Delete <EZText bold>{item.nameParkingLot}</EZText>?
-                        </EZText>
-                        <EZButton
-                          title="Delete"
-                          iconName="trash-2"
-                          type="secondary"
-                          handlePress={() => handleDelete(item.idParking)}
-                        />
-                      </EZContainer>
-                    </EZRBSheet>
-                  </DashboardItem>
-                );
+                return <DashboardItem item={item} key={item.idParking} onRefresh={getLots} />;
               })}
           </ScrollView>
           <View style={styles.titleRevenue}>
@@ -177,7 +142,9 @@ const Dasboard = ({navigation}) => {
             </TouchableOpacity>
           </View>
           {mutationPeriodRevenue.isSuccess && (
-            <ChartLine source={mutationPeriodRevenue?.data?.data} />
+            <View style={styles.chartLine}>
+              <ChartLine source={mutationPeriodRevenue?.data?.data} />
+            </View>
           )}
           {mutationPeriodRevenue.isLoading && <EZLoading text=" " />}
           {/* {mutationParkingLot.isSuccess && (
@@ -194,12 +161,25 @@ const Dasboard = ({navigation}) => {
           {PERIOD_REVENUE.map(item => {
             return (
               <EZButton
-                styleEZButton={{backgroundColor: BG2ND, marginBottom: 15}}
+                styleEZButton={{
+                  backgroundColor: BG2ND,
+                  marginBottom: 15,
+                  shadowColor: COLOR,
+                  shadowOffset: {
+                    width: 0,
+                    height: 3,
+                  },
+                  shadowOpacity: 0.27,
+                  shadowRadius: 4.65,
+
+                  elevation: 8,
+                }}
                 title={item.label}
                 handlePress={() => {
                   refRBSheetPeriod.current.close();
                   setPeriodRevenue(item.value);
                 }}
+                color={COLOR}
                 key={item.value}
               />
             );
@@ -262,5 +242,13 @@ const styles = StyleSheet.create({
     alignItems: 'flex-end',
     paddingVertical: 10,
     borderRadius: 6,
+  },
+  chartLine: {
+    maxWidth: '100%',
+    marginHorizontal: SPACING.pxComponent,
+    borderRadius: 10,
+    overflow: 'hidden',
+    marginVertical: 16,
+    position: 'relative',
   },
 });

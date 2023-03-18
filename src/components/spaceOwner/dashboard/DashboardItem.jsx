@@ -1,11 +1,12 @@
 import {
+  Dimensions,
   StyleSheet,
   Text,
   TouchableOpacity,
   useColorScheme,
   View,
 } from 'react-native';
-import React from 'react';
+import React, {useRef} from 'react';
 import EZText from '../../core/EZText';
 import Icon from 'react-native-vector-icons/Feather';
 import {
@@ -13,14 +14,23 @@ import {
   colorDefault,
   COLORS,
   FONTSIZE,
+  SPACING,
 } from '../../../assets/styles/styles';
 import {useNavigation} from '@react-navigation/native';
 import LinearGradient from 'react-native-linear-gradient';
+import EZRBSheetModal from '../../core/EZRBSheetModal';
+import {EZButton} from '../../core/EZButton';
+import EZRBSheet from '../../core/EZRBSheet';
+import EditParkingLot from './EditParkingLot';
 
 const DashboardItem = props => {
+  const {isCreate, item, onRefresh} = props;
+  console.log(item);
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const navigation = useNavigation();
+  const refPopup = useRef();
+  const refEdit = useRef();
   const isDarkMode = useColorScheme() === 'dark';
   return (
     <TouchableOpacity
@@ -28,26 +38,90 @@ const DashboardItem = props => {
         styles.managetedItem,
         {backgroundColor: BG2ND, shadowColor: COLOR},
       ]}
-      onLongPress={() => props.handleLongPress()}
-      onPress={() => navigation.navigate(props.navigateTo)}>
+      onLongPress={() => {
+        !isCreate && refPopup.current.open();
+      }}
+      onPress={() =>
+        navigation.navigate(
+          isCreate
+            ? 'createLot'
+            : {
+                name: 'lotDetail',
+                params: {
+                  idParkingLot: item.idParking,
+                  nameParkingLot: item.nameParkingLot,
+                },
+              },
+        )
+      }>
       <LinearGradient
         start={{x: 0.0, y: 0.25}}
         end={{x: 0.5, y: 1.0}}
         locations={[0.3, 0.6, 0.9]}
-        colors={isDarkMode ? COLORS.linearBGDark : COLORS.linearBGLight}
+        colors={
+          isCreate
+            ? COLORS.linearBGPrimary
+            : isDarkMode
+            ? COLORS.linearBGDark
+            : COLORS.linearBGLight
+        }
         style={styles.linearGradient}>
-        {props.iconName && (
+        {isCreate && (
           <Icon
-            name={props.iconName}
+            name="plus"
             size={FONTSIZE.iconLarge}
             color={COLORS.primary}
+            style={styles.btn}
           />
         )}
         <EZText lines={2}>
-          {props.text}
+          {isCreate ? 'Create new' : item.nameParkingLot}
         </EZText>
-        {props.children}
       </LinearGradient>
+      {!isCreate && (
+        <>
+          <EZRBSheetModal refRBSheet={refPopup} height="auto">
+            <View
+              style={{
+                flexDirection: 'row',
+                justifyContent: 'space-between',
+                marginVertical: 50,
+                width: '100%',
+                paddingHorizontal: SPACING.pxComponent,
+              }}>
+              <EZButton
+                title="Delete"
+                iconName="trash-2"
+                w="40%"
+                type="secondary"
+                handlePress={() => handleDelete(item.idParking)}
+              />
+              <EZButton
+                title="Edit"
+                iconName="edit-3"
+                w="40%"
+                handlePress={() => refEdit.current.open()}
+              />
+            </View>
+          </EZRBSheetModal>
+          <EZRBSheet
+            refRBSheet={refEdit}
+            closeBtn={false}
+            height={Dimensions.get('window').height}
+            styleEZRBSheet={{
+              borderTopLeftRadius: 0,
+              borderTopRightRadius: 0,
+            }}>
+            <EditParkingLot
+              refresh={onRefresh}
+              refEdit={refEdit}
+              refPopup={refPopup}
+              idParking={item.idParking}
+              nameParkingLot={item.nameParkingLot}
+            />
+          </EZRBSheet>
+        </>
+      )}
     </TouchableOpacity>
   );
 };
@@ -75,5 +149,10 @@ const styles = StyleSheet.create({
     padding: 5,
     justifyContent: 'center',
     alignItems: 'center',
+  },
+  btn: {
+    padding: 7,
+    backgroundColor: COLORS.bgLight,
+    borderRadius: 4,
   },
 });

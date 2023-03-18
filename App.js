@@ -17,8 +17,7 @@ const App = () => {
       const uid = await getData('EZUid');
       console.log('socketId', socketId);
       pusher.subscribe({
-        channelName: 'my-channel',
-        // channelName: `private-user${uid}`,
+        channelName: `my-channel.${uid}`,
         onEvent: event => {
           console.log(`Event received: ${event}`);
         },

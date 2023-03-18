@@ -1,5 +1,6 @@
 import {
   Dimensions,
+  Image,
   ScrollView,
   StyleSheet,
   Text,
@@ -7,44 +8,53 @@ import {
   View,
 } from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
-import EZContainer from '../../components/core/EZContainer';
-import EZText from '../../components/core/EZText';
-import {
-  EZButton,
-  EZButtonBack,
-  EZButtonText,
-} from '../../components/core/EZButton';
+import EZContainer from '../../core/EZContainer';
+import EZText from '../../core/EZText';
+import {EZButton, EZButtonBack, EZButtonText} from '../../core/EZButton';
 import {
   bgSecondaryDefault,
+  colorDefault,
   COLORS,
   FONTSIZE,
   SPACING,
-} from '../../assets/styles/styles';
-import EZInput from '../../components/core/EZInput';
-import EZRBSheet from '../../components/core/EZRBSheet';
-import EZRBSheetModal from '../../components/core/EZRBSheetModal';
-import {getData, getDataObj} from '../../shared/asyncStorages';
-import EZMapView from '../../components/core/EZMapView';
+} from '../../../assets/styles/styles';
+import EZInput from '../../core/EZInput';
+import EZRBSheet from '../../core/EZRBSheet';
+import {getData, getDataObj} from '../../../shared/asyncStorages';
+import EZMapView from '../../core/EZMapView';
 import Icon from 'react-native-vector-icons/Feather';
 import IconMaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import DatePicker from 'react-native-date-picker';
 import moment from 'moment';
 import ImageCropPicker from 'react-native-image-crop-picker';
-import EZSlider from '../../components/core/EZSlider';
+import EZSlider from '../../core/EZSlider';
 import Lottie from 'lottie-react-native';
-import {useCreateParkingLot} from '../../hooks/api/useSpaceOwnerAction';
-import EZLoading from '../../components/core/EZLoading';
+import {
+  useCreateParkingLot,
+  useEditParkingLot,
+} from '../../../hooks/api/useSpaceOwnerAction';
+import EZLoading from '../../core/EZLoading';
 import {useNavigation, useRoute} from '@react-navigation/native';
 import Geocoder from 'react-native-geocoder';
+import {useGetParkingLotInfo} from '../../../hooks/api/getParkingLots';
+import {androidNotification} from '../../../shared/androidNotification';
 
-const CreateLot = () => {
+const EditParkingLot = ({
+  refresh,
+  refEdit,
+  refPopup,
+  idParking,
+  nameParkingLot,
+}) => {
   const refInput = useRef();
   const refRBSheet = useRef();
-  const mutationCreate = useCreateParkingLot();
+  const mutationEdit = useEditParkingLot();
+  const mutationGetInfo = useGetParkingLotInfo();
   const {BG2ND} = bgSecondaryDefault();
+  const {COLOR} = colorDefault();
   const navigation = useNavigation();
   const [params, setParams] = useState({
-    uid: '',
+    idParkingLot: idParking,
     name: '',
     address: '',
     lat: '',
@@ -52,6 +62,7 @@ const CreateLot = () => {
     open: null,
     close: null,
     images: [],
+    imagesUpdate: [],
     desc: '',
   });
   const [errMess, setErrMess] = useState({
@@ -60,7 +71,7 @@ const CreateLot = () => {
     coordinate: '',
     open: null,
     close: null,
-    images: '',
+    imagesUpdate: '',
     desc: '',
   });
   const [showDateTimePicker, setShowDateTimePicker] = useState({
@@ -73,15 +84,38 @@ const CreateLot = () => {
     const getCoor = async () => {
       const coor = await getDataObj('EZCurrentRegion');
       const uid = await getData('EZUid');
+      console.log(uid, idParking, nameParkingLot);
       setCoordinate(coor);
-      setParams({...params, ['uid']: uid});
+      mutationGetInfo.mutate({
+        parkingId: idParking,
+        uid: uid,
+      });
     };
     getCoor();
   }, []);
   useEffect(() => {
-    if (mutationCreate.isSuccess) {
+    if (mutationGetInfo.isSuccess) {
+      console.log('CCC', mutationGetInfo.data[0]?.openTime.slice(0,5));
       setParams({
-        uid: '',
+        ...params,
+        ['name']: mutationGetInfo.data[0]?.nameParkingLot,
+        ['address']: mutationGetInfo.data[0]?.address,
+        ['lat']: mutationGetInfo.data[0]?.address_latitude,
+        ['lng']: mutationGetInfo.data[0]?.address_longitude,
+        ['open']: mutationGetInfo.data[0]?.openTime.slice(0,5),
+        ['close']: mutationGetInfo.data[0]?.endTime.slice(0,5),
+        ['images']: mutationGetInfo.data[0]?.images,
+        ['desc']: mutationGetInfo.data[0]?.desc,
+      });
+    } else {
+      console.log(mutationGetInfo.error?.response?.data);
+    }
+  }, [mutationGetInfo.status]);
+  console.log(params);
+  useEffect(() => {
+    if (mutationEdit.isSuccess) {
+      setParams({
+        idParkingLot: idParking,
         name: '',
         address: '',
         lat: '',
@@ -89,23 +123,16 @@ const CreateLot = () => {
         open: null,
         close: null,
         images: [],
+        imagesUpdate: [],
         desc: '',
       });
-      mutationCreate.reset();
-      navigation.reset({
-        index: 1,
-        routes: [
-          {
-            name: 'lotDetail',
-            params: {
-              idParkingLot: mutationCreate.data.data.id,
-              nameParkingLot: mutationCreate.data.data.nameParkingLot,
-            },
-          },
-        ],
-      });
+      androidNotification('Updated success!');
+      refEdit.current.close();
+      refPopup.current.close();
+    } else {
+      console.log(mutationEdit.error?.response?.data);
     }
-  }, [mutationCreate.status]);
+  }, [mutationEdit.status]);
   const handleSearch = details => {
     setCoordinate({
       ...coordinate,
@@ -151,7 +178,7 @@ const CreateLot = () => {
       multiple: true,
       cropping: true,
     }).then(img => {
-      setParams({...params, ['images']: img});
+      setParams({...params, ['imagesUpdate']: img});
     });
   };
   const handleValidate = () => {
@@ -162,7 +189,7 @@ const CreateLot = () => {
       coordinate: '',
       open: null,
       close: null,
-      images: '',
+      imagesUpdate: '',
       desc: '',
     };
     if (params.address === '') {
@@ -193,23 +220,32 @@ const CreateLot = () => {
       errorMessage.close = 'Close time must be after open time!';
       check = false;
     }
-    if (params.images.length == 0) {
-      errorMessage.images = 'Choose at least 1 image of your parking lot!';
-      check = false;
-    }
     setErrMess(errorMessage);
     return check;
   };
-  const handleCreate = () => {
+  const handleEdit = () => {
     if (!handleValidate()) {
       return;
     }
-    mutationCreate.mutate(params);
+    mutationEdit.mutate(params);
   };
 
   return (
     <EZContainer styleEZContainer={styles.container}>
-      {mutationCreate.isLoading && <EZLoading text=" " />}
+      {mutationEdit.isLoading && <EZLoading text=" " />}
+      {mutationGetInfo.isLoading && <EZLoading text=" " />}
+      <View style={styles.title}>
+        <TouchableOpacity
+          onPress={() => {
+            refEdit.current.close();
+            refPopup.current.close();
+          }}>
+          <Icon name="arrow-left" color={COLOR} size={FONTSIZE.iconLarge} />
+        </TouchableOpacity>
+        <EZText size="quiteLarge" bold>
+          Edit {nameParkingLot}{' '}
+        </EZText>
+      </View>
       <DatePicker
         modal
         open={showDateTimePicker.open}
@@ -301,11 +337,7 @@ const CreateLot = () => {
             }
           />
           <EZText
-            color={
-              params.lat !== '' && params.lng !== ''
-                ? COLORS.primary
-                : COLORS.disable
-            }>
+            color={params.lat !== '' && params.lng !== '' && COLORS.primary}>
             {params.lat !== '' && params.lng !== ''
               ? 'Picked location success'
               : 'Pick specific location'}
@@ -348,14 +380,27 @@ const CreateLot = () => {
             editable={false}
           />
         </TouchableOpacity>
-        {params.images.length > 0 ? (
-          <EZSlider data={params.images} local />
+        {params.images.length > 0 && (
+          <ScrollView contentContainerStyle={styles.imgList} collapsable>
+            {params.images.map((item, index) => {
+              return (
+                <Image
+                  key={index}
+                  source={{uri: item}}
+                  style={[styles.imgItem]}
+                />
+              );
+            })}
+          </ScrollView>
+        )}
+        {params.imagesUpdate.length > 0 ? (
+          <EZSlider data={params.imagesUpdate} local />
         ) : (
           <TouchableOpacity
             onPress={handlePickImage}
             style={styles.uploadImage}>
             <Lottie
-              source={require('../../assets/images/upload.json')}
+              source={require('../../../assets/images/upload.json')}
               autoPlay
               loop
               style={{position: 'relative', width: 100, height: 100}}
@@ -363,15 +408,15 @@ const CreateLot = () => {
             <EZText>Upload images </EZText>
           </TouchableOpacity>
         )}
-        {errMess.images && (
+        {errMess.imagesUpdate && (
           <EZText size="small" color={COLORS.redLight}>
-            {errMess.images}
+            {errMess.imagesUpdate}
           </EZText>
         )}
         <EZButton
           styleEZButton={{marginVertical: 20}}
-          title="Next"
-          handlePress={handleCreate}
+          title="Update"
+          handlePress={handleEdit}
         />
       </ScrollView>
       <EZRBSheet
@@ -413,12 +458,19 @@ const CreateLot = () => {
   );
 };
 
-export default CreateLot;
+export default EditParkingLot;
 
 const styles = StyleSheet.create({
   container: {
     alignItems: 'center',
     padding: SPACING.pxComponent,
+  },
+  title: {
+    flexDirection: 'row',
+    width: '100%',
+    paddingBottom: 15,
+    gap: 20,
+    alignItems: 'center',
   },
   form: {width: '100%'},
   btnClose: {
@@ -459,5 +511,20 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     gap: 10,
     marginBottom: 10,
+  },
+  imgList: {
+    width: '100%',
+    justifyContent: 'flex-start',
+    alignItems: 'center',
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+    marginBottom: 15,
+    gap: (Dimensions.get('screen').width - SPACING.pxComponent * 2) * 0.02,
+  },
+  imgItem: {
+    width: '48%',
+    height: 200,
+    borderRadius: 10,
+    resizeMode: 'cover',
   },
 });

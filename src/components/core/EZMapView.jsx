@@ -59,7 +59,7 @@ const EZMapView = props => {
         onPress={(data, details = null) => {
           handleSearch(details);
         }}
-        // minLength={6}
+        minLength={5}
         fetchDetails={true}
         query={{
           key: API_GOOGLE_MAP,
@@ -137,8 +137,8 @@ const EZMapView = props => {
             <Circle
               center={initRegion}
               radius={10}
-              strokeColor={COLORS.primary}
-              strokeWidth={0}
+              strokeColor={COLORS.secondary}
+              strokeWidth={10}
               fillColor={COLORS.tertiary}
             />
           </>

@@ -21,7 +21,7 @@ export const COLORS = {
   borderBrighter: '#091C3F14',
   linearBGLight: ['#F3F2F8', '#F2F2F2', '#DBDBDB'],
   linearBGDark: ['#1B1616', '#232526', '#414345'],
-  linearBGPrimary: ['#2085D3', '#0071AE', '#414345'],
+  linearBGPrimary: ['#2085D3', '#0071AE', '#1BCAF0'],
 };
 
 export const FONTSIZE = {
