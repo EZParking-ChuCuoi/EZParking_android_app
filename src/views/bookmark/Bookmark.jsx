@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   FlatList,
   Image,
   RefreshControl,
@@ -18,6 +19,7 @@ import {useGetSavedParkingLot} from '../../hooks/api/getParkingLots';
 import {getData} from '../../shared/asyncStorages';
 import EZLoading from '../../components/core/EZLoading';
 import BookmarkItem from '../../components/bookmark/BookmarkItem';
+import Lottie from 'lottie-react-native';
 
 const Bookmark = () => {
   const mutationGetSavedParkingLot = useGetSavedParkingLot();
@@ -39,6 +41,19 @@ const Bookmark = () => {
         renderItem={({item}) => (
           <BookmarkItem data={item} onRefresh={initalMutate} />
         )}
+        ListEmptyComponent={
+          <View style={styles.empty}>
+            <EZText bold size="quiteLarge" color={COLORS.secondary}>
+              Save your favorite parking!
+            </EZText>
+            <Lottie
+              source={require('../../assets/images/bookmark.json')}
+              autoPlay
+              loop
+              style={[styles.image]}
+            />
+          </View>
+        }
         refreshControl={
           <RefreshControl
             refreshing={false}
@@ -54,4 +69,18 @@ const Bookmark = () => {
 
 export default Bookmark;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  empty: {
+    width: '100%',
+    height: Dimensions.get('screen').height,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+  },
+  image: {
+    position: 'relative',
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+  },
+});

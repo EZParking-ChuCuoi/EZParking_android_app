@@ -35,6 +35,7 @@ import {AVATAR} from '../../utils/defaultImage';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import RemotePushController from '../../shared/RemotePushController';
 import SplashScreen from 'react-native-splash-screen';
+import {useGetUserInfoApp} from '../../hooks/useGetInfo';
 
 const Home = () => {
   const {COLOR} = colorDefault();
@@ -42,16 +43,11 @@ const Home = () => {
   const refRBSheet = useRef();
   const navigation = useNavigation();
   const mutationNearlyPark = useGetNearlyParkingLot();
-  const mutationUserInfo = useGetUserInfo();
   const [currentRegion, setCurrentRegion] = useState(undefined);
-
+  const {userInfo, onRefresh, mutationGet} = useGetUserInfoApp();
   useEffect(() => {
     const askPermissionLocation = async () => {
       const permission = await requestLocationPermission(null);
-      const EZUid = await getData('EZUid');
-      // const token = await getData('EZToken');
-      // console.log(EZUid);
-      mutationUserInfo.mutate(EZUid);
       if (permission) {
         getCurrentLocation();
       }
@@ -111,15 +107,11 @@ const Home = () => {
             color={COLORS.white}
             bold
             size="large">
-            Hi{' '}
-            {mutationUserInfo.isSuccess &&
-              mutationUserInfo.data?.data[0]?.fullName}
+            Hi {userInfo.fullName}
           </EZText>
           <Image
             source={{
-              uri: mutationUserInfo.isSuccess
-                ? mutationUserInfo.data?.data[0]?.avatar
-                : AVATAR,
+              uri: userInfo.avatar,
             }}
             style={styles.image}
           />
@@ -135,11 +127,12 @@ const Home = () => {
         <EZText bold size="quiteLarge">
           Parking lots near you
         </EZText>
-        <TouchableOpacity
+        {/* <TouchableOpacity
           style={styles.filter}
           onPress={() => refRBSheet.current.open()}>
           <Icon name="filter" size={FONTSIZE.iconMedium} color={COLOR} />
-        </TouchableOpacity>
+        </TouchableOpacity> */}
+        {/* Filter function */}
       </View>
       <FlatList
         showsVerticalScrollIndicator={false}

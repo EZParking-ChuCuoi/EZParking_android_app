@@ -33,6 +33,7 @@ import Lottie from 'lottie-react-native';
 import EZLoading from '../../components/core/EZLoading';
 import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 import EditAccount from './EditAccount';
+import { useGetUserInfoApp } from '../../hooks/useGetInfo';
 
 const Account = ({navigation, route}) => {
   const {COLOR} = colorDefault();
@@ -41,6 +42,7 @@ const Account = ({navigation, route}) => {
   const {BG2ND} = bgSecondaryDefault();
   const refRBSheet = useRef();
   const refEdit = useRef();
+  const {userInfo, onRefresh, mutationGet} = useGetUserInfoApp();
   useEffect(() => {
     const setMutate = async () => {
       const checkSpaceOwner = await isSpaceOwner();
@@ -194,7 +196,7 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
     marginBottom: 15,
     borderWidth: 2,
-    borderColor: COLORS.primary,
+    borderColor: COLORS.borderInput,
   },
   logoutBtn: {
     paddingVertical: 15,
@@ -245,8 +247,8 @@ const styles = StyleSheet.create({
     justifyContent: 'space-between',
     alignItems: 'center',
     width: '85%',
-    borderBottomColor: COLORS.borderBrighter,
-    borderBottomWidth: 1,
+    borderBottomColor: COLORS.borderInput,
+    borderBottomWidth: .3,
     paddingVertical: 15,
   },
   text: {

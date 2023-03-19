@@ -2,6 +2,7 @@ import {Animated, FlatList, StyleSheet, Text, View} from 'react-native';
 import React, {useRef, useState} from 'react';
 import EZSliderItem from './EZSliderItem';
 import EZSliderPagination from './EZSliderPagination';
+import { SPACING } from '../../assets/styles/styles';
 
 const EZSlider = ({data, local = false}) => {
   const [index, setIndex] = useState(0);
@@ -45,7 +46,7 @@ const EZSlider = ({data, local = false}) => {
         onScroll={handleOnScroll}
         onViewableItemsChanged={handleOnViewableItemsChanged}
         viewabilityConfig={viewabilityConfig}
-        contentContainerStyle={{gap: 10}}
+        contentContainerStyle={{gap: SPACING.pxComponent}}
       />
       <EZSliderPagination data={data} scrollX={scrollX} index={index} />
     </View>

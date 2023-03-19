@@ -1,24 +1,18 @@
-import {
-  Dimensions,
-  Image,
-  ImageBackground,
-  StyleSheet,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import {Dimensions, StyleSheet, View} from 'react-native';
 import React, {useEffect, useRef, useState} from 'react';
 import {EZButton, EZButtonBack} from '../../components/core/EZButton';
 import EZText from '../../components/core/EZText';
 import EZContainer from '../../components/core/EZContainer';
-import {navigateAuthorized, validateEmail} from '../../shared/auth';
+import {validateEmail} from '../../shared/auth';
 import EZInput from '../../components/core/EZInput';
-import {bgSecondaryDefault, colorDefault, COLORS, SPACING} from '../../assets/styles/styles';
+import {
+  bgSecondaryDefault,
+  colorDefault,
+  COLORS,
+  SPACING,
+} from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
-import ListCountryCode from '../../components/auth/ListCountryCode';
 import {useRegister} from '../../hooks/api/auth';
-import {androidNotification} from '../../shared/androidNotification';
 import OTPScreen from '../../components/auth/OTPScreen';
 import EZLoading from '../../components/core/EZLoading';
 import Lottie from 'lottie-react-native';
@@ -52,8 +46,19 @@ const Register = ({navigation}) => {
     }
   }, [mutation]);
   useEffect(() => {
-    if (mutation.isError && mutation.error.response?.status === 422) {
-      setErrMessage({...errMessage, ['email']: 'Email is duplicated'});
+    if (mutation.isError && mutation.error.response?.data?.errors?.email) {
+      setErrMessage({
+        ...errMessage,
+        ['email']: mutation.error?.response?.data?.errors?.email[0],
+      });
+    } else if (
+      mutation.isError &&
+      mutation.error.response?.data?.errors?.password
+    ) {
+      setErrMessage({
+        ...errMessage,
+        ['password']: mutation.error?.response?.data?.errors?.password[0],
+      });
     }
   }, [mutation.isError]);
 

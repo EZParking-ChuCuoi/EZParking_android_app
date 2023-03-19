@@ -19,7 +19,6 @@ import {
   SPACING,
 } from '../../assets/styles/styles';
 import EZRBSheet from '../../components/core/EZRBSheet';
-import ListCountryCode from '../../components/auth/ListCountryCode';
 import {useLogin} from '../../hooks/api/auth';
 import {androidNotification} from '../../shared/androidNotification';
 import EZLoading from '../../components/core/EZLoading';
@@ -102,11 +101,6 @@ const Login = () => {
     <EZContainer styleEZContainer={styles.container}>
       {mutation.isLoading && <EZLoading />}
       <EZRBSheet refRBSheet={refRBSheet}>
-        <ListCountryCode
-          handlePressItem={countryCode =>
-            setParams({...params, ['prefix']: countryCode})
-          }
-        />
       </EZRBSheet>
       <View style={[styles.imageLogin, {shadowColor: COLOR}]}>
         <Lottie
