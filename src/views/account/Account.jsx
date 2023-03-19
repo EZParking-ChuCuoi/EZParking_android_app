@@ -33,7 +33,6 @@ import Lottie from 'lottie-react-native';
 import EZLoading from '../../components/core/EZLoading';
 import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 import EditAccount from './EditAccount';
-import { useGetUserInfoApp } from '../../hooks/useGetInfo';
 
 const Account = ({navigation, route}) => {
   const {COLOR} = colorDefault();
@@ -42,7 +41,6 @@ const Account = ({navigation, route}) => {
   const {BG2ND} = bgSecondaryDefault();
   const refRBSheet = useRef();
   const refEdit = useRef();
-  const {userInfo, onRefresh, mutationGet} = useGetUserInfoApp();
   useEffect(() => {
     const setMutate = async () => {
       const checkSpaceOwner = await isSpaceOwner();

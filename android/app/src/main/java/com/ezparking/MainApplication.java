@@ -14,6 +14,7 @@ import com.airbnb.android.react.lottie.LottiePackage;
 import com.dieam.reactnativepushnotification.ReactNativePushNotificationPackage;
 import com.reactnativecommunity.cameraroll.CameraRollPackage;
 import com.devfd.RNGeocoder.RNGeocoderPackage;
+import com.reactnativerestart.RestartPackage;
 import java.util.List;
 
 public class MainApplication extends Application implements ReactApplication {
@@ -34,6 +35,7 @@ public class MainApplication extends Application implements ReactApplication {
       new ReactNativePushNotificationPackage();
       new CameraRollPackage();
       new RNGeocoderPackage();
+      new RestartPackage();
       // Packages that cannot be autolinked yet can be added manually here, for
       // example:
       // packages.add(new MyReactNativePackage());

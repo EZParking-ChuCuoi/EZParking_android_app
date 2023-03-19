@@ -1,4 +1,4 @@
-import {useMutation, useQuery} from '@tanstack/react-query';
+import {useMutation, useQuery, useQueryClient} from '@tanstack/react-query';
 import axios from 'axios';
 import {getData} from '../../shared/asyncStorages';
 import * as httpRequest from '../../utils/httpRequest';
@@ -34,6 +34,31 @@ export const useGetUserInfo = () => {
   return useMutation({
     mutationFn: uid => {
       return httpRequest.getHttpRequest(`user/${uid}/info`);
+    },
+    mutationKey: 'userInfo',
+  });
+};
+
+export const useEditProfile = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: params => {
+      let formData = new FormData();
+      formData.append('fullName', params.fullName);
+      formData.append('_method', 'PUT');
+      if (params.avatar !== null) {
+        formData.append('avatar', {
+          uri: params.avatar.path,
+          name: params.avatar.path.substring(
+            params.avatar.path.lastIndexOf('/') + 1,
+          ),
+          type: params.avatar.mime,
+        });
+      }
+      return httpRequest.postHttpRequest(
+        `user/update/${params.userId}`,
+        formData,
+      );
     },
   });
 };
@@ -74,28 +99,6 @@ export const useRegisterSpaceOwner = () => {
   });
 };
 
-export const useEditProfile = () => {
-  return useMutation({
-    mutationFn: params => {
-      let formData = new FormData();
-      formData.append('fullName', params.fullName);
-      formData.append('_method', 'PUT');
-      if (params.avatar !== null) {
-        formData.append('avatar', {
-          uri: params.avatar.path,
-          name: params.avatar.path.substring(
-            params.avatar.path.lastIndexOf('/') + 1,
-          ),
-          type: params.avatar.mime,
-        });
-      }
-      return httpRequest.postHttpRequest(
-        `user/update/${params.userId}`,
-        formData,
-      );
-    },
-  });
-};
 //Search query example
 export const search = async (param1, param2) => {
   try {

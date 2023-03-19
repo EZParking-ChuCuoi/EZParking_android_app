@@ -168,6 +168,8 @@ dependencies {
     implementation project(':react-native-splash-screen')
 
     implementation project(':lottie-react-native')
+
+    implementation project(':react-native-restart')
     
     implementation project(':react-native-push-notification')
 

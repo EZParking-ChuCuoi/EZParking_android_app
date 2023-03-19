@@ -131,6 +131,7 @@ const BlockItem = props => {
       handleResetForm();
     } else if (mutationEditBlock.isError) {
       console.log('CCCCC', mutationEditBlock.error?.response?.data);
+      //todo: handle when name is exist
     }
   }, [mutationGetBlockInfo.status, mutationEditBlock.status]);
   useEffect(() => {
@@ -237,7 +238,9 @@ const BlockItem = props => {
                 <EZText>
                   Delete <EZText bold>{props.item.nameBlock}</EZText>?
                 </EZText>
-                <EZText size="small" color={COLORS.redLight} bold>{errMess?.popup}</EZText>
+                <EZText size="small" color={COLORS.redLight} bold>
+                  {errMess?.popup}
+                </EZText>
                 <EZButton
                   title="Yes"
                   styleEZButton={{marginTop: 10}}

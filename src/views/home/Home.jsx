@@ -29,13 +29,12 @@ import EZRBSheet from '../../components/core/EZRBSheet';
 import {requestLocationPermission} from '../../shared/androidPermission';
 import Geolocation from '@react-native-community/geolocation';
 import {useGetNearlyParkingLot} from '../../hooks/api/getParkingLots';
-import {getData, storeDataObj} from '../../shared/asyncStorages';
+import {getData, storeData, storeDataObj} from '../../shared/asyncStorages';
 import {useGetUserInfo} from '../../hooks/api/auth';
 import {AVATAR} from '../../utils/defaultImage';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import RemotePushController from '../../shared/RemotePushController';
 import SplashScreen from 'react-native-splash-screen';
-import {useGetUserInfoApp} from '../../hooks/useGetInfo';
 
 const Home = () => {
   const {COLOR} = colorDefault();
@@ -43,16 +42,29 @@ const Home = () => {
   const refRBSheet = useRef();
   const navigation = useNavigation();
   const mutationNearlyPark = useGetNearlyParkingLot();
+  const mutationUserInfo = useGetUserInfo();
   const [currentRegion, setCurrentRegion] = useState(undefined);
-  const {userInfo, onRefresh, mutationGet} = useGetUserInfoApp();
+
+  const checkEdit = async () => {
+    const change = await getData('EZChangeUser');
+    if (change === 'edited') {
+      storeData('EZChangeUser', '');
+      askPermissionLocation();
+    }
+  };
+  checkEdit();
+  const askPermissionLocation = async () => {
+    const permission = await requestLocationPermission(null);
+    const EZUid = await getData('EZUid');
+    // const token = await getData('EZToken');
+    // console.log(EZUid);
+    mutationUserInfo.mutate(EZUid);
+    if (permission) {
+      getCurrentLocation();
+    }
+    SplashScreen.hide();
+  };
   useEffect(() => {
-    const askPermissionLocation = async () => {
-      const permission = await requestLocationPermission(null);
-      if (permission) {
-        getCurrentLocation();
-      }
-      SplashScreen.hide();
-    };
     askPermissionLocation();
   }, []);
   useEffect(() => {
@@ -107,11 +119,15 @@ const Home = () => {
             color={COLORS.white}
             bold
             size="large">
-            Hi {userInfo.fullName}
+            Hi{' '}
+            {mutationUserInfo.isSuccess &&
+              mutationUserInfo.data?.data[0]?.fullName}
           </EZText>
           <Image
             source={{
-              uri: userInfo.avatar,
+              uri: mutationUserInfo.isSuccess
+                ? mutationUserInfo.data?.data[0]?.avatar
+                : AVATAR,
             }}
             style={styles.image}
           />

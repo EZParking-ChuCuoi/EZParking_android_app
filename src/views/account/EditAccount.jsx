@@ -13,6 +13,7 @@ import {useEditProfile} from '../../hooks/api/auth';
 import EZLoading from '../../components/core/EZLoading';
 import {useNavigation} from '@react-navigation/native';
 import EZRBSheetModal from '../../components/core/EZRBSheetModal';
+import RNRestart from 'react-native-restart';
 
 const EditAccount = ({onRefresh, refEdit}) => {
   const mutationEditProfile = useEditProfile();
@@ -36,6 +37,7 @@ const EditAccount = ({onRefresh, refEdit}) => {
   useEffect(() => {
     if (mutationEditProfile.isSuccess) {
       refEdit.current.close();
+      RNRestart.restart();
       onRefresh();
     }
   }, [mutationEditProfile.status]);
