@@ -22,9 +22,12 @@ import {EZButtonText} from '../../core/EZButton';
 import QRCode from 'react-native-qrcode-svg';
 import {getData} from '../../../shared/asyncStorages';
 import EZLoading from '../../core/EZLoading';
-import {dateFormatMoment} from '../../../shared/handleDate';
-
-const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
+import {
+  dateFormatMoment,
+  dateFormatMomentWithoutSecond,
+} from '../../../shared/handleDate';
+import moment from 'moment';
+const BookingHistoryInfo = ({bookings, idSpaceOwner, returnDate}) => {
   const {COLOR} = colorDefault();
   const {BG} = bgDefault();
   const {BG2ND} = bgSecondaryDefault();
@@ -90,8 +93,23 @@ const BookingHistoryInfo = ({bookings, idSpaceOwner}) => {
         paddingVertical: 20,
       }}>
       <ScrollView showsVerticalScrollIndicator={false}>
-        {new Date(mutationBookingDetails.data?.data?.bookings[0]?.bookDate) >=
-          new Date() && (
+        <EZText styleEZText={{marginBottom: 10}}>
+          Booking duration:{' '}
+          {dateFormatMomentWithoutSecond(
+            mutationBookingDetails.data?.data?.bookings[0]?.bookDate,
+          )}{' - '}
+          {dateFormatMomentWithoutSecond(returnDate)}
+        </EZText>
+        {(moment(
+          new Date(mutationBookingDetails.data?.data?.bookings[0]?.bookDate),
+        )
+          .startOf('hour')
+          .fromNow() === 'an hour ago' ||
+          moment(
+            new Date(mutationBookingDetails.data?.data?.bookings[0]?.bookDate),
+          )
+            .startOf('hour')
+            .fromNow() === 'in an hour') && (
           <EZButtonText
             text="Regenerate QR code"
             color={COLORS.primary}

@@ -112,46 +112,40 @@ const Dasboard = ({navigation}) => {
                 );
               })}
           </ScrollView>
-          <View style={styles.titleRevenue}>
-            <EZText
-              transform="uppercase"
-              bold
-              color={COLORS.secondary}
-              styleEZText={{
-                marginTop: 20,
-                width: '50%',
-              }}></EZText>
-            <TouchableOpacity
-              style={[styles.btnPeriod, {backgroundColor: BG2ND}]}
-              onPress={() => refRBSheetPeriod.current.open()}>
-              <EZText bold color={COLORS.primary}>
-                {periodRevenue}{' '}
-              </EZText>
-              <Icon
-                name="chevron-down"
-                size={FONTSIZE.iconLarge}
-                color={COLORS.primary}
-              />
-            </TouchableOpacity>
-          </View>
           {mutationPeriodRevenue.isSuccess && (
             <>
-              <EZText
-                transform="uppercase"
-                bold
-                color={COLORS.secondary}
-                styleEZText={{
-                  marginTop: 20,
-                }}>
-                Revenue all of your parking lots
-              </EZText>
+              <View style={styles.titleRevenue}>
+                <EZText
+                  transform="uppercase"
+                  bold
+                  color={COLORS.secondary}
+                  styleEZText={{
+                    marginTop: 20,
+                    width: '70%',
+                  }}>
+                  Revenue all of your parking lots
+                </EZText>
+                <TouchableOpacity
+                  style={[styles.btnPeriod, {backgroundColor: BG2ND}]}
+                  onPress={() => refRBSheetPeriod.current.open()}>
+                  <EZText bold color={COLORS.primary}>
+                    {periodRevenue}{' '}
+                  </EZText>
+                  <Icon
+                    name="chevron-down"
+                    size={FONTSIZE.iconLarge}
+                    color={COLORS.primary}
+                  />
+                </TouchableOpacity>
+              </View>
+
               <View style={styles.chartLine}>
                 <ChartLine source={mutationPeriodRevenue?.data?.data} />
               </View>
             </>
           )}
           {mutationPeriodRevenue.isLoading && <EZLoading text=" " />}
-          {mutationParkingLot.isSuccess && (
+          {mutationParkingLot.data?.data?.length > 0 && (
             <>
               <EZText
                 transform="uppercase"
@@ -159,6 +153,7 @@ const Dasboard = ({navigation}) => {
                 color={COLORS.secondary}
                 styleEZText={{
                   marginTop: 20,
+                  marginLeft: SPACING.pxComponent,
                 }}>
                 Revenue specific parking lot
               </EZText>
@@ -248,6 +243,7 @@ const styles = StyleSheet.create({
     width: '100%',
     alignItems: 'flex-end',
     marginTop: 20,
+    paddingHorizontal: SPACING.pxComponent,
   },
   periodItem: {
     marginBottom: 15,

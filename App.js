@@ -14,19 +14,16 @@ pusher.connect();
 const App = () => {
   useEffect(() => {
     const getPusher = async () => {
-      const socketId = await pusher.getSocketId();
       const uid = await getData('EZUid');
-      console.log('socketId', uid);
       pusher.subscribe({
-        channelName: `wishlists.${uid}`,
+        channelName: 'wishlists.1000007',
         onEvent: event => {
-          console.log(`Event received at ${event.data}: ${event}`);
+          console.log(`Event received at ${event.data}`);
           LocalNotification(
-            'New notification',
-            'Next is the event data',
-            `${event}`,
-            undefined,
-            new Date(event.data.time),
+            JSON.parse(event.data).userId,
+            JSON.parse(event.data).message,
+            JSON.parse(event.data).title,
+            JSON.parse(event.data).avatar,
           );
         },
       });

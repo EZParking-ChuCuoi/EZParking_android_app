@@ -45,7 +45,7 @@ const ScanQRSuccess = ({data, refInfo}) => {
           <EZText bold color={COLORS.disable}>
             Address
           </EZText>
-          <EZText>{data.bookings[0].address}</EZText>
+          <EZText styleEZText={{width: '80%'}} textAlign="right" lines={3}>{data.bookings[0].address}</EZText>
         </View>
         <EZText color={COLORS.primary} bold>
           {data.bookings.length} slots booked
@@ -89,7 +89,7 @@ const ScanQRSuccess = ({data, refInfo}) => {
           <EZText bold color={COLORS.disable}>
             Booking date
           </EZText>
-          <EZText>{data.bookings[0].bookDate}</EZText>
+          <EZText color={COLORS.secondary}>{data.bookings[0].bookDate}</EZText>
         </View>
         <View style={styles.flexRow}>
           <EZText bold color={COLORS.disable}>
@@ -129,7 +129,8 @@ const styles = StyleSheet.create({
   flexRow: {
     flexDirection: 'row',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
+    width: '100%'
   },
   slots: {
     alignItems: 'flex-end',

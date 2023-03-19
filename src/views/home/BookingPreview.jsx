@@ -12,13 +12,15 @@ import {EZButton} from '../../components/core/EZButton';
 import EZLoading from '../../components/core/EZLoading';
 import {getData} from '../../shared/asyncStorages';
 import {handleCurrenCy} from '../../shared/handleCurrenCy';
+import useRQGlobalState from '../../hooks/useRQGlobal';
+import {validateLicensePlate} from '../../shared/handleValidate';
 
 const BookingPreview = ({navigation, route}) => {
   const {dateStart, dateReturn, idSlotArr} = route.params;
   const mutationBookingPreview = useBookingPreview();
   const mutationBookingNow = useBookingNow();
   const [errMessage, setErrMessage] = useState('');
-  const [uid, setUid] = useState('');
+  const [userInfo] = useRQGlobalState('user', {});
   const [licensePlate, setLicensePlate] = useState(new Array(idSlotArr.length));
   useEffect(() => {
     const inital = async () => {
@@ -27,11 +29,10 @@ const BookingPreview = ({navigation, route}) => {
         start_datetime: dateStart,
         end_datetime: dateReturn,
       });
-      const uid = await getData('EZUid');
-      setUid(uid);
     };
     inital();
   }, []);
+
   useEffect(() => {
     if (mutationBookingNow.isSuccess) {
       navigation.navigate('bookingTicket', {
@@ -40,20 +41,23 @@ const BookingPreview = ({navigation, route}) => {
       });
     }
   }, [mutationBookingNow.status]);
-  const handleBooking = async () => {
-    let check = false;
+  const validate = () => {
+    let check = true;
     [...Array(licensePlate.length)].forEach((val, index) => {
       if (licensePlate[index] !== undefined) {
-        if (licensePlate[index].length === 8) {
+        if (licensePlate[index].length > 7 || licensePlate[index].length < 9) {
           if (licensePlate[index] === licensePlate[index - 1]) {
             check = false;
             setErrMessage('License plates must be unique!');
             return;
+          } else if (!validateLicensePlate(licensePlate[index])) {
+            check = false;
+            setErrMessage('Invalid license plates format [Ex: 43A12345]');
+            return;
           }
-          check = true;
         } else {
           check = false;
-          setErrMessage('License plates must be 8 characters!');
+          setErrMessage('License plates must be 8 or 9 characters!');
           return;
         }
       } else {
@@ -62,21 +66,22 @@ const BookingPreview = ({navigation, route}) => {
         return;
       }
     });
-    if (check) {
+    return check;
+  };
+  const handleBooking = async () => {
+    if (validate()) {
       mutationBookingNow.mutate({
         licensePlate: licensePlate,
         slot_ids: idSlotArr,
-        user_id: uid,
+        user_id: userInfo.id,
         start_datetime: dateStart,
         end_datetime: dateReturn,
       });
-    } else {
-      setErrMessage('Please enter all valid license plates!');
     }
   };
   const handleChange = (license, index) => {
     let arrTemp = licensePlate;
-    arrTemp[index] = license;
+    arrTemp[index] = license.toUpperCase();
     setLicensePlate(arrTemp);
   };
   return (

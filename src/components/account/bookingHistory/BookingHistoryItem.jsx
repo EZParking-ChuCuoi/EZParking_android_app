@@ -32,7 +32,7 @@ const BookingHistoryItem = ({item}) => {
               paddingHorizontal: 2,
               borderRadius: 2,
             }}>
-            {formatRelativeTime(item.created_at)}
+            Booked {formatRelativeTime(item.created_at)}
           </EZText>
           <EZText
             size="small"
@@ -65,6 +65,7 @@ const BookingHistoryItem = ({item}) => {
         <BookingHistoryInfo
           bookings={item.booking_ids}
           idSpaceOwner={item.idSpaceOwner}
+          returnDate={item.returnDate}
         />
       </EZRBSheet>
       <EZRBSheet

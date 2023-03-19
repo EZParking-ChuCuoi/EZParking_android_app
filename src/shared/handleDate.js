@@ -36,6 +36,10 @@ export const dateFormatMoment = timestamp => {
   return moment(new Date(timestamp)).format('YYYY-MM-DD HH:mm:00');
 };
 
+export const dateFormatMomentWithoutSecond = timestamp => {
+  return moment(new Date(timestamp)).format('YYYY-MM-DD HH:mm');
+};
+
 export const getCurrentTime = () => {
   return moment(new Date()).format('HH:mm:ss');
 };

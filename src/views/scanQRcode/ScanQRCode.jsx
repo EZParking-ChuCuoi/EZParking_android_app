@@ -15,6 +15,7 @@ import {
 } from '../../components/core/EZButton';
 import {
   bgSecondaryDefault,
+  colorDefault,
   COLORS,
   EZStatusBar,
 } from '../../assets/styles/styles';
@@ -23,12 +24,17 @@ import {BarcodeFormat, useScanBarcodes} from 'vision-camera-code-scanner';
 import EZBgTopRounded from '../../components/core/EZBgTopRounded';
 import Lottie from 'lottie-react-native';
 import EZLoading from '../../components/core/EZLoading';
-import {useScanBookingQRcode} from '../../hooks/api/useScanQRcode';
+import {
+  useScanBookingQRcode,
+  useScanConfirmBookingQRcode,
+} from '../../hooks/api/useScanQRcode';
 import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 import ScanQRSuccess from '../../components/scanner/ScanQRSuccess';
-
+import {Neomorph} from 'react-native-neomorph-shadows';
+import useRQGlobalState from '../../hooks/useRQGlobal';
 const ScanQRCode = () => {
   const {BG2ND} = bgSecondaryDefault();
+  const {COLOR} = colorDefault();
   const [hasPermission, setHasPermission] = useState(false);
   const devices = useCameraDevices();
   const device = devices.back;
@@ -36,12 +42,27 @@ const ScanQRCode = () => {
   const refFailed = useRef();
   const [isChecking, setIsChecking] = useState(false);
   const mutationScan = useScanBookingQRcode();
-  const [idSpaceOwner, setIdSpaceOwner] = useState(undefined);
+  const mutationScanConfirm = useScanConfirmBookingQRcode();
+  const [userInfo] = useRQGlobalState('user', {});
   const [scanData, setScanData] = useState({});
+  const [isStart, setIsStart] = useState(true);
   const [frameProcessor, barcodes] = useScanBarcodes([BarcodeFormat.QR_CODE], {
     checkInverted: true,
   });
-
+  const btnActive = {
+    width: '50%',
+    backgroundColor: COLORS.primary,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 15,
+  };
+  const btnDeactive = {
+    width: '50%',
+    backgroundColor: BG2ND,
+    alignItems: 'center',
+    justifyContent: 'center',
+    paddingVertical: 12,
+  };
   useEffect(() => {
     (async () => {
       const status = await Camera.requestCameraPermission();
@@ -58,20 +79,28 @@ const ScanQRCode = () => {
           bookingIds.push(item);
         }
       });
-      setIdSpaceOwner(arr[0]);
-      mutationScan.mutate(bookingIds);
+      if (isStart) {
+        mutationScan.mutate(bookingIds);
+      } else {
+        mutationScanConfirm.mutate(bookingIds);
+      }
     }
   }, [barcodes]);
   useEffect(() => {
     if (mutationScan.isSuccess) {
-      if (mutationScan.data?.data?.bookings[0].idSpaceOwner == idSpaceOwner) {
+      if (mutationScan.data?.data?.bookings[0]?.idSpaceOwner == userInfo.id) {
+        setScanData(mutationScan.data.data);
         refInfo.current.open();
       } else {
         refFailed.current.open();
       }
-      setScanData(mutationScan.data?.data);
     }
   }, [mutationScan.status]);
+  useEffect(() => {
+    if (mutationScanConfirm.isSuccess) {
+      console.log(mutationScanConfirm.data);
+    }
+  }, [mutationScanConfirm.status]);
 
   const handleCancle = () => {
     setIsChecking(!isChecking);
@@ -83,12 +112,25 @@ const ScanQRCode = () => {
         bgEZStatusBar={COLORS.tertiary}
         styleEZContainer={styles.container}>
         {mutationScan.isLoading && <EZLoading />}
+        {mutationScanConfirm.isLoading && <EZLoading />}
         <EZBgTopRounded styleEZBgTopRounded={styles.bgTop} height={120}>
           <EZText size="large" bold color={COLORS.white}>
             Scan QR code
           </EZText>
         </EZBgTopRounded>
         <View style={styles.mainContent}>
+          <View style={[styles.btnGroup, {shadowColor: COLOR}]}>
+            <TouchableOpacity
+              onPress={() => setIsStart(true)}
+              style={isStart ? btnActive : btnDeactive}>
+              <EZText bold>Start parking</EZText>
+            </TouchableOpacity>
+            <TouchableOpacity
+              onPress={() => setIsStart(false)}
+              style={!isStart ? btnActive : btnDeactive}>
+              <EZText bold>Finish parking</EZText>
+            </TouchableOpacity>
+          </View>
           <View style={styles.cameraWrapper}>
             <Camera
               style={styles.camera}
@@ -166,8 +208,7 @@ const styles = StyleSheet.create({
   },
   mainContent: {
     width: '100%',
-    height: '100%',
-    paddingTop: 50,
+    marginTop: 30,
     justifyContent: 'flex-start',
     alignItems: 'center',
   },
@@ -191,5 +232,21 @@ const styles = StyleSheet.create({
     paddingHorizontal: 20,
     paddingVertical: 10,
     borderRadius: 8,
+  },
+  btnGroup: {
+    width: '90%',
+    borderRadius: 30,
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    overflow: 'hidden',
+    marginBottom: 20,
+    shadowOffset: {
+      width: 0,
+      height: 4,
+    },
+    shadowOpacity: 0.3,
+    shadowRadius: 4.65,
+
+    elevation: 8,
   },
 });

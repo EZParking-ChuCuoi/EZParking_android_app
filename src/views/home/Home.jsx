@@ -66,7 +66,6 @@ const Home = () => {
   useEffect(() => {
     askPermissionLocation();
   }, []);
-  console.log('USERINFO', userInfo);
   useEffect(() => {
     const storeCurrent = () => {
       if (currentRegion !== undefined) {
