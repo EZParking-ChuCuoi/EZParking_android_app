@@ -126,6 +126,7 @@ const BlockItem = props => {
     }
     if (mutationEditBlock.isSuccess) {
       console.log('MMMMMMM', mutationEditBlock.data);
+      //todo: handle when name is exist
       refRBSheet.current.close();
       props.handleRefresh();
       handleResetForm();

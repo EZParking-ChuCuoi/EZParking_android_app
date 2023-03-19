@@ -13,23 +13,46 @@ import Notification from '../views/notification/Notification';
 import EZText from '../components/core/EZText';
 import HomeStackNavigators from './HomeStackNavigator';
 import {useNavigation} from '@react-navigation/native';
-import {isSpaceOwner} from '../hooks/api/auth';
+import {isSpaceOwner, useGetUserInfo} from '../hooks/api/auth';
 import {useEffect, useState} from 'react';
 import AccountStackNavigators from './AccountStackNavigator';
 import Bookmark from '../views/bookmark/Bookmark';
+import useRQGlobalState from '../hooks/useRQGlobal';
+import {AVATAR} from '../utils/defaultImage';
+import { getData } from '../shared/asyncStorages';
 
 const BottomTab = () => {
   const navigation = useNavigation();
   const {BG} = bgDefault();
   const {COLOR} = colorDefault();
-  const [isSpaceOwnerAccount, setIsSpaceOwnerAccount] = useState(false);
-
+  const mutationUserInfo = useGetUserInfo();
+  const [userInfo, setUserInfo] = useRQGlobalState('user', {
+    avatar: AVATAR,
+    fullName: '',
+    id: '',
+    isSpaceOwner: false,
+    email: '',
+  });
+  useEffect(() => {
+    if (mutationUserInfo.isSuccess) {
+      setUserInfo({
+        ...userInfo,
+        ['avatar']: mutationUserInfo.data.data[0].avatar,
+        ['fullName']: mutationUserInfo.data.data[0].fullName,
+        ['id']: mutationUserInfo.data.data[0].id,
+        ['email']: mutationUserInfo.data.data[0].email,
+      });
+    }
+  }, [mutationUserInfo.status]);
   useEffect(() => {
     const isSpaceOwnerAccount = async () => {
       const result = await isSpaceOwner();
-      if (result) {
-        setIsSpaceOwnerAccount(true);
-      }
+      const EZUid = await getData('EZUid');
+      mutationUserInfo.mutate(EZUid);
+      setUserInfo({
+        ...userInfo,
+        ['isSpaceOwner']: result,
+      });
     };
     isSpaceOwnerAccount();
   }, []);
@@ -104,7 +127,7 @@ const BottomTab = () => {
           };
         }}
       />
-      {isSpaceOwnerAccount && (
+      {userInfo.isSpaceOwner && (
         <Tab.Screen
           name="scanQRCode"
           component={ScanQRCode}

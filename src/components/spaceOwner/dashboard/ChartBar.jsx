@@ -2,7 +2,7 @@ import {Dimensions, ScrollView, StyleSheet, Text, View} from 'react-native';
 import React from 'react';
 import {BarChart} from 'react-native-chart-kit';
 import {handleCurrenCy} from '../../../shared/handleCurrenCy';
-import {COLORS, FONTSIZE} from '../../../assets/styles/styles';
+import {COLORS, FONTSIZE, SPACING} from '../../../assets/styles/styles';
 import moment from 'moment';
 import EZText from '../../core/EZText';
 import {LocalNotification} from '../../../shared/LocalPushController';

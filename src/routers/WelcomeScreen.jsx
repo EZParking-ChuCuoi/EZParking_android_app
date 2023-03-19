@@ -1,9 +1,16 @@
 import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import React, {useEffect} from 'react';
 import {COLORS} from '../assets/styles/styles';
 import EZLoading from '../components/core/EZLoading';
+import { getData } from '../shared/asyncStorages';
 
-const WelcomeScreen = () => {
+const WelcomeScreen = ({navigation}) => {
+  useEffect(() => {
+    const navigateApp = setInterval(() => {
+      navigation.navigate('');
+    }, 4000);
+    return () => clearInterval(navigateApp);
+  }, []);
   return (
     <View style={styles.container}>
       <Image

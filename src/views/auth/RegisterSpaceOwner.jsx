@@ -20,12 +20,13 @@ import {useRegisterSpaceOwner} from '../../hooks/api/auth';
 import EZLoading from '../../components/core/EZLoading';
 import {useNavigation} from '@react-navigation/native';
 import Lottie from 'lottie-react-native';
+import useRQGlobalState from '../../hooks/useRQGlobal';
 
 const RegisterSpaceOwner = () => {
   const mutationRegister = useRegisterSpaceOwner();
   const navigation = useNavigation();
   const [errMess, setErrMess] = useState(null);
-
+  const [userInfo, setUserInfo] = useRQGlobalState('user', {});
   const [params, setParams] = useState({
     id: '',
     phone: '',
@@ -43,6 +44,10 @@ const RegisterSpaceOwner = () => {
   }, []);
   useEffect(() => {
     if (mutationRegister.isSuccess) {
+      setUserInfo({
+        ...userInfo,
+        ['isSpaceOwner']: true,
+      });
       navigation.navigate('bottomTab', {
         screen: 'account',
         params: {screen: 'spaceOwner', params: {screen: 'dashboard'},},

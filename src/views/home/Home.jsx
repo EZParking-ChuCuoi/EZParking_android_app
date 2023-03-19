@@ -35,6 +35,7 @@ import {AVATAR} from '../../utils/defaultImage';
 import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import RemotePushController from '../../shared/RemotePushController';
 import SplashScreen from 'react-native-splash-screen';
+import useRQGlobalState from '../../hooks/useRQGlobal';
 
 const Home = () => {
   const {COLOR} = colorDefault();
@@ -42,9 +43,8 @@ const Home = () => {
   const refRBSheet = useRef();
   const navigation = useNavigation();
   const mutationNearlyPark = useGetNearlyParkingLot();
-  const mutationUserInfo = useGetUserInfo();
   const [currentRegion, setCurrentRegion] = useState(undefined);
-
+  const [userInfo] = useRQGlobalState('user', {});
   const checkEdit = async () => {
     const change = await getData('EZChangeUser');
     if (change === 'edited') {
@@ -58,7 +58,6 @@ const Home = () => {
     const EZUid = await getData('EZUid');
     // const token = await getData('EZToken');
     // console.log(EZUid);
-    mutationUserInfo.mutate(EZUid);
     if (permission) {
       getCurrentLocation();
     }
@@ -67,12 +66,11 @@ const Home = () => {
   useEffect(() => {
     askPermissionLocation();
   }, []);
+  console.log('USERINFO', userInfo);
   useEffect(() => {
     const storeCurrent = () => {
       if (currentRegion !== undefined) {
         storeDataObj('EZCurrentRegion', currentRegion);
-      }
-      if (currentRegion !== undefined) {
         mutationNearlyPark.mutate(currentRegion);
       }
     };
@@ -119,15 +117,11 @@ const Home = () => {
             color={COLORS.white}
             bold
             size="large">
-            Hi{' '}
-            {mutationUserInfo.isSuccess &&
-              mutationUserInfo.data?.data[0]?.fullName}
+            Hi {userInfo.fullName}
           </EZText>
           <Image
             source={{
-              uri: mutationUserInfo.isSuccess
-                ? mutationUserInfo.data?.data[0]?.avatar
-                : AVATAR,
+              uri: userInfo.avatar,
             }}
             style={styles.image}
           />

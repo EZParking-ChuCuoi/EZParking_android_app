@@ -14,8 +14,9 @@ import EZLoading from '../../components/core/EZLoading';
 import {useNavigation} from '@react-navigation/native';
 import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 import RNRestart from 'react-native-restart';
+import useRQGlobalState from '../../hooks/useRQGlobal';
 
-const EditAccount = ({onRefresh, refEdit}) => {
+const EditAccount = ({refEdit}) => {
   const mutationEditProfile = useEditProfile();
   const refErr = useRef();
   const [params, setParams] = useState({
@@ -27,6 +28,7 @@ const EditAccount = ({onRefresh, refEdit}) => {
     fullName: '',
     avatar: null,
   });
+  const [userInfo, setUserInfo] = useRQGlobalState('user', {});
   useEffect(() => {
     const setUid = async () => {
       const uid = await getData('EZUid');
@@ -36,9 +38,12 @@ const EditAccount = ({onRefresh, refEdit}) => {
   }, []);
   useEffect(() => {
     if (mutationEditProfile.isSuccess) {
+      setUserInfo({
+        ...userInfo,
+        ['avatar']: mutationEditProfile.data.data[0].avatar,
+        ['fullName']: mutationEditProfile.data.data[0].fullName,
+      });
       refEdit.current.close();
-      RNRestart.restart();
-      onRefresh();
     }
   }, [mutationEditProfile.status]);
   const handlePickImage = () => {
