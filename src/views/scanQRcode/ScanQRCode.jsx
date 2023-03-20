@@ -98,7 +98,8 @@ const ScanQRCode = () => {
   }, [mutationScan.status]);
   useEffect(() => {
     if (mutationScanConfirm.isSuccess) {
-      console.log(mutationScanConfirm.data);
+      setScanData(mutationScanConfirm.data);
+      refInfo.current.open();
     }
   }, [mutationScanConfirm.status]);
 

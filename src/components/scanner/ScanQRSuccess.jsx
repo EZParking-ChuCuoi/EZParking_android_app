@@ -11,6 +11,7 @@ import Lottie from 'lottie-react-native';
 import {handleCurrenCy} from '../../shared/handleCurrenCy';
 import {EZButtonText} from '../core/EZButton';
 import {useNavigation} from '@react-navigation/native';
+import {dateFormatMomentWithoutSecond} from '../../shared/handleDate';
 
 const ScanQRSuccess = ({data, refInfo}) => {
   const {COLOR} = colorDefault();
@@ -28,76 +29,82 @@ const ScanQRSuccess = ({data, refInfo}) => {
       <EZText size="quiteLarge" color={COLORS.primary} bold>
         Scan ticket success!
       </EZText>
-      <View style={styles.content}>
-        <View style={styles.flexRow}>
-          <EZText bold color={COLORS.disable}>
-            Client name
+      {data?.bookings[0]?.fullName && (
+        <View style={styles.content}>
+          <View style={styles.flexRow}>
+            <EZText bold color={COLORS.disable}>
+              Client name
+            </EZText>
+            <EZText bold>{data.bookings[0].fullName}</EZText>
+          </View>
+          <View style={styles.flexRow}>
+            <EZText bold color={COLORS.disable}>
+              Parking name
+            </EZText>
+            <EZText>{data.bookings[0].parking_lot_name}</EZText>
+          </View>
+          <View style={styles.flexRow}>
+            <EZText bold color={COLORS.disable}>
+              Address
+            </EZText>
+            <EZText styleEZText={{width: '80%'}} textAlign="right" lines={3}>
+              {data.bookings[0].address}
+            </EZText>
+          </View>
+          <EZText color={COLORS.primary} bold>
+            {data.bookings.length} slots booked
           </EZText>
-          <EZText bold>{data.bookings[0].fullName}</EZText>
-        </View>
-        <View style={styles.flexRow}>
-          <EZText bold color={COLORS.disable}>
-            Parking name
-          </EZText>
-          <EZText>{data.bookings[0].parking_lot_name}</EZText>
-        </View>
-        <View style={styles.flexRow}>
-          <EZText bold color={COLORS.disable}>
-            Address
-          </EZText>
-          <EZText styleEZText={{width: '80%'}} textAlign="right" lines={3}>{data.bookings[0].address}</EZText>
-        </View>
-        <EZText color={COLORS.primary} bold>
-          {data.bookings.length} slots booked
-        </EZText>
-        <View style={styles.slots}>
-          {data.bookings.map(item => {
-            return (
-              <View style={styles.slotItem} key={item.booking_id}>
-                <View style={styles.flexRow}>
-                  <EZText bold color={COLORS.disable}>
-                    Vehicle
-                  </EZText>
-                  <EZText>
-                    <EZText>
-                      {item.carType === '4-16SLOT'
-                        ? '4-16 seats vehicle - '
-                        : '16-34 seats vehicle - '}
+          <View style={styles.slots}>
+            {data.bookings.map(item => {
+              return (
+                <View style={styles.slotItem} key={item.booking_id}>
+                  <View style={styles.flexRow}>
+                    <EZText bold color={COLORS.disable}>
+                      Vehicle
                     </EZText>
-                    <EZText
-                      styleEZText={styles.license}
-                      transform="uppercase">{`${item.licensePlate.slice(
-                      0,
-                      3,
-                    )}-${item.licensePlate.slice(
-                      3,
-                      6,
-                    )}.${item.licensePlate.slice(6, 8)}`}</EZText>
-                  </EZText>
+                    <EZText>
+                      <EZText>
+                        {item.carType === '4-16SLOT'
+                          ? '4-16 seats vehicle - '
+                          : '16-34 seats vehicle - '}
+                      </EZText>
+                      <EZText
+                        styleEZText={styles.license}
+                        transform="uppercase">{`${item.licensePlate.slice(
+                        0,
+                        3,
+                      )}-${item.licensePlate.slice(
+                        3,
+                        6,
+                      )}.${item.licensePlate.slice(6, 8)}`}</EZText>
+                    </EZText>
+                  </View>
+                  <View style={styles.flexRow}>
+                    <EZText bold color={COLORS.disable}>
+                      Slot name
+                    </EZText>
+                    <EZText>{`${item.nameBlock}/${item.slotName}`}</EZText>
+                  </View>
                 </View>
-                <View style={styles.flexRow}>
-                  <EZText bold color={COLORS.disable}>
-                    Slot name
-                  </EZText>
-                  <EZText>{`${item.nameBlock}/${item.slotName}`}</EZText>
-                </View>
-              </View>
-            );
-          })}
+              );
+            })}
+          </View>
+          <View style={styles.flexRow}>
+            <EZText bold color={COLORS.disable}>
+              Booking date
+            </EZText>
+            <EZText color={COLORS.secondary}>
+              {dateFormatMomentWithoutSecond(data.bookings[0].bookDate)}
+            </EZText>
+          </View>
+          <View style={styles.flexRow}>
+            <EZText bold color={COLORS.disable}>
+              Total payment
+            </EZText>
+            <EZText>{handleCurrenCy(Math.round(data.totalPayment))}</EZText>
+          </View>
         </View>
-        <View style={styles.flexRow}>
-          <EZText bold color={COLORS.disable}>
-            Booking date
-          </EZText>
-          <EZText color={COLORS.secondary}>{data.bookings[0].bookDate}</EZText>
-        </View>
-        <View style={styles.flexRow}>
-          <EZText bold color={COLORS.disable}>
-            Total payment
-          </EZText>
-          <EZText>{handleCurrenCy(Math.round(data.totalPayment))}</EZText>
-        </View>
-      </View>
+      )}
       <EZButtonText
         text="Done"
         styleEZButtonText={styles.btnDone}
@@ -130,7 +137,7 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'flex-start',
-    width: '100%'
+    width: '100%',
   },
   slots: {
     alignItems: 'flex-end',

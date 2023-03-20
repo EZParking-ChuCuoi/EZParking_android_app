@@ -7,18 +7,21 @@ import {COLORS, SPACING} from '../../assets/styles/styles';
 
 const Notification = () => {
   return (
-    <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}} >
+    <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
       <View style={styles.noticeItem}>
         <View style={styles.new} />
         <Image source={{uri: AVATAR}} style={styles.avatar} />
         <View style={styles.noticRight}>
           <EZText lines={3} styleEZText={styles.noticRightTop}>
             <EZText bold color={COLORS.primary}>
-              Hoang Tuan Minh
+              Hoang Tuan Minh {' '}
             </EZText>
-            <EZText>Has booked your parking Lorem ipsum dolor sit amet consectetur adipisicing elit. Quo, aliquid? lot</EZText>
+            <EZText>
+              Has booked your parking Lorem ipsum dolor sit amet consectetur
+              adipisicing elit. Quo, aliquid? lot
+            </EZText>
           </EZText>
-          <EZText size="small">2 minutes ago</EZText>
+          <EZText size="small" color={COLORS.disable}>2 minutes ago</EZText>
         </View>
       </View>
       <View style={styles.noticeItem}>
@@ -27,11 +30,11 @@ const Notification = () => {
         <View style={styles.noticRight}>
           <EZText lines={3} styleEZText={styles.noticRightTop}>
             <EZText bold color={COLORS.primary}>
-              Hoang Tuan Minh
+              Hoang Tuan Minh {' '}
             </EZText>
-            <EZText>Has booked your parking lot</EZText>
+            <EZText>Has booked your parking lot Lorem ipsum dolor sit amet consectetur, adipisicing elit.</EZText>
           </EZText>
-          <EZText size="small">2 minutes ago</EZText>
+          <EZText size="small" color={COLORS.disable}>2 minutes ago</EZText>
         </View>
       </View>
     </EZContainer>
@@ -69,9 +72,11 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     justifyContent: 'flex-start',
     alignItems: 'flex-start',
+    width: '100%',
     gap: 6,
   },
   noticRight: {
+    width: '80%',
     justifyContent: 'space-between',
   },
 });

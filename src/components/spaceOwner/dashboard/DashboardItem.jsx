@@ -89,7 +89,7 @@ const DashboardItem = props => {
             style={styles.btn}
           />
         )}
-        <EZText lines={2}>
+        <EZText lines={2} textAlign="center">
           {isCreate ? 'Create new' : item.nameParkingLot}
         </EZText>
       </LinearGradient>

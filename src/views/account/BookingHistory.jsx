@@ -1,4 +1,11 @@
-import {Dimensions, FlatList, RefreshControl, StyleSheet, Text, View} from 'react-native';
+import {
+  Dimensions,
+  FlatList,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
 import React, {useEffect} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
@@ -32,17 +39,19 @@ const BookingHistory = () => {
           initialNumToRender={5}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            <View style={styles.empty}>
-              <EZText bold size="quiteLarge" color={COLORS.secondary}>
-                Your booking history is empty!
-              </EZText>
-              <Lottie
-                source={require('../../assets/images/95434-history.json')}
-                autoPlay
-                loop
-                style={[styles.image]}
-              />
-            </View>
+            mutationBookingHistory.data?.data?.length === 0 && (
+              <View style={styles.empty}>
+                <EZText bold size="quiteLarge" color={COLORS.secondary}>
+                  Your booking history is empty!
+                </EZText>
+                <Lottie
+                  source={require('../../assets/images/95434-history.json')}
+                  autoPlay
+                  loop
+                  style={[styles.image]}
+                />
+              </View>
+            )
           }
           refreshControl={
             <RefreshControl

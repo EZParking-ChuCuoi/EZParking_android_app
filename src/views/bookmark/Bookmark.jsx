@@ -42,17 +42,19 @@ const Bookmark = () => {
           <BookmarkItem data={item} onRefresh={initalMutate} />
         )}
         ListEmptyComponent={
-          <View style={styles.empty}>
-            <EZText bold size="quiteLarge" color={COLORS.secondary}>
-              Save your favorite parking!
-            </EZText>
-            <Lottie
-              source={require('../../assets/images/bookmark.json')}
-              autoPlay
-              loop
-              style={[styles.image]}
-            />
-          </View>
+          mutationGetSavedParkingLot?.data?.length===0 && (
+            <View style={styles.empty}>
+              <EZText bold size="quiteLarge" color={COLORS.secondary}>
+                Save your favorite parking!
+              </EZText>
+              <Lottie
+                source={require('../../assets/images/bookmark.json')}
+                autoPlay
+                loop
+                style={[styles.image]}
+              />
+            </View>
+          )
         }
         refreshControl={
           <RefreshControl

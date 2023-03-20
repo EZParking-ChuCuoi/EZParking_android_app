@@ -25,24 +25,12 @@ const BookingHistoryItem = ({item}) => {
         <EZText bold>{item.parking_lot_name}</EZText>
         <EZText>{item.address}</EZText>
         <EZText>
-          <EZText
-            size="small"
-            styleEZText={{
-              backgroundColor: COLORS.circleOverlay,
-              paddingHorizontal: 2,
-              borderRadius: 2,
-            }}>
+          <EZText size="small" color={COLORS.disable}>
             Booked {formatRelativeTime(item.created_at)}
           </EZText>
-          <EZText
-            size="small"
-            styleEZText={{
-              backgroundColor: COLORS.circleOverlay,
-              paddingHorizontal: 2,
-              borderRadius: 2,
-              marginLeft: 20,
-            }}> | Start{' '}
-            {formatRelativeTime(item.bookDate)}
+          <EZText size="small" color={COLORS.disable}>
+            {' '}
+            | Start {formatRelativeTime(item.bookDate)}
           </EZText>
         </EZText>
         <EZText color={COLORS.secondary}>
