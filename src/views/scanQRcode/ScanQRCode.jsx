@@ -40,7 +40,8 @@ const ScanQRCode = () => {
   const device = devices.back;
   const refInfo = useRef();
   const refFailed = useRef();
-  const [isChecking, setIsChecking] = useState(false);
+  const [isChecking, setIsChecking] = useState(true);
+  const [errMess, setErrMess] = useState('Scan ticket failed!');
   const mutationScan = useScanBookingQRcode();
   const mutationScanConfirm = useScanConfirmBookingQRcode();
   const [userInfo] = useRQGlobalState('user', {});
@@ -79,9 +80,17 @@ const ScanQRCode = () => {
           bookingIds.push(item);
         }
       });
+
+      if (arr.length < 2) {
+        setErrMess('Invalid QR code!');
+        refFailed.current.open();
+        return;
+      }
       if (isStart) {
+        console.log('start');
         mutationScan.mutate(bookingIds);
       } else {
+        console.log('end');
         mutationScanConfirm.mutate(bookingIds);
       }
     }
@@ -89,21 +98,46 @@ const ScanQRCode = () => {
   useEffect(() => {
     if (mutationScan.isSuccess) {
       if (mutationScan.data?.data?.bookings[0]?.idSpaceOwner == userInfo.id) {
+        if (
+          new Date(mutationScan.data?.data?.bookings[0]?.returnDate) <
+          new Date()
+        ) {
+          setErrMess('Booking ticket has expired!');
+          refFailed.current.open();
+          return;
+        }
         setScanData(mutationScan.data.data);
         refInfo.current.open();
       } else {
+        setErrMess('Scan ticket failed!');
         refFailed.current.open();
       }
     }
   }, [mutationScan.status]);
+
   useEffect(() => {
     if (mutationScanConfirm.isSuccess) {
       setScanData(mutationScanConfirm.data);
       refInfo.current.open();
+      console.log('mutationScanConfirm: DATA', mutationScanConfirm.data);
+    } else if (
+      mutationScanConfirm.error?.response?.data?.error ===
+      'Booking has expired!'
+    ) {
+      setErrMess('Booking ticket has expired!');
+      refFailed.current.open();
+    } else if (
+      mutationScanConfirm.error?.response?.data?.error ===
+      'Booking has not yet started!'
+    ) {
+      setErrMess('Booking has not yet started!');
+      refFailed.current.open();
     }
   }, [mutationScanConfirm.status]);
 
   const handleCancle = () => {
+    mutationScan.reset();
+    mutationScanConfirm.reset();
     setIsChecking(!isChecking);
   };
   return (
@@ -174,7 +208,7 @@ const ScanQRCode = () => {
             speed={1}
           />
           <EZText color={COLORS.redLight} bold>
-            Scan ticket failed!
+            {errMess}
           </EZText>
         </EZRBSheetModal>
       </EZContainer>

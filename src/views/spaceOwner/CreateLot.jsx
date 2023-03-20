@@ -112,13 +112,14 @@ const CreateLot = () => {
       ['latitude']: details?.geometry?.location?.lat,
       ['longitude']: details?.geometry?.location?.lng,
     });
+    if (refInput.current?.getAddressText() !== undefined) {
+      setParams({
+        ...params,
+        ['address']: refInput.current?.getAddressText(),
+      });
+    }
   };
   const handleClose = () => {
-    //todo Consider to set address param
-    // setParams({
-    //   ...params,
-    //   ['address']: refInput.current?.getAddressText(),
-    // });
     refRBSheet.current.close();
     if (coordinateDrag !== undefined) {
       setParams({

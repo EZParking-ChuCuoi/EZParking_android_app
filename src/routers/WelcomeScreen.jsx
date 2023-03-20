@@ -5,12 +5,6 @@ import EZLoading from '../components/core/EZLoading';
 import { getData } from '../shared/asyncStorages';
 
 const WelcomeScreen = ({navigation}) => {
-  useEffect(() => {
-    const navigateApp = setInterval(() => {
-      navigation.navigate('');
-    }, 4000);
-    return () => clearInterval(navigateApp);
-  }, []);
   return (
     <View style={styles.container}>
       <Image

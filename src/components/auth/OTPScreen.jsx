@@ -122,6 +122,7 @@ const styles = StyleSheet.create({
     borderRadius: 5,
     borderWidth: 1,
     color: COLORS.primary,
+    fontWeight: 'bold',
   },
   resendOtp: {
     flexDirection: 'row',

@@ -97,19 +97,11 @@ const BookingHistoryInfo = ({bookings, idSpaceOwner, returnDate}) => {
           Booking duration:{' '}
           {dateFormatMomentWithoutSecond(
             mutationBookingDetails.data?.data?.bookings[0]?.bookDate,
-          )}{' - '}
+          )}
+          {' - '}
           {dateFormatMomentWithoutSecond(returnDate)}
         </EZText>
-        {(moment(
-          new Date(mutationBookingDetails.data?.data?.bookings[0]?.bookDate),
-        )
-          .startOf('hour')
-          .fromNow() === 'an hour ago' ||
-          moment(
-            new Date(mutationBookingDetails.data?.data?.bookings[0]?.bookDate),
-          )
-            .startOf('hour')
-            .fromNow() === 'in an hour') && (
+        {new Date(returnDate) > new Date() && (
           <EZButtonText
             text="Regenerate QR code"
             color={COLORS.primary}

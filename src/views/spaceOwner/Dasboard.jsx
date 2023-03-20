@@ -59,6 +59,12 @@ const Dasboard = ({navigation}) => {
     const getRevenue = async () => {
       const uid = await getData('EZUid');
       if (mutationParkingLot?.data?.data?.length > 0) {
+        if (
+          mutationParkingLot?.data?.data?.length === 1 &&
+          mutationParkingLot?.data?.data[0]?.booked === 0
+        ) {
+          return;
+        }
         mutationPeriodRevenue.mutate({userId: uid, period: periodRevenue});
       }
     };

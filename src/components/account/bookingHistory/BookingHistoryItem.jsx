@@ -12,6 +12,7 @@ import BookingHistoryInfo from './BookingHistoryInfo';
 import BookingHistoryFeedback from './BookingHistoryFeedback';
 import {handleCurrenCy} from '../../../shared/handleCurrenCy';
 import {formatRelativeTime} from '../../../shared/handleDate';
+import {Link} from '@react-navigation/native';
 
 const BookingHistoryItem = ({item}) => {
   const {BG2ND} = bgSecondaryDefault();
@@ -22,7 +23,13 @@ const BookingHistoryItem = ({item}) => {
     <View
       style={[styles.container, {backgroundColor: BG2ND, shadowColor: COLOR}]}>
       <View style={styles.contentLeft}>
-        <EZText bold>{item.parking_lot_name}</EZText>
+        <Link
+          to={{
+            screen: 'spaceDetail',
+            params: {parkingId: item.idParking},
+          }}>
+          <EZText bold>{item.parking_lot_name}</EZText>
+        </Link>
         <EZText>{item.address}</EZText>
         <EZText>
           <EZText size="small" color={COLORS.disable}>
