@@ -27,6 +27,7 @@ import {androidNotification} from '../../shared/androidNotification';
 import {hasStorePermission} from '../../shared/androidPermission';
 import {useGetBookingHistory} from '../../hooks/api/getBookingParkingLot';
 import useRQGlobalState from '../../hooks/useRQGlobal';
+import {useGetNotification} from '../../hooks/api/useNotification';
 
 const BookingTicket = ({navigation, route}) => {
   const {spaceOwnerId, idBookings} = route.params;
@@ -34,16 +35,27 @@ const BookingTicket = ({navigation, route}) => {
   const {BG} = bgDefault();
   const refViewShot = useRef();
   const mutationBookingHistory = useGetBookingHistory();
+  const mutationGetNotification = useGetNotification();
   const [histories, setHistories] = useRQGlobalState('history', []);
   const [userInfo] = useRQGlobalState('user', {});
+  const [notices, setNotices] = useRQGlobalState('notice', []);
   useEffect(() => {
-    mutationBookingHistory.mutate(userInfo.id);
+    const getGlobalState = () => {
+      mutationBookingHistory.mutate(userInfo.id);
+      mutationGetNotification.mutate(userInfo.id);
+    };
+    getGlobalState();
   }, []);
   useEffect(() => {
     if (mutationBookingHistory.isSuccess) {
       setHistories(mutationBookingHistory.data?.data);
     }
   }, [mutationBookingHistory.status]);
+  useEffect(() => {
+    if (mutationGetNotification.isSuccess) {
+      setNotices(mutationGetNotification.data);
+    }
+  }, [mutationGetNotification.status]);
 
   let valueQrCode = `${spaceOwnerId}`;
   idBookings.forEach(item => {

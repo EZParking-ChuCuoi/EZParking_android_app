@@ -76,7 +76,7 @@ const ScanQRCode = () => {
     }
   }, [barcodes.length]);
   useEffect(() => {
-    if (isChecking) {
+    if (isChecking && barcodes.length>0) {
       const arr = barcodes[0]?.displayValue.split('|');
       let bookingIds = [];
       arr.forEach((item, index) => {
@@ -125,7 +125,6 @@ const ScanQRCode = () => {
     if (mutationScanConfirm.isSuccess) {
       setScanData(mutationScanConfirm.data);
       refInfo.current.open();
-      console.log('mutationScanConfirm: DATA', mutationScanConfirm.data);
     } else if (
       mutationScanConfirm.error?.response?.data?.error ===
       'Booking has expired!'

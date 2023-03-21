@@ -3,15 +3,16 @@ import React from 'react';
 import {AVATAR} from '../../utils/defaultImage';
 import {COLORS} from '../../assets/styles/styles';
 import EZText from '../../components/core/EZText';
-import { formatRelativeTime } from '../../shared/handleDate';
+import {formatRelativeTime} from '../../shared/handleDate';
+import useRQGlobalState from '../../hooks/useRQGlobal';
 
 const NotificationItem = ({data}) => {
-  console.log(data);
-  const handlePress = ()=>{
-    if(data.type==='QRCode' && data.title==='Completed parking lot'){
-
+  const [userInfo] = useRQGlobalState('user', {});
+  console.log("CCCCCCCCC",data);
+  const handlePress = () => {
+    if (data.type === 'QRCode' && data.title === 'Completed parking lot') {
     }
-  }
+  };
   return (
     <TouchableOpacity style={styles.noticeItem} onPress={handlePress}>
       <View style={styles.new} />
@@ -19,15 +20,12 @@ const NotificationItem = ({data}) => {
       <View style={styles.noticRight}>
         <EZText lines={3} styleEZText={styles.noticRightTop}>
           <EZText bold color={COLORS.primary}>
-          {data.type==='QRCode' && data.title==='Completed parking lot' && 'You'}
-          {data.type==='booking' && data.title==='New booking' && 'Someone'}
-          {data.type==='wishlist' && data.title==='New Wishlist' && 'Someone'}
-            {' '}
+            {data.nameUserSend === userInfo.fullName
+              ? 'You'
+              : data.nameUserSend}{' '}
           </EZText>
           <EZText>
-            {data.type==='booking' && data.title==='New booking' && 'Has booked your parking lot'}
-            {data.type==='QRCode' && data.title==='Completed parking lot' && `completed your booking at ${data.type}`}
-            {data.type==='wishlist' && data.title==='New Wishlist' && 'added your parking lot to their wishlist'}
+            {data.message}
           </EZText>
         </EZText>
         <EZText size="small" color={COLORS.disable}>

@@ -14,6 +14,7 @@ import {useNavigation} from '@react-navigation/native';
 import {dateFormatMomentWithoutSecond} from '../../shared/handleDate';
 
 const ScanQRSuccess = ({data, refInfo}) => {
+  console.log(data?.updatedBookings?.bookDate);
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const navigation = useNavigation();
@@ -27,8 +28,34 @@ const ScanQRSuccess = ({data, refInfo}) => {
         speed={1}
       />
       <EZText size="quiteLarge" color={COLORS.primary} bold>
-        Scan ticket success!
+      {data?.updatedBookings ? 'Completely finished!' : 'Scan ticket successfully!'}
       </EZText>
+      {data?.updatedBookings && (
+        <View style={styles.content}>
+          <View style={styles.flexRow}>
+            <EZText bold color={COLORS.disable}>
+              Client name
+            </EZText>
+            <EZText bold>{data?.updatedBookings?.userName}</EZText>
+          </View>
+          <View style={styles.flexRow}>
+            <EZText bold color={COLORS.disable}>
+              Booking date
+            </EZText>
+            <EZText bold>
+              {dateFormatMomentWithoutSecond(data?.updatedBookings?.bookDate)}
+            </EZText>
+          </View>
+          <View style={styles.flexRow}>
+            <EZText bold color={COLORS.disable}>
+              Total payment
+            </EZText>
+            <EZText bold color={COLORS.redLight}>
+              {handleCurrenCy(Math.round(data?.updatedBookings?.totalPrice))}
+            </EZText>
+          </View>
+        </View>
+      )}
       {data?.bookings && (
         <View style={styles.content}>
           <View style={styles.flexRow}>

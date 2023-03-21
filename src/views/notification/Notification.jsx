@@ -1,4 +1,5 @@
 import {
+  Dimensions,
   FlatList,
   Image,
   RefreshControl,
@@ -15,6 +16,7 @@ import useRQGlobalState from '../../hooks/useRQGlobal';
 import NotificationItem from './NotificationItem';
 import {useGetNotification} from '../../hooks/api/useNotification';
 import EZLoading from '../../components/core/EZLoading';
+import Lottie from 'lottie-react-native';
 
 const Notification = () => {
   const [notices, setNotices] = useRQGlobalState('notice', []);
@@ -44,6 +46,21 @@ const Notification = () => {
             }}
           />
         }
+        ListEmptyComponent={
+            notices.length === 0 && mutationGetNotification.isSuccess && (
+              <View style={styles.empty}>
+                <EZText bold size="quiteLarge" color={COLORS.secondary}>
+                  Your notification is empty!
+                </EZText>
+                <Lottie
+                  source={require('../../assets/images/notifications.json')}
+                  autoPlay
+                  loop
+                  style={[styles.image]}
+                />
+              </View>
+            )
+          }
       />
     </EZContainer>
   );
@@ -51,4 +68,18 @@ const Notification = () => {
 
 export default Notification;
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+  image: {
+    position: 'relative',
+    width: '100%',
+    height: 200,
+    resizeMode: 'cover',
+  },
+  empty: {
+    width: '100%',
+    height: Dimensions.get('screen').height,
+    justifyContent: 'center',
+    alignItems: 'center',
+    gap: 20,
+  },
+});

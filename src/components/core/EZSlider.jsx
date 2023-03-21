@@ -38,7 +38,7 @@ const EZSlider = ({data, local = false}) => {
       <FlatList
         data={data}
         keyExtractor={(_, index) => {
-          setIndex(index);
+          // setIndex(index);
           return index;
         }}
         renderItem={({item}) => <EZSliderItem item={item} local={local} />}
