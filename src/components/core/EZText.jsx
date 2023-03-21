@@ -32,6 +32,8 @@ const EZText = props => {
     sizeText = FONTSIZE.huge;
   } else if (size === 'quiteLarge') {
     sizeText = FONTSIZE.quiteLarge;
+  } else if (size === '>medium') {
+    sizeText = FONTSIZE.moreThanMedium;
   }
   return (
     <Text

@@ -1,82 +1,54 @@
-import {Image, StyleSheet, Text, View} from 'react-native';
-import React from 'react';
+import {
+  FlatList,
+  Image,
+  RefreshControl,
+  StyleSheet,
+  Text,
+  View,
+} from 'react-native';
+import React, {useEffect} from 'react';
 import EZContainer from '../../components/core/EZContainer';
 import EZText from '../../components/core/EZText';
 import {AVATAR} from '../../utils/defaultImage';
 import {COLORS, SPACING} from '../../assets/styles/styles';
+import useRQGlobalState from '../../hooks/useRQGlobal';
+import NotificationItem from './NotificationItem';
+import {useGetNotification} from '../../hooks/api/useNotification';
+import EZLoading from '../../components/core/EZLoading';
 
 const Notification = () => {
+  const [notices, setNotices] = useRQGlobalState('notice', []);
+  const [userInfo] = useRQGlobalState('user', {});
+  const mutationGetNotification = useGetNotification();
+  useEffect(() => {
+    mutationGetNotification.mutate(userInfo.id);
+  }, []);
+  useEffect(() => {
+    if (mutationGetNotification.isSuccess) {
+      setNotices(mutationGetNotification.data);
+    }
+  }, [mutationGetNotification.status]);
   return (
     <EZContainer styleEZContainer={{paddingHorizontal: SPACING.pxComponent}}>
-      <View style={styles.noticeItem}>
-        <View style={styles.new} />
-        <Image source={{uri: AVATAR}} style={styles.avatar} />
-        <View style={styles.noticRight}>
-          <EZText lines={3} styleEZText={styles.noticRightTop}>
-            <EZText bold color={COLORS.primary}>
-              Hoang Tuan Minh {' '}
-            </EZText>
-            <EZText>
-              Has booked your parking Lorem ipsum dolor sit amet consectetur
-              adipisicing elit. Quo, aliquid? lot
-            </EZText>
-          </EZText>
-          <EZText size="small" color={COLORS.disable}>2 minutes ago</EZText>
-        </View>
-      </View>
-      <View style={styles.noticeItem}>
-        <View style={styles.new} />
-        <Image source={{uri: AVATAR}} style={styles.avatar} />
-        <View style={styles.noticRight}>
-          <EZText lines={3} styleEZText={styles.noticRightTop}>
-            <EZText bold color={COLORS.primary}>
-              Hoang Tuan Minh {' '}
-            </EZText>
-            <EZText>Has booked your parking lot Lorem ipsum dolor sit amet consectetur, adipisicing elit.</EZText>
-          </EZText>
-          <EZText size="small" color={COLORS.disable}>2 minutes ago</EZText>
-        </View>
-      </View>
+      {mutationGetNotification.isLoading && <EZLoading />}
+      <FlatList
+        data={notices}
+        showsVerticalScrollIndicator={false}
+        renderItem={({item}) => <NotificationItem data={item} />}
+        keyExtractor={item => item.id}
+        refreshControl={
+          <RefreshControl
+            refreshing={false}
+            onRefresh={() => {
+              mutationGetNotification.mutate(userInfo.id);
+            }}
+          />
+        }
+      />
     </EZContainer>
   );
 };
 
 export default Notification;
 
-const styles = StyleSheet.create({
-  noticeItem: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'center',
-    width: '100%',
-    gap: 10,
-    paddingTop: 10,
-    paddingBottom: 15,
-    borderBottomColor: COLORS.borderBrighter,
-    borderBottomWidth: 1,
-    overflow: 'hidden',
-  },
-  avatar: {
-    width: 50,
-    height: 50,
-    resizeMode: 'cover',
-    borderRadius: 40,
-  },
-  new: {
-    width: 8,
-    height: 8,
-    borderRadius: 6,
-    backgroundColor: COLORS.redLight,
-  },
-  noticRightTop: {
-    flexDirection: 'row',
-    justifyContent: 'flex-start',
-    alignItems: 'flex-start',
-    width: '100%',
-    gap: 6,
-  },
-  noticRight: {
-    width: '80%',
-    justifyContent: 'space-between',
-  },
-});
+const styles = StyleSheet.create({});

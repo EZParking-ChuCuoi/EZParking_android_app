@@ -25,12 +25,26 @@ import {CameraRoll} from '@react-native-camera-roll/camera-roll';
 import {LocalNotification} from '../../shared/LocalPushController';
 import {androidNotification} from '../../shared/androidNotification';
 import {hasStorePermission} from '../../shared/androidPermission';
+import {useGetBookingHistory} from '../../hooks/api/getBookingParkingLot';
+import useRQGlobalState from '../../hooks/useRQGlobal';
 
 const BookingTicket = ({navigation, route}) => {
   const {spaceOwnerId, idBookings} = route.params;
   const {COLOR} = colorDefault();
   const {BG} = bgDefault();
   const refViewShot = useRef();
+  const mutationBookingHistory = useGetBookingHistory();
+  const [histories, setHistories] = useRQGlobalState('history', []);
+  const [userInfo] = useRQGlobalState('user', {});
+  useEffect(() => {
+    mutationBookingHistory.mutate(userInfo.id);
+  }, []);
+  useEffect(() => {
+    if (mutationBookingHistory.isSuccess) {
+      setHistories(mutationBookingHistory.data?.data);
+    }
+  }, [mutationBookingHistory.status]);
+
   let valueQrCode = `${spaceOwnerId}`;
   idBookings.forEach(item => {
     valueQrCode = valueQrCode.concat('|', item);
@@ -129,7 +143,14 @@ const BookingTicket = ({navigation, route}) => {
           <EZText color={COLORS.disable}>Save to phone</EZText>
         </TouchableOpacity>
         <TouchableOpacity
-          onPress={() => navigation.navigate('home')}
+          onPress={() =>
+            navigation.navigate('bottomTab', {
+              screen: 'homeStack',
+              params: {
+                screen: 'home',
+              },
+            })
+          }
           style={{flexDirection: 'row', gap: 10}}>
           <IconIon
             name="close"

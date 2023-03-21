@@ -13,6 +13,7 @@ export const COLORS = {
   disable: '#7D7C80',
   redLight: '#FD3232',
   yellow: '#FFFF00',
+  yellowDarker: '#BEBE00',
   bgDark: '#1B1616',
   bgDarkSecondary: '#2E2B2B',
   bgLightSecondary: '#F9FAFB',
@@ -27,6 +28,7 @@ export const COLORS = {
 export const FONTSIZE = {
   small: 12,
   medium: 15,
+  moreThanMedium: 18,
   quiteLarge: 25,
   large: 37,
   huge: 50,

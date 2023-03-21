@@ -24,7 +24,6 @@ import {
 import NavigatedOption from '../../components/account/NavigatedOptions';
 import Icon from 'react-native-vector-icons/Feather';
 import {logOut} from '../../shared/auth';
-import {isSpaceOwner} from '../../hooks/api/auth';
 import EZRBSheet from '../../components/core/EZRBSheet';
 import Lottie from 'lottie-react-native';
 import EZRBSheetModal from '../../components/core/EZRBSheetModal';

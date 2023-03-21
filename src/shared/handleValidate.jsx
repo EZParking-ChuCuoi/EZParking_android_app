@@ -6,5 +6,5 @@ export const validateFileImage = file => {
 };
 
 export const validateLicensePlate = licensePlate => {
-  return /^[0-9]{2}[A-Z]{1,2}[-]?[0-9A-Z]{4,5}$/.test(licensePlate);
+  return /^[0-9]{2}[A-Z]{1}[-]?[0-9A-Z]{4,5}$/.test(licensePlate);
 };

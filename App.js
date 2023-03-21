@@ -16,13 +16,50 @@ const App = () => {
     const getPusher = async () => {
       const uid = await getData('EZUid');
       pusher.subscribe({
-        channelName: 'wishlists.1000007',
+        channelName: `wishlists.${uid}`,
         onEvent: event => {
-          console.log(`Event received at ${event.data}`);
+          console.log(`Event wishlists ${event.data}`);
           LocalNotification(
             JSON.parse(event.data).userId,
-            JSON.parse(event.data).message,
             JSON.parse(event.data).title,
+            JSON.parse(event.data).message,
+            JSON.parse(event.data).avatar,
+          );
+        },
+      });
+
+      pusher.subscribe({
+        channelName: `bookings.${uid}`,
+        onEvent: event => {
+          console.log(`Event booking ${event.data}`);
+          LocalNotification(
+            JSON.parse(event.data).userId,
+            JSON.parse(event.data).title,
+            JSON.parse(event.data).message,
+            JSON.parse(event.data).avatar,
+          );
+        },
+      });
+      pusher.subscribe({
+        channelName: `qr-codes.${uid}`,
+        onEvent: event => {
+          console.log(`Event QRCODE ${event.data}`);
+          LocalNotification(
+            JSON.parse(event.data).userId,
+            JSON.parse(event.data).title,
+            JSON.parse(event.data).message,
+            JSON.parse(event.data).avatar,
+          );
+        },
+      });
+      pusher.subscribe({
+        channelName: `comments.${uid}`,
+        onEvent: event => {
+          console.log(`Event comment ${event.data}`);
+          LocalNotification(
+            JSON.parse(event.data).userId,
+            JSON.parse(event.data).title,
+            JSON.parse(event.data).message,
             JSON.parse(event.data).avatar,
           );
         },

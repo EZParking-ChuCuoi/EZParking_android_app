@@ -21,13 +21,17 @@ import {AVATAR} from '../../../utils/defaultImage';
 import {formatRelativeTime} from '../../../shared/handleDate';
 import {EZButton, EZButtonText} from '../../core/EZButton';
 import EZInput from '../../core/EZInput';
+import {useCreateComment, useEditComment} from '../../../hooks/api/useComments';
 
-const BookingHistoryFeedback = () => {
+const BookingHistoryFeedback = ({idParking}) => {
   const LIMITSTAR = 5;
   const STARS = 3;
   const {BG} = bgDefault();
   const {BG2ND} = bgSecondaryDefault();
+  const mutationCreateComment = useCreateComment();
+  const mutationEditComment = useEditComment();
   const [action, setAction] = useState('review');
+  // todo: CRUD comment
   const [params, setParams] = useState({
     rating: 0,
     content: '',
@@ -87,7 +91,7 @@ const BookingHistoryFeedback = () => {
         }}
         bold
         size="quiteLarge">
-        Your Feedback
+        Your review
       </EZText>
       <ScrollView style={styles.content}>
         {action === 'review' && (
@@ -127,7 +131,7 @@ const BookingHistoryFeedback = () => {
                 impedit recusandae vitae optio hic quasi?
               </EZText>
               <EZButtonText
-                text="Edit your feedback"
+                text="Edit your review"
                 color={COLORS.primary}
                 handlePress={() => setAction('edit')}
               />
@@ -159,18 +163,18 @@ const BookingHistoryFeedback = () => {
               </EZText>
             )}
             <EZInput
-              label="Write you feedback"
+              label="Write you review"
               errMess={errMess.content}
               styleEZInput={{marginVertical: SPACING.mbInputItem}}
               lines={5}
-              placeholder="Write you feedback"
+              placeholder="Write you review"
               defaultValue={params.content}
               onChangeText={newText =>
                 setParams({...params, ['content']: newText})
               }
             />
             <EZButton
-              title={action==='edit' ? "Edit feedback" : "Post feedback"}
+              title={action === 'edit' ? 'Edit review' : 'Post review'}
               handlePress={action === 'edit' ? handleEdit : handleCreate}
             />
           </View>

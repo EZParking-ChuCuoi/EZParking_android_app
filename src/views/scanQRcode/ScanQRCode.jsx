@@ -40,7 +40,7 @@ const ScanQRCode = () => {
   const device = devices.back;
   const refInfo = useRef();
   const refFailed = useRef();
-  const [isChecking, setIsChecking] = useState(true);
+  const [isChecking, setIsChecking] = useState(false);
   const [errMess, setErrMess] = useState('Scan ticket failed!');
   const mutationScan = useScanBookingQRcode();
   const mutationScanConfirm = useScanConfirmBookingQRcode();
@@ -73,7 +73,11 @@ const ScanQRCode = () => {
   useEffect(() => {
     if (barcodes.length > 0) {
       setIsChecking(true);
-      const arr = barcodes[0].displayValue.split('|');
+    }
+  }, [barcodes.length]);
+  useEffect(() => {
+    if (isChecking) {
+      const arr = barcodes[0]?.displayValue.split('|');
       let bookingIds = [];
       arr.forEach((item, index) => {
         if (index !== 0) {
@@ -87,14 +91,16 @@ const ScanQRCode = () => {
         return;
       }
       if (isStart) {
-        console.log('start');
+        console.log('STARTTTTTTTTTTT');
         mutationScan.mutate(bookingIds);
+        return;
       } else {
-        console.log('end');
+        console.log('ENDDDDDDDD');
         mutationScanConfirm.mutate(bookingIds);
+        return;
       }
     }
-  }, [barcodes]);
+  }, [isChecking]);
   useEffect(() => {
     if (mutationScan.isSuccess) {
       if (mutationScan.data?.data?.bookings[0]?.idSpaceOwner == userInfo.id) {

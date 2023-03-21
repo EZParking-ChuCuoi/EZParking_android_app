@@ -29,7 +29,7 @@ const ScanQRSuccess = ({data, refInfo}) => {
       <EZText size="quiteLarge" color={COLORS.primary} bold>
         Scan ticket success!
       </EZText>
-      {data?.bookings[0]?.fullName && (
+      {data?.bookings && (
         <View style={styles.content}>
           <View style={styles.flexRow}>
             <EZText bold color={COLORS.disable}>

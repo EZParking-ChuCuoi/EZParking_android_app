@@ -16,10 +16,12 @@ import EZLoading from '../../components/core/EZLoading';
 import BookingHistoryItem from '../../components/account/bookingHistory/BookingHistoryItem';
 import {COLORS, SPACING} from '../../assets/styles/styles';
 import Lottie from 'lottie-react-native';
+import useRQGlobalState from '../../hooks/useRQGlobal';
 
 const BookingHistory = () => {
   useHideTabBar();
   const mutationBookingHistory = useGetBookingHistory();
+  const [histories, setHistories] = useRQGlobalState('history', []);
   const getHistory = async () => {
     const uid = await getData('EZUid');
     mutationBookingHistory.mutate(uid);
@@ -27,19 +29,24 @@ const BookingHistory = () => {
   useEffect(() => {
     getHistory();
   }, []);
+  useEffect(() => {
+    if(mutationBookingHistory.isSuccess){
+      setHistories(mutationBookingHistory.data?.data)
+    }
+  }, [mutationBookingHistory.status]);
   return (
     <EZContainer>
       {mutationBookingHistory.isLoading && <EZLoading />}
       {mutationBookingHistory.isSuccess && (
         <FlatList
-          data={mutationBookingHistory.data?.data}
+          data={histories}
           renderItem={({item}) => <BookingHistoryItem item={item} />}
           keyExtractor={(item, index) => index}
           contentContainerStyle={styles.container}
           initialNumToRender={5}
           showsVerticalScrollIndicator={false}
           ListEmptyComponent={
-            mutationBookingHistory.data?.data?.length === 0 && (
+            histories.length === 0 && mutationBookingHistory.isSuccess && (
               <View style={styles.empty}>
                 <EZText bold size="quiteLarge" color={COLORS.secondary}>
                   Your booking history is empty!

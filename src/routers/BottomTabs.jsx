@@ -20,6 +20,7 @@ import Bookmark from '../views/bookmark/Bookmark';
 import useRQGlobalState from '../hooks/useRQGlobal';
 import {AVATAR} from '../utils/defaultImage';
 import { getData } from '../shared/asyncStorages';
+import NotificationtackNavigators from './NotificationStackNavigator';
 
 const BottomTab = () => {
   const navigation = useNavigation();
@@ -154,8 +155,8 @@ const BottomTab = () => {
         />
       )}
       <Tab.Screen
-        name="notification"
-        component={Notification}
+        name="notiStack"
+        component={NotificationtackNavigators}
         options={() => {
           return {
             tabBarLabel: ({focused}) => {

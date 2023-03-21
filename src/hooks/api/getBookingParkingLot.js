@@ -39,3 +39,16 @@ export const useGetBookingDetailHistory = () => {
     },
   });
 };
+
+export const useCancelHistory = () => {
+  return useMutation({
+    mutationFn: bookingIds => {
+      let formData = new FormData();
+      formData.append('_method', 'PUT');
+      bookingIds.forEach(item => {
+        formData.append('bookingIds[]', item);
+      });
+      return httpRequest.postHttpRequest('booking/cancel', formData);
+    },
+  });
+};
