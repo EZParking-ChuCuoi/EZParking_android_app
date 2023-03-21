@@ -31,13 +31,12 @@ const Bookmark = () => {
   useEffect(() => {
     initalMutate();
   }, []);
-
   return (
     <EZContainer>
       {mutationGetSavedParkingLot.isLoading && <EZLoading />}
       <FlatList
         data={mutationGetSavedParkingLot?.data || []}
-        keyExtractor={item => item.parking_lot_id}
+        keyExtractor={item => item.parkingLotId}
         renderItem={({item}) => (
           <BookmarkItem data={item} onRefresh={initalMutate} />
         )}

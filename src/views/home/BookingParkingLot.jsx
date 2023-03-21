@@ -39,6 +39,7 @@ import EZRBSheetModal from '../../components/core/EZRBSheetModal';
 
 const BookingParkingLot = ({navigation, route}) => {
   const {info} = route.params;
+  // todo: validate choosing dateStart must match with opentime
   const [idSlotArr, setIdSlotArr] = useState([]);
   const mutationGetSlots = useGetSlots();
   const {BG2ND} = bgSecondaryDefault();

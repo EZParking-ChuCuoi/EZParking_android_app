@@ -1,4 +1,4 @@
-import {Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {Dimensions, Image, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import React from 'react';
 import {AVATAR} from '../../utils/defaultImage';
 import {COLORS} from '../../assets/styles/styles';
@@ -8,14 +8,14 @@ import useRQGlobalState from '../../hooks/useRQGlobal';
 
 const NotificationItem = ({data}) => {
   const [userInfo] = useRQGlobalState('user', {});
-  console.log("CCCCCCCCC",data);
   const handlePress = () => {
     if (data.type === 'QRCode' && data.title === 'Completed parking lot') {
+      console.log(data);
     }
   };
   return (
     <TouchableOpacity style={styles.noticeItem} onPress={handlePress}>
-      <View style={styles.new} />
+      {data.read === 0 && <View style={styles.new} />}
       <Image source={{uri: data.image}} style={styles.avatar} />
       <View style={styles.noticRight}>
         <EZText lines={3} styleEZText={styles.noticRightTop}>
@@ -24,9 +24,7 @@ const NotificationItem = ({data}) => {
               ? 'You'
               : data.nameUserSend}{' '}
           </EZText>
-          <EZText>
-            {data.message}
-          </EZText>
+          <EZText>{data.message}</EZText>
         </EZText>
         <EZText size="small" color={COLORS.disable}>
           {formatRelativeTime(data.created_at)}
@@ -52,8 +50,8 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
   },
   avatar: {
-    width: 50,
-    height: 50,
+    width: Dimensions.get('screen').width * 0.15,
+    height: Dimensions.get('screen').width * 0.15,
     resizeMode: 'cover',
     borderRadius: 40,
   },

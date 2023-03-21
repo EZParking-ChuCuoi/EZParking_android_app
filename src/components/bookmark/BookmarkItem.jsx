@@ -26,13 +26,13 @@ const BookmarkItem = ({data, onRefresh}) => {
   const mutationParkingLotInfo = useGetParkingLotInfo();
   const handleBookNow = async () => {
     const uid = await getData('EZUid');
-    mutationParkingLotInfo.mutate({parkingId: data.parking_lot_id, uid});
+    mutationParkingLotInfo.mutate({parkingId: data.parkingLotId, uid});
   };
   const handleRemove = async () => {
     const uid = await getData('EZUid');
     mutationHandleRemove.mutate({
       userId: uid,
-      parkingLotId: data.parking_lot_id,
+      parkingLotId: data.parkingLotId,
     });
   };
   useEffect(() => {
@@ -51,14 +51,14 @@ const BookmarkItem = ({data, onRefresh}) => {
   return (
     <View style={styles.bookmarkItem}>
       {mutationParkingLotInfo.isLoading && <EZLoading />}
-      {data.count > 0 ? (
+      {data.booking_count > 0 ? (
         <View
           style={[styles.left, {backgroundColor: BG2ND, shadowColor: COLOR}]}>
           <EZText color={COLORS.secondary} bold>
             Booked
           </EZText>
           <EZText color={COLORS.secondary} size="quiteLarge" bold>
-            {data.count}
+            {data.booking_count}
           </EZText>
           <EZText color={COLORS.secondary} bold>
             times before
@@ -73,6 +73,7 @@ const BookmarkItem = ({data, onRefresh}) => {
             backgroundColor: BG2ND,
             borderRadius: 8,
             alignItems: 'center',
+            justifyContent: 'center',
             padding: 10,
             shadowOffset: {
               width: 0,
@@ -89,10 +90,10 @@ const BookmarkItem = ({data, onRefresh}) => {
         <Link
           to={{
             screen: 'spaceDetail',
-            params: {parkingId: data.parking_lot_id},
+            params: {parkingId: data.parkingLotId},
           }}>
-          <EZText bold color={COLORS.primary}>
-            {data.nameParkingLot}
+          <EZText size=">medium"  bold color={COLORS.primary}>
+            {data.parking_lot_name}
           </EZText>
         </Link>
         <EZText>{data.address}</EZText>

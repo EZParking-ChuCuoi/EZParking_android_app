@@ -36,8 +36,6 @@ import RNAndroidLocationEnabler from 'react-native-android-location-enabler';
 import RemotePushController from '../../shared/RemotePushController';
 import SplashScreen from 'react-native-splash-screen';
 import useRQGlobalState from '../../hooks/useRQGlobal';
-import {Pusher} from '@pusher/pusher-websocket-react-native';
-import { LocalNotification } from '../../shared/LocalPushController';
 
 const Home = () => {
   const {COLOR} = colorDefault();
@@ -59,68 +57,6 @@ const Home = () => {
   };
   useEffect(() => {
     askPermissionLocation();
-  }, []);
-
-  const pusher = Pusher.getInstance();
-  pusher.init({
-    apiKey: 'e3c6c9e141a887ca9466',
-    cluster: 'ap1',
-  });
-
-  pusher.connect();
-  useEffect(() => {
-    const getPusher = () => {
-      pusher.subscribe({
-        channelName: `wishlists.${userInfo.id}`,
-        onEvent: event => {
-          console.log(`Event wishlists ${event.data}`);
-          LocalNotification(
-            JSON.parse(event.data).userId,
-            JSON.parse(event.data).title,
-            JSON.parse(event.data).message,
-            JSON.parse(event.data).avatar,
-          );
-        },
-      });
-
-      pusher.subscribe({
-        channelName: `bookings.${userInfo.id}`,
-        onEvent: event => {
-          console.log(`Event booking ${event.data}`);
-          LocalNotification(
-            JSON.parse(event.data).userId,
-            JSON.parse(event.data).title,
-            JSON.parse(event.data).message,
-            JSON.parse(event.data).avatar,
-          );
-        },
-      });
-      pusher.subscribe({
-        channelName: `qr-codes.${userInfo.id}`,
-        onEvent: event => {
-          console.log(`Event QRCODE ${event.data}`);
-          LocalNotification(
-            JSON.parse(event.data).userId,
-            JSON.parse(event.data).title,
-            JSON.parse(event.data).message,
-            JSON.parse(event.data).avatar,
-          );
-        },
-      });
-      pusher.subscribe({
-        channelName: `comments.${userInfo.id}`,
-        onEvent: event => {
-          console.log(`Event comment ${event.data}`);
-          LocalNotification(
-            JSON.parse(event.data).userId,
-            JSON.parse(event.data).title,
-            JSON.parse(event.data).message,
-            JSON.parse(event.data).avatar,
-          );
-        },
-      });
-    };
-    getPusher();
   }, []);
   useEffect(() => {
     const storeCurrent = () => {

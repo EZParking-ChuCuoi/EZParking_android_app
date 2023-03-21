@@ -36,6 +36,10 @@ export const dateFormatMoment = timestamp => {
   return moment(new Date(timestamp)).format('YYYY-MM-DD HH:mm:00');
 };
 
+export const dateFormatBooking = timestamp => {
+  return moment(new Date(timestamp)).format('YYYY-MM-DD 00:00:00');
+};
+
 export const dateFormatMomentWithoutSecond = timestamp => {
   return moment(new Date(timestamp)).format('YYYY-MM-DD HH:mm');
 };
