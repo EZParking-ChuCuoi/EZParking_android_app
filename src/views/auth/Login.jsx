@@ -58,6 +58,19 @@ const Login = () => {
         email: 'Email or password wrong!',
         password: 'Email or password wrong!',
       });
+    }else if (mutation.isError && mutation.error.response?.data?.errors?.email) {
+      setErrMessage({
+        ...errMessage,
+        ['email']: mutation.error?.response?.data?.errors?.email[0],
+      });
+    } else if (
+      mutation.isError &&
+      mutation.error.response?.data?.errors?.password
+    ) {
+      setErrMessage({
+        ...errMessage,
+        ['password']: mutation.error?.response?.data?.errors?.password[0],
+      });
     }
   }, [mutation.isError]);
 
