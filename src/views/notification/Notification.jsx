@@ -38,6 +38,7 @@ const Notification = () => {
         showsVerticalScrollIndicator={false}
         renderItem={({item}) => <NotificationItem data={item} />}
         keyExtractor={item => item.id}
+        contentContainerStyle={{paddingVertical: 20, paddingBottom: 50}}
         refreshControl={
           <RefreshControl
             refreshing={false}

@@ -8,3 +8,16 @@ export const useGetNotification = () => {
     },
   });
 };
+
+export const useMakeRead = () => {
+  return useMutation({
+    mutationFn: id => {
+      let formData = new FormData();
+      formData.append('_method', 'PATCH');
+      return httpRequest.postHttpRequest(
+        `notifications/${id}/read`,
+        formData,
+      );
+    },
+  });
+};

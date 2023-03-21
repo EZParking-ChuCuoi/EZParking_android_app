@@ -23,14 +23,18 @@ import Icon from 'react-native-vector-icons/FontAwesome';
 import useRQGlobalState from '../../hooks/useRQGlobal';
 import {AVATAR} from '../../utils/defaultImage';
 import EZLoading from '../../components/core/EZLoading';
+import {useGetNotification, useMakeRead} from '../../hooks/api/useNotification';
 
 const NotiBookingSuccess = ({navigation, route}) => {
   useHideTabBar();
-  const {data} = route.params;
+  const {data, id} = route.params;
   const mutationCreateComment = useCreateComment();
   const mutationEditComment = useEditComment();
   const mutationGetComment = useGetComment();
+  const mutationGetNotification = useGetNotification();
+  const mutationMakeRead = useMakeRead();
   const [userInfo] = useRQGlobalState('user', {});
+  const [notices, setNotices] = useRQGlobalState('notice', []);
   const [action, setAction] = useState('');
   const [params, setParams] = useState({
     rating: 0,
@@ -44,11 +48,22 @@ const NotiBookingSuccess = ({navigation, route}) => {
     [...Array(LIMITSTAR)].map(() => 'star-o'),
   );
   useEffect(() => {
-    mutationGetComment.mutate({
-      idUser: userInfo.id,
-      idParkingLot: data.parkingInfo.id,
-    });
+    const callMutate = () => {
+      mutationGetComment.mutate({
+        idUser: userInfo.id,
+        idParkingLot: data.parkingInfo.id,
+      });
+      mutationMakeRead.mutate(id);
+    };
+    callMutate();
   }, []);
+  useEffect(() => {
+    if (mutationMakeRead.isSuccess && mutationGetNotification.isSuccess) {
+      setNotices(mutationGetNotification.data);
+    } else if (mutationMakeRead.isSuccess) {
+      mutationGetNotification.mutate(userInfo.id);
+    }
+  }, [mutationMakeRead.status, mutationGetNotification.status]);
   useEffect(() => {
     if (mutationGetComment.isSuccess && mutationGetComment.data.length == 0) {
       setAction('create');
@@ -200,7 +215,9 @@ const NotiBookingSuccess = ({navigation, route}) => {
                       key={index}
                     />
                   ))}
-                  {[...Array(LIMITSTAR - mutationGetComment.data[0].ranting)].map((val, index) => (
+                  {[
+                    ...Array(LIMITSTAR - mutationGetComment.data[0].ranting),
+                  ].map((val, index) => (
                     <Icon
                       name="star-o"
                       size={FONTSIZE.iconMedium}
@@ -214,9 +231,9 @@ const NotiBookingSuccess = ({navigation, route}) => {
                 </EZText>
               </View>
               <EZText textAlign="justify">
-                {params.content === null
+                {mutationGetComment.data[0]?.content === ''
                   ? "You didn't write anything"
-                  : params.content}
+                  : mutationGetComment.data[0]?.content}
               </EZText>
               <EZButtonText
                 text="Edit"
