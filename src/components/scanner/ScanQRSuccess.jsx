@@ -74,7 +74,7 @@ const ScanQRSuccess = ({data, refInfo}) => {
             <EZText bold color={COLORS.disable}>
               Address
             </EZText>
-            <EZText styleEZText={{width: '80%'}} textAlign="right" lines={3}>
+            <EZText textAlign="right" lines={3}>
               {data.bookings[0].address}
             </EZText>
           </View>

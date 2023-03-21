@@ -8,7 +8,7 @@ import {
   dateFormatMomentWithoutSecond,
   formatRelativeTime,
   dateFormatBooking,
-  datePostToApi
+  datePostToApi,
 } from '../../shared/handleDate';
 import {handleCurrenCy} from '../../shared/handleCurrenCy';
 import {LIMITSTAR} from '../../utils/constants';
@@ -22,6 +22,7 @@ import {EZButton, EZButtonText} from '../../components/core/EZButton';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import useRQGlobalState from '../../hooks/useRQGlobal';
 import {AVATAR} from '../../utils/defaultImage';
+import EZLoading from '../../components/core/EZLoading';
 
 const NotiBookingSuccess = ({navigation, route}) => {
   useHideTabBar();
@@ -59,11 +60,14 @@ const NotiBookingSuccess = ({navigation, route}) => {
       mutationGetComment.isSuccess &&
       mutationGetComment.data.length > 0
     ) {
-      console.log(mutationGetComment.data);
       setAction('review');
+      setParams({
+        ...params,
+        ['content']: mutationGetComment.data[0].content,
+      });
+      handlePressRating(mutationGetComment.data[0].ranting);
     }
   }, [mutationGetComment.status]);
-
   useEffect(() => {
     const checkCallApi = () => {
       if (mutationCreateComment.isSuccess) {
@@ -132,19 +136,21 @@ const NotiBookingSuccess = ({navigation, route}) => {
 
   return (
     <EZContainer>
+      {mutationGetComment.isLoading && <EZLoading />}
       <View style={styles.content}>
-        <EZText
-          textAlign="center"
-          bold
-          size="quiteLarge"
-          color={COLORS.primary}>
-          {data.parkingInfo.nameParkingLot}
-        </EZText>
+        <View style={styles.flexRow}>
+          <EZText bold color={COLORS.disable}>
+            Parking lot name
+          </EZText>
+          <EZText textAlign="right" lines={3} bold>
+            {data.parkingInfo.nameParkingLot}
+          </EZText>
+        </View>
         <View style={styles.flexRow}>
           <EZText bold color={COLORS.disable}>
             Address
           </EZText>
-          <EZText styleEZText={{width: '80%'}} textAlign="right" lines={3}>
+          <EZText textAlign="right" lines={3}>
             {data.parkingInfo.address}
           </EZText>
         </View>
@@ -170,7 +176,7 @@ const NotiBookingSuccess = ({navigation, route}) => {
         </View>
       </View>
       <EZText bold textAlign="center" size=">medium" color={COLORS.primary}>
-        Feedback about this parking lot?
+        Rate this parking lot?
       </EZText>
       {action === 'review' &&
         mutationGetComment.isSuccess &&
@@ -186,19 +192,15 @@ const NotiBookingSuccess = ({navigation, route}) => {
             <View style={styles.contentRight}>
               <View style={styles.flexRow}>
                 <View style={styles.rating}>
-                  {[...Array(mutationGetComment.data[0]?.ranting)].map(
-                    (val, index) => (
-                      <Icon
-                        name="star"
-                        size={FONTSIZE.iconMedium}
-                        color={COLORS.yellow}
-                        key={index}
-                      />
-                    ),
-                  )}
-                  {[
-                    ...Array(LIMITSTAR - mutationGetComment.data[0]?.ranting),
-                  ].map((val, index) => (
+                  {[...Array(params.rating)].map((val, index) => (
+                    <Icon
+                      name="star"
+                      size={FONTSIZE.iconMedium}
+                      color={COLORS.yellow}
+                      key={index}
+                    />
+                  ))}
+                  {[...Array(LIMITSTAR - mutationGetComment.data[0].ranting)].map((val, index) => (
                     <Icon
                       name="star-o"
                       size={FONTSIZE.iconMedium}
@@ -208,23 +210,16 @@ const NotiBookingSuccess = ({navigation, route}) => {
                   ))}
                 </View>
                 <EZText color={COLORS.disable} size="small">
-                  {mutationGetComment.data[0]?.created_at !==
-                  mutationGetComment.data[0]?.updated_at
-                    ? `Edited ${datePostToApi(
-                        mutationGetComment.data[0]?.updated_at,
-                      )}`
-                    : formatRelativeTime(
-                        mutationGetComment.data[0]?.created_at
-                      )}
+                  {formatRelativeTime(mutationGetComment.data[0]?.created_at)}
                 </EZText>
               </View>
               <EZText textAlign="justify">
-                {mutationGetComment.data[0]?.content === 'null'
+                {params.content === null
                   ? "You didn't write anything"
-                  : mutationGetComment.data[0]?.content}
+                  : params.content}
               </EZText>
               <EZButtonText
-                text="Edit your review"
+                text="Edit"
                 color={COLORS.primary}
                 handlePress={() => setAction('edit')}
               />
@@ -234,22 +229,7 @@ const NotiBookingSuccess = ({navigation, route}) => {
       {(action === 'edit' || action === 'create') && (
         <View style={styles.form}>
           <View style={styles.stars}>
-            {action === 'create' && [...Array(LIMITSTAR)].map((_, index) => (
-              <TouchableOpacity
-                key={index}
-                onPress={() => handlePressRating(index)}>
-                <Icon
-                  name={starRating[index]}
-                  size={FONTSIZE.iconHuge}
-                  color={
-                    starRating[index] === 'star'
-                      ? COLORS.yellow
-                      : COLORS.disable
-                  }
-                />
-              </TouchableOpacity>
-            ))}
-            {action === 'edit' && [...Array(LIMITSTAR)].map((_, index) => (
+            {[...Array(LIMITSTAR)].map((_, index) => (
               <TouchableOpacity
                 key={index}
                 onPress={() => handlePressRating(index)}>
@@ -281,10 +261,21 @@ const NotiBookingSuccess = ({navigation, route}) => {
               setParams({...params, ['content']: newText})
             }
           />
-          <EZButton
-            title={action === 'edit' ? 'Edit review' : 'Post review'}
-            handlePress={action === 'edit' ? handleEdit : handleCreate}
-          />
+          <View style={styles.flexRow}>
+            <EZButton
+              title={action === 'edit' ? 'Edit review' : 'Post review'}
+              handlePress={action === 'edit' ? handleEdit : handleCreate}
+              w={action === 'edit' ? '40%' : '100%'}
+            />
+            {action === 'edit' && (
+              <EZButton
+                title={'Cancel edit'}
+                handlePress={() => setAction('review')}
+                w="40%"
+                type="secondary"
+              />
+            )}
+          </View>
         </View>
       )}
     </EZContainer>
