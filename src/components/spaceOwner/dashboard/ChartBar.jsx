@@ -8,6 +8,7 @@ import EZText from '../../core/EZText';
 import {LocalNotification} from '../../../shared/LocalPushController';
 
 const ChartBar = ({source}) => {
+  console.log(source[0].totalRevenue);
   const WIDTH = Dimensions.get('screen').width;
   const data = {
     labels: source.map(item => {
@@ -37,8 +38,6 @@ const ChartBar = ({source}) => {
       <BarChart
         data={data}
         width={widthChart}
-        yAxisLabel=""
-        yAxisSuffix=""
         yAxisInterval={20}
         verticalLabelRotation={30}
         showsHorizontalScrollIndicator={true}
@@ -49,6 +48,7 @@ const ChartBar = ({source}) => {
         withCustomBarColorFromData={true}
         flatColor={true}
         height={400}
+        fromZero={true}
         chartConfig={{
           backgroundColor: 'transparent',
           backgroundGradientFrom: COLORS.primary,

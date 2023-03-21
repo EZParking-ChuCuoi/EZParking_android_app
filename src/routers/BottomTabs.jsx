@@ -19,7 +19,7 @@ import AccountStackNavigators from './AccountStackNavigator';
 import Bookmark from '../views/bookmark/Bookmark';
 import useRQGlobalState from '../hooks/useRQGlobal';
 import {AVATAR} from '../utils/defaultImage';
-import { getData } from '../shared/asyncStorages';
+import {getData} from '../shared/asyncStorages';
 import NotificationtackNavigators from './NotificationStackNavigator';
 
 const BottomTab = () => {
@@ -27,13 +27,7 @@ const BottomTab = () => {
   const {BG} = bgDefault();
   const {COLOR} = colorDefault();
   const mutationUserInfo = useGetUserInfo();
-  const [userInfo, setUserInfo] = useRQGlobalState('user', {
-    avatar: AVATAR,
-    fullName: '',
-    id: '',
-    isSpaceOwner: false,
-    email: '',
-  });
+  const [userInfo, setUserInfo] = useRQGlobalState('user', {});
   useEffect(() => {
     if (mutationUserInfo.isSuccess) {
       setUserInfo({

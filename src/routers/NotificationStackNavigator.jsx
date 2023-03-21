@@ -34,7 +34,7 @@ const NotificationtackNavigators = () => {
         <NotificationStack.Screen
           name="notiBookingSuccess"
           component={NotiBookingSuccess}
-          options={{title: 'Booking success'}}
+          options={{title: 'Booking informations'}}
         />
       </NotificationStack.Group>
     </NotificationStack.Navigator>

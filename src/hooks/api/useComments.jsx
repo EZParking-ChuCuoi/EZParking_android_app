@@ -8,7 +8,17 @@ export const useCreateComment = () => {
       // "parkingId": "1000000",
       // "content": "good",
       // "ranting": "2",
-      return httpRequest.postHttpRequest('/comments', params);
+      return httpRequest.postHttpRequest('comments', params);
+    },
+  });
+};
+
+export const useGetComment = () => {
+  return useMutation({
+    mutationFn: params => {
+      return httpRequest.getHttpRequest(
+        `comments/${params.idUser}/${params.idParkingLot}`,
+      );
     },
   });
 };

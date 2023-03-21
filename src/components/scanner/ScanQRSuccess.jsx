@@ -118,7 +118,7 @@ const ScanQRSuccess = ({data, refInfo}) => {
           </View>
           <View style={styles.flexRow}>
             <EZText bold color={COLORS.disable}>
-              Booking date
+              Start time
             </EZText>
             <EZText color={COLORS.secondary}>
               {dateFormatMomentWithoutSecond(data.bookings[0].bookDate)}

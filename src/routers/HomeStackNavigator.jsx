@@ -35,7 +35,7 @@ const HomeStackNavigators = () => {
           headerStyle: {backgroundColor: BG},
           headerTitleStyle: {fontSize: FONTSIZE.quiteLarge},
         }}>
-        <HomeStack.Screen name="spaceDetail" component={SpaceDetail} />
+        <HomeStack.Screen name="spaceDetail" component={SpaceDetail} options={{title: 'Parking lot details'}} />
         <HomeStack.Screen
           name="reviews"
           component={Reviews}
