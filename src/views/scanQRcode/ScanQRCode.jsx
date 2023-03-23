@@ -91,11 +91,9 @@ const ScanQRCode = () => {
         return;
       }
       if (isStart) {
-        console.log('STARTTTTTTTTTTT');
         mutationScan.mutate(bookingIds);
         return;
       } else {
-        console.log('ENDDDDDDDD');
         mutationScanConfirm.mutate(bookingIds);
         return;
       }

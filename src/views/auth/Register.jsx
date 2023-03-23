@@ -16,6 +16,7 @@ import {useRegister} from '../../hooks/api/auth';
 import OTPScreen from '../../components/auth/OTPScreen';
 import EZLoading from '../../components/core/EZLoading';
 import Lottie from 'lottie-react-native';
+import { validateName } from '../../shared/handleValidate';
 
 const Register = ({navigation}) => {
   const {BG2ND} = bgSecondaryDefault();
@@ -96,6 +97,9 @@ const Register = ({navigation}) => {
     } else if (params.username.length < 3) {
       check = false;
       errMess.username = 'Username must be more than 3 characters!';
+    }else if (!validateName(params.username)) {
+      check = false;
+      errMess.username = 'Username must not contain number!';
     }
     if (params.password === '') {
       check = false;

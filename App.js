@@ -30,7 +30,6 @@ const App = () => {
 
   useEffect(() => {
     if (mutationGetNotification.isSuccess) {
-      console.log('NOTICE');
       setNotices(mutationGetNotification.data);
     }
   }, [mutationGetNotification.status]);
@@ -46,7 +45,6 @@ const App = () => {
       pusher.subscribe({
         channelName: `wishlists.${uid}`,
         onEvent: event => {
-          console.log(`Event wishlists ${event.data}`);
           mutationGetNotification.mutate(uid);
           LocalNotification(
             JSON.parse(event.data).userId,
@@ -60,7 +58,6 @@ const App = () => {
       pusher.subscribe({
         channelName: `bookings.${uid}`,
         onEvent: event => {
-          console.log(`Event booking ${event.data}`);
           mutationGetNotification.mutate(uid);
           mutationBookingHistory.mutate(uid);
           LocalNotification(
@@ -75,7 +72,6 @@ const App = () => {
       pusher.subscribe({
         channelName: `cancel-bookings.${uid}`,
         onEvent: event => {
-          console.log(`Event booking ${event.data}`);
           mutationGetNotification.mutate(uid);
           mutationBookingHistory.mutate(uid);
           LocalNotification(
@@ -90,7 +86,6 @@ const App = () => {
       pusher.subscribe({
         channelName: `qr-codes.${uid}`,
         onEvent: event => {
-          console.log(`Event QRCODE ${event.data}`);
           mutationGetNotification.mutate(uid);
           mutationBookingHistory.mutate(uid);
           LocalNotification(
@@ -104,7 +99,6 @@ const App = () => {
       pusher.subscribe({
         channelName: `comments.${uid}`,
         onEvent: event => {
-          console.log(`Event comment ${event.data}`);
           mutationGetNotification.mutate(uid);
           LocalNotification(
             JSON.parse(event.data).userId,
@@ -118,7 +112,6 @@ const App = () => {
       pusher.subscribe({
         channelName: `time-outs.${uid}`,
         onEvent: event => {
-          console.log(`Event timeouts ${event.data}`);
           mutationGetNotification.mutate(uid);
           LocalNotification(
             JSON.parse(event.data).userId,

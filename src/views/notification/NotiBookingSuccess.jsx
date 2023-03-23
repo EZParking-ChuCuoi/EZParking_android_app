@@ -90,8 +90,6 @@ const NotiBookingSuccess = ({navigation, route}) => {
           idUser: userInfo.id,
           idParkingLot: data.parkingInfo.id,
         });
-      } else if (mutationCreateComment.isError) {
-        console.log(mutationCreateComment.error?.response?.data?.errors);
       }
 
       if (mutationEditComment.isSuccess) {
@@ -99,8 +97,6 @@ const NotiBookingSuccess = ({navigation, route}) => {
           idUser: userInfo.id,
           idParkingLot: data.parkingInfo.id,
         });
-      } else if (mutationEditComment.isError) {
-        console.log(mutationCreateComment.error);
       }
     };
     checkCallApi();

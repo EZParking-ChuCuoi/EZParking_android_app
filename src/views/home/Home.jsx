@@ -47,9 +47,6 @@ const Home = () => {
   const [userInfo] = useRQGlobalState('user', {});
   const askPermissionLocation = async () => {
     const permission = await requestLocationPermission(null);
-    const EZUid = await getData('EZUid');
-    // const token = await getData('EZToken');
-    // console.log(EZUid);
     if (permission) {
       getCurrentLocation();
     }

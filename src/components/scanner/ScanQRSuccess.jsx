@@ -14,7 +14,6 @@ import {useNavigation} from '@react-navigation/native';
 import {dateFormatMomentWithoutSecond} from '../../shared/handleDate';
 
 const ScanQRSuccess = ({data, refInfo}) => {
-  console.log(data?.updatedBookings?.bookDate);
   const {COLOR} = colorDefault();
   const {BG2ND} = bgSecondaryDefault();
   const navigation = useNavigation();

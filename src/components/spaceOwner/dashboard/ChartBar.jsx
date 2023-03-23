@@ -8,7 +8,6 @@ import EZText from '../../core/EZText';
 import {LocalNotification} from '../../../shared/LocalPushController';
 
 const ChartBar = ({source}) => {
-  console.log(source[0].totalRevenue);
   const WIDTH = Dimensions.get('screen').width;
   const data = {
     labels: source.map(item => {

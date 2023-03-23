@@ -89,13 +89,11 @@ const EditParkingLot = ({
     const getCoor = async () => {
       const coor = await getDataObj('EZCurrentRegion');
       const uid = await getData('EZUid');
-      console.log(uid, idParking, nameParkingLot);
       setCoordinate(coor);
       mutationGetInfo.mutate(idParking);
     };
     getCoor();
   }, []);
-  console.log(params)
   useEffect(() => {
     if (mutationGetInfo.isSuccess) {
       setParams({
@@ -109,8 +107,6 @@ const EditParkingLot = ({
         ['images']: mutationGetInfo.data?.images,
         ['desc']: mutationGetInfo.data?.desc,
       });
-    } else {
-      console.log(mutationGetInfo.error?.response?.data);
     }
   }, [mutationGetInfo.status]);
   useEffect(() => {
@@ -130,8 +126,6 @@ const EditParkingLot = ({
       androidNotification('Updated success!');
       refEdit.current.close();
       refPopup.current.close();
-    } else {
-      console.log(mutationEdit.error?.response?.data);
     }
   }, [mutationEdit.status]);
   const handleSearch = details => {

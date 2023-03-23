@@ -13,7 +13,6 @@ export const useGetUserInfoApp = () => {
     id: '',
   });
   const onRefresh = async () => {
-    console.log('firstCCC')
     const EZUid = await getData('EZUid');
     mutationGet.mutate(EZUid);
   };

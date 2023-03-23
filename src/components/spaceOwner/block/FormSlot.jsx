@@ -51,9 +51,8 @@ const FormSlot = ({blockId, refForm, refresh, slotItem}) => {
       mutationCreate.isError &&
       mutationCreate?.error?.response?.status === 400
     ) {
-      setErrMess('The slot nam has already taken inthis block!');
+      setErrMess('The slot nam has already taken in this block!');
     } else if (mutationCreate.isSuccess) {
-      console.log(mutationCreate?.data);
       refForm.current.close();
       refresh();
     }

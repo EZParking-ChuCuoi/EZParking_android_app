@@ -27,7 +27,6 @@ const OTPScreen = props => {
   useEffect(() => {
     if (mutation.isError && mutation.error.response.status === 400) {
       setErrMessage('Invalid OTP!');
-      console.log(mutation.variables);
     }
   }, [mutation.isError]);
 
@@ -40,6 +39,7 @@ const OTPScreen = props => {
   };
 
   const handleResend = () => {
+    // todo: handle resend otp
     console.log('handle resend otp');
   };
   return (

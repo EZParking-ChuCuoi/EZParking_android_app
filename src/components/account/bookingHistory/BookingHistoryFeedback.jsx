@@ -71,8 +71,6 @@ const BookingHistoryFeedBack = ({idParking}) => {
           idUser: userInfo.id,
           idParkingLot: idParking,
         });
-      } else if (mutationCreateComment.isError) {
-        console.log(mutationCreateComment.error?.response?.data?.errors);
       }
 
       if (mutationEditComment.isSuccess) {
@@ -80,8 +78,6 @@ const BookingHistoryFeedBack = ({idParking}) => {
           idUser: userInfo.id,
           idParkingLot: idParking,
         });
-      } else if (mutationEditComment.isError) {
-        console.log(mutationCreateComment.error);
       }
     };
     checkCallApi();
