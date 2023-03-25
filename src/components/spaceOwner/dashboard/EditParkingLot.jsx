@@ -142,7 +142,7 @@ const EditParkingLot = ({
     }
   };
   const handleClose = () => {
-    //todo Consider to set address param
+    //todo Consider to set address params
     // setParams({
     //   ...params,
     //   ['address']: refInput.current?.getAddressText(),
